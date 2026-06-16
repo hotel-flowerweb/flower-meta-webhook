@@ -499,9 +499,10 @@ function getPlanCls(plan) {
   return 'pTO';
 }
 function chType(ch) {
-  if(['Booking.com','Expedia','Trip.com','OTS','Website/Booking Engine','Agjensi 7BEDS'].some(o=>ch.includes(o)))return'ota';
-  if(['W2M','Hotelbeds','ITAKA','Webbeds','Agjensi'].some(t=>ch.includes(t)))return'tour';
-  if(['Social Media','Whatsapp','Calls','Walk In','Viber','Email'].some(d=>ch.includes(d)))return'dir';
+  const c = (ch||'').toLowerCase();
+  if(['booking.com','expedia','trip.com','ots','website/booking engine','agjensi 7beds'].some(o=>c.includes(o)))return'ota';
+  if(['w2m','hotelbeds','itaka','webbeds','agjensi'].some(t=>c.includes(t)))return'tour';
+  if(['social media','whatsapp','calls','walk in','viber','email'].some(d=>c.includes(d)))return'dir';
   return'oth';
 }
 function chTag(ch) {
@@ -526,7 +527,8 @@ function setView(v, el) {
 
 function applyFilter() {
   const dateVal = document.getElementById('dateFilter').value;
-  let data = [...storedData];
+  // Vetëm kanale direkte: Social Media, Whatsapp, Calls, Walk In, Viber, Email
+  let data = [...storedData].filter(r => chType(r['AI'] || '') === 'dir');
 
   if (currentView === 'today')       data = data.filter(r => getCD(r) === TODAY);
   else if (currentView === 'week')   data = data.filter(r => getCD(r) >= getWeekStart());
@@ -535,7 +537,7 @@ function applyFilter() {
 
   // If manual date filter is set and view is 'today', use that date instead
   if (currentView === 'today' && dateVal && dateVal !== TODAY) {
-    data = storedData.filter(r => getCD(r) === dateVal);
+    data = storedData.filter(r => getCD(r) === dateVal && chType(r['AI'] || '') === 'dir');
   }
 
   // Staff filter (not for Manager)
@@ -557,7 +559,7 @@ function showAll() {
 function updateDayHistory() {
   // Get last 14 days that have data
   const byDay = {};
-  storedData.forEach(r => {
+  storedData.filter(r => chType(r['AI'] || '') === 'dir').forEach(r => {
     const cd = getCD(r);
     if (!cd) return;
     if (!byDay[cd]) byDay[cd] = {cnt:0,rev:0};
@@ -1048,14 +1050,4 @@ Raporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
       metaSection += '  Total: ' + _metaStats.total + ' biseda';
     } else if (_metaStats.myIg !== undefined) {
       metaSection += '  Instagram: ' + _metaStats.myIg + ' / Messenger: ' + _metaStats.myMe;
-      metaSection += '\n  Total turni: ' + (_metaStats.myIg+_metaStats.myMe) + ' biseda';
-    }
-    body += metaSection;
-  }
-  
-    const mailto = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailto;
-}
-</script>
-</body>
-</ht
+      metaSection += '\n  Total turni: ' + (_metaStat
