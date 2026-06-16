@@ -1,0 +1,8 @@
+{
+  "name": "flower-hotel-dashboard",
+  "version": "1.0.0",
+  "description": "Flower Hotel Sales Dashboard — Meta webhook backend",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
