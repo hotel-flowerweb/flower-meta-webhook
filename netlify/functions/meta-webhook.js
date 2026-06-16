@@ -1,11 +1,6 @@
 /**
  * Flower Hotel — Meta Webhook (Netlify Function)
  * File: netlify/functions/meta-webhook.js
- *
- * Environment variables (set in Netlify):
- *   META_VERIFY_TOKEN         — secret string matching Meta Developers
- *   SUPABASE_URL              — https://xxxx.supabase.co
- *   SUPABASE_SERVICE_ROLE_KEY — NEVER in frontend HTML
  */
 
 const { createClient } = require('@supabase/supabase-js');
@@ -71,19 +66,19 @@ async function processEvent(platform, senderId, timestamp) {
 
   const { error: insErr } = await supabase
     .from('meta_conversations')
-    .insert({ platform, sender_id: senderId, conversation_date: dateStr,
-              first_message_time: firstMessageTime, assigned_staff: assignedStaff });
+    .insert({ platform, sender_id: senderId, conversation_date: dateStr, first_message_time: firstMessageTime, assigned_staff: assignedStaff });
 
   if (insErr && insErr.code !== '23505') {
     console.error('INSERT error:', insErr.message);
+  } else {
+    console.log('SAVED:', platform, senderId, dateStr, assignedStaff);
   }
 }
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'GET') {
     const p = event.queryStringParameters || {};
-    if (p['hub.mode'] === 'subscribe' &&
-        p['hub.verify_token'] === process.env.META_VERIFY_TOKEN) {
+    if (p['hub.mode'] === 'subscribe' && p['hub.verify_token'] === process.env.META_VERIFY_TOKEN) {
       return { statusCode: 200, body: p['hub.challenge'] };
     }
     return { statusCode: 403, body: 'Forbidden' };
@@ -91,32 +86,41 @@ exports.handler = async (event) => {
 
   if (event.httpMethod === 'POST') {
     let body;
-    try { body = JSON.parse(event.body); }
-    catch { return { statusCode: 400, body: 'Bad JSON' }; }
+    try { body = JSON.parse(event.body); } catch { return { statusCode: 400, body: 'Bad JSON' }; }
 
     const object = body.object;
+    console.log('WEBHOOK object:', object, '| entries:', (body.entry||[]).length);
 
     for (const entry of body.entry || []) {
+      console.log('ENTRY id:', entry.id, '| messaging:', (entry.messaging||[]).length, '| changes:', (entry.changes||[]).length);
+
       if (object === 'page') {
         for (const msg of entry.messaging || []) {
           if (!msg.message || msg.message.is_echo) continue;
           if (msg.delivery || msg.read) continue;
+          console.log('MESSENGER from:', msg.sender.id);
           await processEvent('messenger', msg.sender.id, msg.timestamp);
         }
       }
+
       if (object === 'instagram') {
         for (const msg of entry.messaging || []) {
           if (!msg.message || msg.message.is_echo) continue;
+          console.log('INSTAGRAM messaging from:', msg.sender.id);
           await processEvent('instagram', msg.sender.id, msg.timestamp);
         }
         for (const change of entry.changes || []) {
           if (change.field !== 'messages') continue;
           const val = change.value || {};
           if (!val.message || val.message.is_echo) continue;
-          if (val.sender) await processEvent('instagram', val.sender.id, val.timestamp);
+          if (val.sender) {
+            console.log('INSTAGRAM changes from:', val.sender.id);
+            await processEvent('instagram', val.sender.id, val.timestamp);
+          }
         }
       }
     }
+
     return { statusCode: 200, body: 'EVENT_RECEIVED' };
   }
 
