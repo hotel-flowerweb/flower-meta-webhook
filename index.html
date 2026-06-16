@@ -1050,4 +1050,14 @@ Raporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
       metaSection += '  Total: ' + _metaStats.total + ' biseda';
     } else if (_metaStats.myIg !== undefined) {
       metaSection += '  Instagram: ' + _metaStats.myIg + ' / Messenger: ' + _metaStats.myMe;
-      metaSection += '\n  Total turni: ' + (_metaStat
+      metaSection += '\n  Total turni: ' + (_metaStats.myIg+_metaStats.myMe) + ' biseda';
+    }
+    body += metaSection;
+  }
+
+    const mailto = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const a = document.createElement('a'); a.href = mailto; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
