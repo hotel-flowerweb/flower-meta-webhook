@@ -748,7 +748,7 @@ function renderResTable() {
 }
 
 // ── CHECKIN MONTH DISTRIBUTION ──────────────────────────────────
-let monthChartInst = null;
+var monthChartInst = null;
 function updateMonthHistory() {
   // Group the CURRENTLY FILTERED reservations by their check-in month
   const data = filteredData;
@@ -875,8 +875,8 @@ function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 
 // ── META / SUPABASE ────────────────────────────────────────────
 var _metaStats = null; // { sara:{ig,me}, inva:{ig,me}, none:{ig,me}, total } or { myIg, myMe, total }
-const SUPABASE_URL = 'https://ftevcplecbihhfffcxfd.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
+var SUPABASE_URL = 'https://ftevcplecbihhfffcxfd.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
 
 async function loadMetaStats() {
   const today = new Date().toISOString().slice(0,10);
@@ -1058,3 +1058,4 @@ Raporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
 }
 </script>
 </body>
+</ht
