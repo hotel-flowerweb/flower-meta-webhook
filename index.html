@@ -1155,31 +1155,59 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     var moNm=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
     var moS={},moI={},moT={};
-    saraD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);if(m){moS[m]=(moS[m]||0)+1;moT[m]=(moT[m]||0)+1;}});
-    invaD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);if(m){moI[m]=(moI[m]||0)+1;moT[m]=(moT[m]||0)+1;}});
+    saraD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);var n=getNts(r);if(m){moS[m]=(moS[m]||0)+n;moT[m]=(moT[m]||0)+n;}});
+    invaD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);var n=getNts(r);if(m){moI[m]=(moI[m]||0)+n;moT[m]=(moT[m]||0)+n;}});
     var allMo=Object.keys(moT).sort();
     var mxMo=allMo.reduce(function(mx,m){return Math.max(mx,moT[m]||0);},1);
 
     var moRows2=allMo.map(function(m){
       var pts=m.split('-');
       var nm=moNm[+pts[1]-1]+' '+pts[0];
-      var sC=moS[m]||0,iC=moI[m]||0,tC=moT[m];
-      var sw=Math.round(sC/mxMo*70),iw=Math.round(iC/mxMo*70);
+      var sN=moS[m]||0,iN=moI[m]||0,tN=moT[m];
+      var sw=Math.round(sN/mxMo*70),iw=Math.round(iN/mxMo*70);
       return '<tr>'
         +'<td style="'+tdStyle()+';font-weight:700">'+nm+'</td>'
-        +'<td style="'+tdR()+';color:#9d174d;font-weight:800;font-size:14px">'+sC+'</td>'
+        +'<td style="'+tdR()+';color:#9d174d;font-weight:800;font-size:14px">'+sN+'</td>'
         +'<td style="padding:6px 8px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:10px;width:'+(sw||2)+'px;background:#ec4899;border-radius:4px"></div></td>'
-        +'<td style="'+tdR()+';color:#5b21b6;font-weight:800;font-size:14px">'+iC+'</td>'
+        +'<td style="'+tdR()+';color:#5b21b6;font-weight:800;font-size:14px">'+iN+'</td>'
         +'<td style="padding:6px 8px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:10px;width:'+(iw||2)+'px;background:#7c3aed;border-radius:4px"></div></td>'
-        +'<td style="'+tdR()+';font-weight:900;color:#0a2240;font-size:14px">'+tC+'</td>'
+        +'<td style="'+tdR()+';font-weight:900;color:#0a2240;font-size:14px">'+tN+'</td>'
       +'</tr>';
     }).join('');
 
-    mgrExtraHtml += secHead('03','Shpërndarje Mujore (Check-in) — Sara / Inva / Total')
+    mgrExtraHtml += secHead('03','Shpërndarje Mujore — Netë Qendrimi (Sara / Inva / Total)')
       +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
-      +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+';color:#9d174d">Sara</th><th style="'+thStyle()+'"></th><th style="'+thR()+';color:#5b21b6">Inva</th><th style="'+thStyle()+'"></th><th style="'+thR()+'">Total</th></tr>'
+      +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+';color:#9d174d">Sara 🌙</th><th style="'+thStyle()+'"></th><th style="'+thR()+';color:#5b21b6">Inva 🌙</th><th style="'+thStyle()+'"></th><th style="'+thR()+'">Total 🌙</th></tr>'
       +moRows2
       +'</table></td></tr>';
+  }
+
+  // ── STAFF-ONLY: Month distribution by nights ─────────────────────
+  var staffMoHtml = '';
+  if (!isManager) {
+    var moNmX=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
+    var moDataX={};
+    data.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);var n=getNts(r);if(m){moDataX[m]=(moDataX[m]||0)+n;}});
+    var allMoX=Object.keys(moDataX).sort();
+    var mxMoX=allMoX.reduce(function(mx,m){return Math.max(mx,moDataX[m]||0);},1);
+    if(allMoX.length>0){
+      var moRowsX=allMoX.map(function(m){
+        var pts=m.split('-');
+        var nm=moNmX[+pts[1]-1]+' '+pts[0];
+        var nts=moDataX[m];
+        var bw=Math.round(nts/mxMoX*140);
+        return '<tr>'
+          +'<td style="'+tdStyle()+';font-weight:700">'+nm+'</td>'
+          +'<td style="'+tdR()+';font-weight:900;font-size:15px;color:#0a2240">'+nts+'</td>'
+          +'<td style="padding:6px 12px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:12px;width:'+(bw||2)+'px;background:linear-gradient(90deg,#c9a84c,#f0d080);border-radius:4px"></div></td>'
+        +'</tr>';
+      }).join('');
+      staffMoHtml = secHead(sn(7),'Shpërndarje Mujore — Netë Qendrimi')
+        +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+        +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+'">Netë 🌙</th><th style="'+thStyle()+'">Grafiku</th></tr>'
+        +moRowsX
+        +'</table></td></tr>';
+    }
   }
 
   var so = isManager ? 2 : 0;
@@ -1252,7 +1280,8 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +rezRows
     +'</table></td></tr>'
     +(metaHtml?secHead(sn(7),'Aktiviteti Social Media — Meta')+'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'+metaHtml+'</table></td></tr>':'')
-    +secHead(metaHtml?sn(8):sn(7),'Permbledhja e Menaxhimit')
+    +(isManager?'':staffMoHtml)
+    +secHead(isManager?(metaHtml?sn(8):sn(7)):(staffMoHtml?(metaHtml?sn(9):sn(8)):(metaHtml?sn(8):sn(7))),'Permbledhja e Menaxhimit')
     +'<tr><td colspan="99" style="padding:8px 0 20px"><p style="margin:0;font-size:14px;line-height:1.8;color:#1a2533">'+summaryText+'</p></td></tr>'
     +'</table>'
     +'</div>'
