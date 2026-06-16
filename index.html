@@ -501,7 +501,7 @@ function getPlanCls(plan) {
 function chType(ch) {
   if(['Booking.com','Expedia','Trip.com','OTS','Website/Booking Engine','Agjensi 7BEDS'].some(o=>ch.includes(o)))return'ota';
   if(['W2M','Hotelbeds','ITAKA','Webbeds','Agjensi'].some(t=>ch.includes(t)))return'tour';
-  if(['Social Media','Whatsapp','Calls','Walk In','Viber'].some(d=>ch.includes(d)))return'dir';
+  if(['Social Media','Whatsapp','Calls','Walk In','Viber','Email'].some(d=>ch.includes(d)))return'dir';
   return'oth';
 }
 function chTag(ch) {
