@@ -16,6 +16,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;min-height:100vh}
+
+/* ─── HEADER ─── */
 header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(10,34,64,.25);position:sticky;top:0;z-index:100}
 header h1{font-size:20px;font-weight:700;letter-spacing:.3px}
 header h1 span{color:var(--gold)}
@@ -25,6 +27,8 @@ header h1 span{color:var(--gold)}
 .user-chip.inva{background:var(--inva-bg);border-color:var(--inva);color:#5b21b6}
 .user-chip.none{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff}
 .date-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#aac4e0;padding:5px 12px;border-radius:20px;font-size:12px}
+
+/* ─── LOGIN SCREEN ─── */
 #loginScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);gap:0;padding:40px 20px}
 .login-box{background:var(--card);border-radius:20px;padding:52px 60px;box-shadow:0 8px 40px rgba(10,34,64,.15);text-align:center;max-width:460px;width:100%}
 .login-logo{font-size:52px;margin-bottom:8px}
@@ -40,6 +44,8 @@ header h1 span{color:var(--gold)}
 .login-manager{color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .login-manager:hover{color:var(--navy)}
 .login-note{margin-top:28px;background:#f8fafc;border-radius:10px;padding:14px 18px;font-size:12px;color:var(--muted);line-height:1.7;text-align:left}
+
+/* ─── CONTROLS ─── */
 .controls{background:var(--navy);padding:10px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .ctl-lbl{color:#aac4e0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
 .controls input[type=date]{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 10px;border-radius:6px;font-size:13px;cursor:pointer}
@@ -52,7 +58,11 @@ header h1 span{color:var(--gold)}
 .upload-lbl:hover{border-color:var(--gold);color:#fff;background:rgba(201,168,76,.1)}
 #fileInput{display:none}
 .data-badge{background:rgba(14,124,110,.25);border:1px solid #0e7c6e;color:#6ee7b7;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700}
+
+/* ─── MAIN ─── */
 main{padding:22px 28px;max-width:1600px;margin:0 auto}
+
+/* ─── VIEW HEADER ─── */
 .view-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
 .view-title{font-size:22px;font-weight:800;color:var(--navy)}
 .view-title .accent.sara{color:var(--sara)}.view-title .accent.inva{color:var(--inva)}.view-title .accent.all{color:var(--gold)}
@@ -61,6 +71,8 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .vtab{padding:6px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;border:2px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s;white-space:nowrap}
 .vtab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 .vtab:hover:not(.active){border-color:var(--navy);color:var(--navy)}
+
+/* ─── KPI CARDS ─── */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;margin-bottom:22px}
 .kpi{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);border-left:4px solid var(--gold);transition:transform .15s}
 .kpi:hover{transform:translateY(-1px)}
@@ -71,6 +83,8 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .kpi .ksub{font-size:11px;color:var(--muted);margin-top:3px}
 .kpi .kdelta{font-size:11px;margin-top:3px;font-weight:700}
 .kdelta.up{color:var(--teal)}.kdelta.dn{color:var(--red)}.kdelta.eq{color:var(--muted)}
+
+/* ─── STAFF COMPARISON ─── */
 .staff-comp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
 @media(max-width:600px){.staff-comp{grid-template-columns:1fr}}
 .sc-card{background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);border-top:4px solid}
@@ -87,15 +101,21 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .sc-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
 .sc-card.sara .sc-bar-fill{background:var(--sara)}.sc-card.inva .sc-bar-fill{background:var(--inva)}
 .sc-pct{font-size:11px;color:var(--muted);margin-top:5px;font-weight:600}
+
+/* ─── GRIDS ─── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:22px}
 @media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+
+/* ─── CARDS ─── */
 .card{background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}
 .ct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;justify-content:space-between}
 .ct-left{display:flex;align-items:center;gap:8px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
 .cw{position:relative;height:210px}
+
+/* ─── CHANNEL TABLE ─── */
 .cht{width:100%;border-collapse:collapse}
 .cht th{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);padding:7px 4px;text-align:left;border-bottom:2px solid var(--border)}
 .cht td{padding:8px 4px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
@@ -103,6 +123,8 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .mbar{height:5px;border-radius:3px;background:var(--gold);min-width:2px}
 .tag{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700}
 .t-ota{background:#dbeafe;color:#1d4ed8}.t-tour{background:#f3e8ff;color:#7c3aed}.t-dir{background:#dcfce7;color:#15803d}.t-oth{background:#fef9c3;color:#92400e}
+
+/* ─── DAILY HISTORY ─── */
 .day-history{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px}
 .day-pill{background:var(--card);border-radius:10px;padding:10px 14px;box-shadow:var(--sh);cursor:pointer;border:2px solid transparent;white-space:nowrap;transition:all .15s;min-width:100px;text-align:center}
 .day-pill:hover{border-color:var(--gold)}
@@ -113,6 +135,8 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .day-pill.active .dp-cnt{color:#fff}
 .day-pill .dp-rev{font-size:11px;color:var(--muted);margin-top:2px}
 .day-pill.active .dp-rev{color:#aac4e0}
+
+/* ─── RES TABLE ─── */
 .rw{overflow-x:auto}
 .rt{width:100%;border-collapse:collapse;font-size:13px}
 .rt th{background:var(--navy);color:#fff;padding:9px 11px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
@@ -125,16 +149,24 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .ss.sara{background:var(--sara-bg);border-color:var(--sara);color:#9d174d}.ss.inva{background:var(--inva-bg);border-color:var(--inva);color:#5b21b6}
 .new-badge{background:#f0fdf4;border:1px solid #86efac;color:#166534;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px}
 .es{text-align:center;color:var(--muted);padding:36px;font-size:13px}
+
+/* ─── NAT ─── */
 .ni{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
 .ni:last-child{border-bottom:none}
+
+/* ─── SEARCH ─── */
 .srch{padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;width:200px;outline:none}
 .srch:focus{border-color:var(--navy)}
+
+/* ─── IMPORT STATUS ─── */
 .import-status{background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 16px;font-size:12px;color:#15803d;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .import-status.hidden{display:none}
+
 footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-top:4px}
 </style>
 </head>
 <body>
+
 <header>
   <h1>🌸 Flower Hotel &nbsp;—&nbsp; <span>Sales Monitor</span></h1>
   <div class="hdr-right">
@@ -143,14 +175,19 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
   </div>
 </header>
 
+<!-- ═══════════ LOGIN SCREEN ═══════════ -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">🌸</div>
     <div class="login-title">Sales Monitor</div>
     <div class="login-sub">Mirë se erdhe! Kush po monitoron shitjet sot?</div>
     <div class="login-btns">
-      <button class="login-btn sara" onclick="doLogin('Sara')"><span class="emoji">👩</span>Sara</button>
-      <button class="login-btn inva" onclick="doLogin('Inva')"><span class="emoji">👩</span>Inva</button>
+      <button class="login-btn sara" onclick="doLogin('Sara')">
+        <span class="emoji">👩</span>Sara
+      </button>
+      <button class="login-btn inva" onclick="doLogin('Inva')">
+        <span class="emoji">👩</span>Inva
+      </button>
     </div>
     <div class="login-manager" onclick="doLogin('Manager')">Hyr si Manager (shiko të gjitha)</div>
     <div class="login-note">
@@ -160,12 +197,13 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
   </div>
 </div>
 
+<!-- ═══════════ CONTROLS ═══════════ -->
 <div class="controls" id="controlsBar" style="display:none">
   <span class="ctl-lbl">📂 Import:</span>
   <label class="upload-lbl" for="fileInput">📊 <span id="fileName">Ngarko XLS Trinis...</span></label>
   <input type="file" id="fileInput" accept=".xls,.xlsx,.xml">
   <span id="dataBadge" class="data-badge" style="display:none"></span>
-  <button class="btn btn-ghost btn-sm" onclick="clearAndReimport()">🗑 Riset</button>
+  <button class="btn btn-ghost btn-sm" onclick="clearAndReimport()" title="Pastro cache dhe importo skedarin sërish">🗑 Riset</button>
   <span class="ctl-lbl" style="margin-left:8px">📅</span>
   <input type="date" id="dateFilter">
   <button class="btn btn-gold btn-sm" onclick="applyFilter()">▶ Filtro</button>
@@ -173,8 +211,12 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
   <input type="text" class="srch" id="srch" placeholder="🔍 Klient / dhomë…" oninput="renderResTable()" style="margin-left:auto">
 </div>
 
+<!-- ═══════════ MAIN ═══════════ -->
 <main id="mainArea" style="display:none">
+
   <div class="import-status hidden" id="importStatus"></div>
+
+  <!-- VIEW HEADER -->
   <div class="view-header">
     <div>
       <div class="view-title" id="viewTitle">—</div>
@@ -187,13 +229,15 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
         <div class="vtab" onclick="setView('month',this)">📈 Ky Muaj</div>
         <div class="vtab" onclick="setView('all',this)">📋 Gjithë Historia</div>
       </div>
-      <button class="btn btn-gold btn-sm" onclick="sendSummaryEmail()">✉️ Email</button>
-      <button class="btn btn-sm" onclick="exportPDF()" style="background:linear-gradient(135deg,#3730a3,#5b21b6);color:#fff;font-weight:800;border:none;box-shadow:0 2px 8px rgba(55,48,163,.35)">📄 PDF</button>
+      <button class="btn btn-gold btn-sm" onclick="sendSummaryEmail()" title="Dërgo përmbledhjen me email">✉️ Email</button>
+      <button class="btn btn-sm" onclick="exportPDF()" title="Shkarko PDF" style="background:linear-gradient(135deg,#3730a3,#5b21b6);color:#fff;font-weight:800;border:none;box-shadow:0 2px 8px rgba(55,48,163,.35)">📄 PDF</button>
     </div>
   </div>
 
+  <!-- DAILY HISTORY PILLS -->
   <div class="day-history" id="dayHistory"></div>
 
+  <!-- KPIs -->
   <div class="kpi-grid" id="kpiGrid">
     <div class="kpi blue"><label>Rezervime</label><div class="kval" id="kCnt">—</div><div class="ksub" id="kCntS"></div></div>
     <div class="kpi"><label>Të Ardhura</label><div class="kval sm" id="kRev">—</div><div class="ksub">EUR</div></div>
@@ -203,9 +247,11 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     <div class="kpi green"><label>Arrivals Sot</label><div class="kval" id="kArr">—</div><div class="ksub">check-in sot</div></div>
   </div>
 
+  <!-- STAFF COMPARISON (Manager only) -->
   <div class="staff-comp" id="staffComp" style="display:none">
     <div class="sc-card sara">
-      <div class="sc-name">Sara</div><div class="sc-role">Sales Agent</div>
+      <div class="sc-name">Sara</div>
+      <div class="sc-role">Sales Agent</div>
       <div class="sc-kpis">
         <div class="sck"><div class="sv" id="sCnt">0</div><div class="sl">Rez.</div></div>
         <div class="sck"><div class="sv" id="sRev">0</div><div class="sl">EUR</div></div>
@@ -216,7 +262,8 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       <div class="sc-pct" id="sPct"></div>
     </div>
     <div class="sc-card inva">
-      <div class="sc-name">Inva</div><div class="sc-role">Sales Agent</div>
+      <div class="sc-name">Inva</div>
+      <div class="sc-role">Sales Agent</div>
       <div class="sc-kpis">
         <div class="sck"><div class="sv" id="iCnt">0</div><div class="sl">Rez.</div></div>
         <div class="sck"><div class="sv" id="iRev">0</div><div class="sl">EUR</div></div>
@@ -228,16 +275,19 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     </div>
   </div>
 
+  <!-- CHARTS -->
   <div class="g3">
     <div class="card"><div class="ct"><div class="ct-left"><span class="dot"></span>Kanalet</div></div><div class="cw"><canvas id="chChart"></canvas></div></div>
     <div class="card"><div class="ct"><div class="ct-left"><span class="dot" style="background:#2563eb"></span>Llojet Dhomave</div></div><div class="cw"><canvas id="rmChart"></canvas></div></div>
     <div class="card"><div class="ct"><div class="ct-left"><span class="dot" style="background:var(--teal)"></span>Plani Tarifar</div></div><div class="cw"><canvas id="plChart"></canvas></div></div>
   </div>
 
+  <!-- CHANNEL + NAT -->
   <div class="g2">
     <div class="card">
       <div class="ct"><div class="ct-left"><span class="dot"></span>Performance Kanalit</div></div>
-      <table class="cht"><thead><tr><th>Kanali</th><th>Tip</th><th>Rez.</th><th>EUR</th><th>%</th><th></th></tr></thead><tbody id="chTbl"></tbody></table>
+      <table class="cht"><thead><tr><th>Kanali</th><th>Tip</th><th>Rez.</th><th>EUR</th><th>%</th><th></th></tr></thead>
+      <tbody id="chTbl"></tbody></table>
     </div>
     <div class="card">
       <div class="ct"><div class="ct-left"><span class="dot" style="background:var(--teal)"></span>Kombësitë — Top 10</div></div>
@@ -245,19 +295,29 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:24px">
-    <div class="ct"><div class="ct-left"><span class="dot" style="background:var(--navy)"></span>Shpërndarja sipas Muajit</div></div>
-    <div style="position:relative;height:180px;margin-bottom:16px"><canvas id="monthChart"></canvas></div>
-    <table class="cht"><thead><tr><th>Muaj check-in</th><th>Rezervime</th><th>Të ardhura</th><th>% e totalit</th></tr></thead><tbody id="monthTblBody"></tbody></table>
+  <!-- CHECKIN MONTH DISTRIBUTION -->
+  <div class="card" style="margin-bottom:24px" id="monthSection">
+    <div class="ct">
+      <div class="ct-left"><span class="dot" style="background:var(--navy)"></span>Shpërndarja sipas Muajit <span id="monthSectionSub" style="font-weight:400;color:var(--muted);font-size:12px;margin-left:6px">— muajt e check-in të rezervimeve të filtrit</span></div>
+    </div>
+    <div style="position:relative;height:180px;margin-bottom:16px"><canvas id="monthChart" role="img" aria-label="Shpërndarje e rezervimeve sipas muajit të check-in">Të dhënat do shfaqen pas importit.</canvas></div>
+    <table class="cht">
+      <thead><tr><th>Muaj check-in</th><th>Rezervime</th><th>Të ardhura</th><th>% e totalit</th></tr></thead>
+      <tbody id="monthTblBody"></tbody>
+    </table>
   </div>
 
+
+  <!-- META SOCIAL MEDIA -->
   <div class="card" style="margin-bottom:22px">
     <div class="ct"><div class="ct-left"><span class="dot" style="background:#e1306c"></span>Social Media Meta — Sot</div>
-    <span onclick="loadMetaStats()" style="cursor:pointer;font-size:11px;color:var(--muted);font-weight:400;text-transform:none">🔄 Rifresko</span></div>
+    <span id="metaRefreshBtn" onclick="loadMetaStats()" style="cursor:pointer;font-size:11px;color:var(--muted);font-weight:400;text-transform:none">🔄 Rifresko</span>
+    </div>
     <div id="metaSection" style="display:none"></div>
     <div id="metaLoading" style="font-size:12px;color:var(--muted);padding:8px 0">Duke ngarkuar të dhënat Meta...</div>
   </div>
 
+  <!-- RESERVATIONS -->
   <div class="card" style="margin-bottom:24px">
     <div class="ct">
       <div class="ct-left"><span class="dot" style="background:#7c3aed"></span>Lista Rezervimeve <span id="resCnt" style="font-weight:400;color:var(--muted);margin-left:4px"></span></div>
@@ -273,6 +333,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       </table>
     </div>
   </div>
+
 </main>
 
 <footer>🌸 Flower Hotel · Sales Monitor · Të dhënat ruhen lokalisht në browser</footer>
@@ -283,18 +344,26 @@ const TODAY = new Date().toISOString().slice(0,10);
 document.getElementById('todayChip').textContent = fmtD(TODAY);
 document.getElementById('dateFilter').value = TODAY;
 
-let currentUser = '', currentView = 'today', storedData = [], staffMap = {}, filteredData = [], charts = {};
+// ── STATE ──────────────────────────────────────────────────────
+let currentUser = '';           // 'Sara' | 'Inva' | 'Manager'
+let currentView = 'today';      // today | week | month | all
+let storedData = [];            // all reservations ever imported
+let staffMap = {};              // {nr: 'Sara'|'Inva'}
+let filteredData = [];          // currently shown
+let charts = {};
 
 function loadState() {
   try { storedData = JSON.parse(localStorage.getItem('fhData') || '[]'); } catch(e){ storedData=[]; }
   try { staffMap  = JSON.parse(localStorage.getItem('fhStaff') || '{}'); } catch(e){ staffMap={}; }
 }
 function saveState() {
-  try { localStorage.setItem('fhData', JSON.stringify(storedData)); } catch(e){ alert('Kujtesa e browserit është plot.'); }
+  try { localStorage.setItem('fhData', JSON.stringify(storedData)); } catch(e){ alert('Kujtesa e browserit është plot. Pastro historikun e vjetër.'); }
   localStorage.setItem('fhStaff', JSON.stringify(staffMap));
 }
+
 loadState();
 
+// ── LOGIN ──────────────────────────────────────────────────────
 function doLogin(user) {
   currentUser = user;
   localStorage.setItem('fhUser', user);
@@ -302,10 +371,10 @@ function doLogin(user) {
   document.getElementById('controlsBar').style.display = 'flex';
   document.getElementById('mainArea').style.display = 'block';
   const chip = document.getElementById('userChip');
-  chip.textContent = user==='Manager'?'👔 Manager':user==='Sara'?'👩 Sara':'👩 Inva';
-  chip.className = 'user-chip '+(user==='Sara'?'sara':user==='Inva'?'inva':'none');
+  chip.textContent = user === 'Manager' ? '👔 Manager' : (user === 'Sara' ? '👩 Sara' : '👩 Inva');
+  chip.className = 'user-chip ' + (user==='Sara'?'sara':user==='Inva'?'inva':'none');
   if (storedData.length) { applyFilter(); updateDayHistory(); updateBadge(); }
-  else { set('viewTitle','Ngarko skedarin XLS nga Trinis'); set('viewSub','Kliko "Ngarko XLS Trinis" në shiritin e sipërm'); }
+  else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; }
   loadMetaStats();
 }
 function logout() {
@@ -313,11 +382,14 @@ function logout() {
   localStorage.removeItem('fhUser');
   location.reload();
 }
+
+// Auto-restore last user session
 (function(){
   const u = localStorage.getItem('fhUser');
-  if (u) { loadState(); doLogin(u); }
+  if (u) { loadState(); if(storedData.length || true) doLogin(u); }
 })();
 
+// ── FILE IMPORT ────────────────────────────────────────────────
 document.getElementById('fileInput').addEventListener('change', e => {
   if (e.target.files[0]) importFile(e.target.files[0]);
 });
@@ -331,19 +403,33 @@ function importFile(file) {
       const existIds = new Set(storedData.map(r => r['Nr. Prenotimit']));
       const newOnes  = imported.filter(r => !existIds.has(r['Nr. Prenotimit']));
       const updated  = imported.filter(r =>  existIds.has(r['Nr. Prenotimit']));
+
+      // Auto-assign new reservations to current user (if not Manager)
       if (currentUser && currentUser !== 'Manager') {
-        newOnes.forEach(r => { if (!staffMap[r['Nr. Prenotimit']]) staffMap[r['Nr. Prenotimit']] = currentUser; });
+        newOnes.forEach(r => {
+          const nr = r['Nr. Prenotimit'];
+          if (!staffMap[nr]) staffMap[nr] = currentUser;
+        });
       }
+
+      // Add new, update existing records (keep staff assignment)
       storedData = [
         ...storedData.filter(r => !new Set(updated.map(u=>u['Nr. Prenotimit'])).has(r['Nr. Prenotimit'])),
-        ...updated, ...newOnes
+        ...updated,
+        ...newOnes
       ];
-      saveState(); updateBadge(); updateDayHistory(); applyFilter();
-      const autoMsg = (currentUser && currentUser!=='Manager' && newOnes.length>0) ? ` · ${newOnes.length} u caktuan te ${currentUser}` : '';
-      const st = document.getElementById('importStatus');
-      st.className = 'import-status';
-      st.textContent = `✅ ${newOnes.length} rezervime të reja · ${updated.length} u përditësuan · Totali: ${storedData.length}${autoMsg}`;
-      setTimeout(() => st.className = 'import-status hidden', 8000);
+
+      saveState();
+      updateBadge();
+      updateDayHistory();
+      applyFilter();
+
+      const autoAssignMsg = (currentUser && currentUser !== 'Manager' && newOnes.length > 0)
+        ? ` · ${newOnes.length} u caktuan automatikisht te ${currentUser}` : '';
+      const status = document.getElementById('importStatus');
+      status.className = 'import-status';
+      status.textContent = `✅ Import i suksesshëm — ${newOnes.length} rezervime të reja u shtuan · ${updated.length} u përditësuan · Totali: ${storedData.length} rekorde${autoAssignMsg}`;
+      setTimeout(() => status.className = 'import-status hidden', 8000);
     } catch(err) { alert('Gabim: ' + err.message); }
   };
   r.readAsText(file, 'utf-8');
@@ -355,12 +441,21 @@ function parseXLS(content) {
   const ns = 'urn:schemas-microsoft-com:office:spreadsheet';
   const rows = xml.getElementsByTagNameNS(ns, 'Row');
   if (!rows.length) throw new Error('Skedari është bosh ose i formatit të gabuar');
+
+  // Header: all Data elements in first row
   const header = Array.from(rows[0].getElementsByTagNameNS(ns,'Data')).map(c=>c.textContent.trim());
+
   const data = [];
   for (let i = 1; i < rows.length; i++) {
-    const vals = Array.from(rows[i].getElementsByTagNameNS(ns,'Data')).map(d=>d.textContent.trim());
+    // Use Data elements only — same as Python lxml findall('.//Data').
+    // Empty <Cell /> has no Data child, so it is skipped automatically.
+    // This gives correct sequential mapping identical to the Python analysis.
+    const dataEls = rows[i].getElementsByTagNameNS(ns, 'Data');
+    const vals = Array.from(dataEls).map(d => d.textContent.trim());
     while (vals.length < header.length) vals.push('');
-    const obj = {}; header.forEach((h,idx)=>obj[h]=vals[idx]||''); data.push(obj);
+    const obj = {};
+    header.forEach((h, idx) => obj[h] = vals[idx] || '');
+    data.push(obj);
   }
   return data;
 }
@@ -371,7 +466,13 @@ function updateBadge() {
   b.textContent = `💾 ${storedData.length} rez. ruajtur`;
 }
 
+// ── DATE HELPERS ───────────────────────────────────────────────
 function getCD(r) {
+  // Scan all field values for dd/mm/yyyy pattern.
+  // The Exp Date raw value is " - 15/06/2026" but .trim() strips the leading
+  // space → "- 15/06/2026". Checking for ' - ' would miss it, so we just
+  // regex-search for the date digits directly — safe because check-in dates
+  // are stored as ISO (yyyy-mm-dd) and no other field uses dd/mm/yyyy format.
   for (const val of Object.values(r)) {
     if (!val) continue;
     const m = val.match(/(\d{2})\/(\d{2})\/(\d{4})/);
@@ -383,15 +484,20 @@ function fmtD(iso) { if(!iso||iso.length<10)return'—'; return iso.slice(8,10)+
 function getRev(r) { return parseFloat(r['Ditët qëndrimit'])||0; }
 function getNts(r) { return parseInt(r['Çmimi'])||0; }
 function getPlan(r) {
-  const k = r['Kompania']||'';
-  if(k.includes('ALL INCLUSIVE'))return'All Inclusive';
-  if(k.includes('Bed')||k.includes('BB'))return'B&B';
-  if(k.includes('Half')||k.includes('HB'))return'Half Board';
-  if(k.includes('Full')||k.includes('FB'))return'Full Board';
-  if(k.includes('ITAKA'))return'Tour Op.';
-  return k.slice(0,12)||'—';
+  const k = r['Kompania'] || '';
+  if (k.includes('ALL INCLUSIVE')) return 'All Inclusive';
+  if (k.includes('Bed') || k.includes('BB')) return 'B&B';
+  if (k.includes('Half') || k.includes('HB')) return 'Half Board';
+  if (k.includes('Full') || k.includes('FB')) return 'Full Board';
+  if (k.includes('ITAKA')) return 'Tour Op.';
+  return k.slice(0,12) || '—';
 }
-function getPlanCls(p){return p==='All Inclusive'?'pAI':p==='B&B'?'pBB':p==='Half Board'?'pHB':'pTO';}
+function getPlanCls(plan) {
+  if (plan==='All Inclusive') return 'pAI';
+  if (plan==='B&B') return 'pBB';
+  if (plan==='Half Board') return 'pHB';
+  return 'pTO';
+}
 function chType(ch) {
   if(['Booking.com','Expedia','Trip.com','OTS','Website/Booking Engine','Agjensi 7BEDS'].some(o=>ch.includes(o)))return'ota';
   if(['W2M','Hotelbeds','ITAKA','Webbeds','Agjensi'].some(t=>ch.includes(t)))return'tour';
@@ -404,111 +510,153 @@ function chTag(ch) {
   const cls={ota:'t-ota',tour:'t-tour',dir:'t-dir',oth:'t-oth'};
   return`<span class="tag ${cls[t]}">${map[t]}</span>`;
 }
-function getWeekStart(){const d=new Date(TODAY);d.setDate(d.getDate()-d.getDay()+1);return d.toISOString().slice(0,10);}
-function getMonthStart(){return TODAY.slice(0,8)+'01';}
 
-function setView(v,el){
-  currentView=v;
+function getWeekStart() {
+  const d=new Date(TODAY); d.setDate(d.getDate()-d.getDay()+1); return d.toISOString().slice(0,10);
+}
+function getMonthStart() { return TODAY.slice(0,8)+'01'; }
+
+// ── VIEW / FILTER ──────────────────────────────────────────────
+function setView(v, el) {
+  currentView = v;
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
+  if(el) el.classList.add('active');
   applyFilter();
 }
 
 function applyFilter() {
   const dateVal = document.getElementById('dateFilter').value;
-  // Vetëm direkte: Calls, WhatsApp, Social Media, Walk In, Viber, Email
-  let data = [...storedData].filter(r => chType(r['AI']||'') === 'dir');
-  if(currentView==='today') data=data.filter(r=>getCD(r)===TODAY);
-  else if(currentView==='week') data=data.filter(r=>getCD(r)>=getWeekStart());
-  else if(currentView==='month') data=data.filter(r=>getCD(r)>=getMonthStart());
-  if(currentView==='today' && dateVal && dateVal!==TODAY) {
-    data=storedData.filter(r=>getCD(r)===dateVal && chType(r['AI']||'')==='dir');
+  let data = [...storedData];
+
+  if (currentView === 'today')       data = data.filter(r => getCD(r) === TODAY);
+  else if (currentView === 'week')   data = data.filter(r => getCD(r) >= getWeekStart());
+  else if (currentView === 'month')  data = data.filter(r => getCD(r) >= getMonthStart());
+  // 'all' = no date filter
+
+  // If manual date filter is set and view is 'today', use that date instead
+  if (currentView === 'today' && dateVal && dateVal !== TODAY) {
+    data = storedData.filter(r => getCD(r) === dateVal);
   }
-  if(currentUser!=='Manager') data=data.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===currentUser);
-  filteredData=data;
+
+  // Staff filter (not for Manager)
+  if (currentUser !== 'Manager') {
+    data = data.filter(r => (staffMap[r['Nr. Prenotimit']] || '') === currentUser);
+  }
+
+  filteredData = data;
   render();
 }
 
-function showAll(){
-  document.getElementById('dateFilter').value='';
-  setView('all',null);
+function showAll() {
+  document.getElementById('dateFilter').value = '';
+  setView('all', null);
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
 }
 
+// ── DAILY HISTORY PILLS ────────────────────────────────────────
 function updateDayHistory() {
-  const byDay={};
-  storedData.filter(r=>chType(r['AI']||'')==='dir').forEach(r=>{
-    const cd=getCD(r); if(!cd)return;
-    if(!byDay[cd])byDay[cd]={cnt:0,rev:0};
-    byDay[cd].cnt++; byDay[cd].rev+=getRev(r);
+  // Get last 14 days that have data
+  const byDay = {};
+  storedData.forEach(r => {
+    const cd = getCD(r);
+    if (!cd) return;
+    if (!byDay[cd]) byDay[cd] = {cnt:0,rev:0};
+    byDay[cd].cnt++;
+    byDay[cd].rev += getRev(r);
   });
-  const days=Object.keys(byDay).sort().reverse().slice(0,14);
-  const selDate=document.getElementById('dateFilter').value||TODAY;
-  document.getElementById('dayHistory').innerHTML=days.map(d=>{
-    const v=byDay[d]; const isActive=d===selDate&&currentView==='today';
-    return`<div class="day-pill${isActive?' active':''}" onclick="selectDay('${d}')">
-      <div class="dp-date">${fmtD(d)}</div><div class="dp-cnt">${v.cnt}</div><div class="dp-rev">${v.rev.toFixed(0)} EUR</div></div>`;
+  const days = Object.keys(byDay).sort().reverse().slice(0,14);
+  const selDate = document.getElementById('dateFilter').value || TODAY;
+
+  document.getElementById('dayHistory').innerHTML = days.map(d => {
+    const v = byDay[d];
+    const isActive = d === selDate && currentView === 'today';
+    return `<div class="day-pill${isActive?' active':''}" onclick="selectDay('${d}')">
+      <div class="dp-date">${fmtD(d)}</div>
+      <div class="dp-cnt">${v.cnt}</div>
+      <div class="dp-rev">${v.rev.toFixed(0)} EUR</div>
+    </div>`;
   }).join('');
 }
 
-function selectDay(d){
-  document.getElementById('dateFilter').value=d;
+function selectDay(d) {
+  document.getElementById('dateFilter').value = d;
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
   document.querySelector('.vtab').classList.add('active');
-  currentView='today'; applyFilter(); updateDayHistory();
+  currentView = 'today';
+  applyFilter();
+  updateDayHistory();
 }
 
+// ── RENDER ─────────────────────────────────────────────────────
 function render() {
-  const data=filteredData;
+  const data = filteredData;
   updateMonthHistory();
-  const dateVal=document.getElementById('dateFilter').value;
-  const isManager=currentUser==='Manager';
-  const userColor=currentUser==='Sara'?'sara':currentUser==='Inva'?'inva':'all';
-  let titleDate='';
-  if(currentView==='today') titleDate=dateVal?fmtD(dateVal):fmtD(TODAY);
-  const viewLabel=currentView==='today'?`Sot · ${titleDate}`:currentView==='week'?'Kjo Javë':currentView==='month'?'Ky Muaj':'Gjithë Historia';
-  const userName=currentUser==='Manager'?'Manager':currentUser;
-  document.getElementById('viewTitle').innerHTML=`<span class="accent ${userColor}">${userName}</span> — ${viewLabel}`;
-  document.getElementById('viewSub').textContent=isManager
-    ?`${storedData.length} rezervime totale · ${data.length} në këtë periudhë`
-    :`${data.length} rezervime të tua · ${storedData.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')==='').length} ende pa caktuar staf`;
-  const totalRev=data.reduce((s,r)=>s+getRev(r),0);
-  const totalNts=data.reduce((s,r)=>s+getNts(r),0);
-  const adr=totalNts>0?totalRev/totalNts:0;
-  const rooms=new Set(data.map(r=>r['Nr Dhomes'].trim())).size;
-  const arrToday=storedData.filter(r=>(r['Data Fillimit']||'').slice(0,10)===TODAY).length;
-  set('kCnt',data.length); set('kCntS',isManager?'':`nga ${storedData.length} total`);
-  set('kRev',totalRev.toLocaleString('sq-AL',{maximumFractionDigits:0}));
-  set('kNts',totalNts); set('kADR',adr>0?adr.toFixed(0)+'€':'—');
-  set('kRms',rooms); set('kArr',arrToday);
-  document.getElementById('staffComp').style.display=isManager?'grid':'none';
-  if(isManager) renderStaffComp(data);
-  mkDoughnut('chChart',cntBy(data,r=>r['AI']||'Pa kanal'),8,['#0a2240','#c9a84c','#0e7c6e','#2563eb','#7c3aed','#e05252','#f59e0b','#10b981']);
-  mkBar('rmChart',cntBy(data,r=>(r['LLoji Dhomes']||'').trim().replace('GARDEN ','G ').replace('FLOWER ','F ').replace(' FLOWER ','F ')||'Tjetër'),['#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#1d4ed8','#1e40af']);
-  mkDoughnut('plChart',cntBy(data,r=>getPlan(r)),99,['#f59e0b','#0e7c6e','#2563eb','#7c3aed','#e05252','#10b981']);
-  renderChTable(data,totalRev); renderNat(data); renderResTable();
+  const dateVal = document.getElementById('dateFilter').value;
+  const isManager = currentUser === 'Manager';
+  const userColor = currentUser==='Sara'?'sara':currentUser==='Inva'?'inva':'all';
+
+  // Title
+  let titleDate = '';
+  if (currentView==='today') titleDate = dateVal ? fmtD(dateVal) : fmtD(TODAY);
+  const viewLabel = currentView==='today'?`Sot · ${titleDate}`:currentView==='week'?'Kjo Javë':currentView==='month'?'Ky Muaj':'Gjithë Historia';
+  const userName = currentUser==='Manager'?'Manager':currentUser;
+  document.getElementById('viewTitle').innerHTML = `<span class="accent ${userColor}">${userName}</span> — ${viewLabel}`;
+  document.getElementById('viewSub').textContent = isManager
+    ? `${storedData.length} rezervime totale · ${data.length} në këtë periudhë`
+    : `${data.length} rezervime të tua · ${storedData.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')==='').length} ende pa caktuar staf`;
+
+  // KPIs
+  const totalRev = data.reduce((s,r)=>s+getRev(r),0);
+  const totalNts = data.reduce((s,r)=>s+getNts(r),0);
+  const adr = totalNts>0?totalRev/totalNts:0;
+  const rooms = new Set(data.map(r=>r['Nr Dhomes'].trim())).size;
+  const arrToday = storedData.filter(r=>(r['Data Fillimit']||'').slice(0,10)===TODAY).length;
+
+  set('kCnt', data.length);
+  set('kCntS', isManager ? '' : `nga ${storedData.length} total`);
+  set('kRev', totalRev.toLocaleString('sq-AL',{maximumFractionDigits:0}));
+  set('kNts', totalNts);
+  set('kADR', adr>0?adr.toFixed(0)+'€':'—');
+  set('kRms', rooms);
+  set('kArr', arrToday);
+
+  // Staff comparison (Manager only)
+  document.getElementById('staffComp').style.display = isManager ? 'grid' : 'none';
+  if (isManager) renderStaffComp(data);
+
+  // Charts
+  mkDoughnut('chChart', cntBy(data,r=>r['AI']||'Pa kanal'),8,['#0a2240','#c9a84c','#0e7c6e','#2563eb','#7c3aed','#e05252','#f59e0b','#10b981']);
+  mkBar('rmChart', cntBy(data,r=>(r['LLoji Dhomes']||'').trim().replace('GARDEN ','G ').replace('FLOWER ','F ').replace(' FLOWER ','F ')||'Tjetër'),
+    ['#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#1d4ed8','#1e40af']);
+  mkDoughnut('plChart', cntBy(data,r=>getPlan(r)),99,['#f59e0b','#0e7c6e','#2563eb','#7c3aed','#e05252','#10b981']);
+
+  renderChTable(data, totalRev);
+  renderNat(data);
+  renderResTable();
 }
 
-function renderStaffComp(data){
-  const totalRev=data.reduce((s,r)=>s+getRev(r),0);
-  ['Sara','Inva'].forEach(name=>{
-    const mine=data.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===name);
-    const rev=mine.reduce((s,r)=>s+getRev(r),0); const nts=mine.reduce((s,r)=>s+getNts(r),0);
-    const pct=totalRev>0?((rev/totalRev)*100):0; const p=name[0].toLowerCase();
+function renderStaffComp(data) {
+  const totalRev = data.reduce((s,r)=>s+getRev(r),0);
+  ['Sara','Inva'].forEach(name => {
+    const mine = data.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===name);
+    const rev = mine.reduce((s,r)=>s+getRev(r),0);
+    const nts = mine.reduce((s,r)=>s+getNts(r),0);
+    const pct = totalRev>0?((rev/totalRev)*100):0;
+    const p = name[0].toLowerCase();
     set(p+'Cnt',mine.length); set(p+'Rev',rev.toLocaleString('sq-AL',{maximumFractionDigits:0}));
     set(p+'Nts',nts); set(p+'ADR',nts>0?(rev/nts).toFixed(0)+'€':'—');
-    document.getElementById(p+'Bar').style.width=pct+'%';
+    document.getElementById(p+'Bar').style.width = pct+'%';
     set(p+'Pct',`${pct.toFixed(0)}% e të ardhurave totale`);
   });
 }
 
-function cntBy(data,fn,limit){
+function cntBy(data,fn,limit) {
   const c={};
   data.forEach(r=>{const k=fn(r)||'?';c[k]=(c[k]||0)+1;});
   return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,limit||99);
 }
 
-function mkDoughnut(id,entries,limit,colors){
+function mkDoughnut(id,entries,limit,colors) {
   if(charts[id])charts[id].destroy();
   const sl=entries.slice(0,limit);
   charts[id]=new Chart(document.getElementById(id).getContext('2d'),{
@@ -517,7 +665,7 @@ function mkDoughnut(id,entries,limit,colors){
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:5}},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw}}}}
   });
 }
-function mkBar(id,entries,colors){
+function mkBar(id,entries,colors) {
   if(charts[id])charts[id].destroy();
   charts[id]=new Chart(document.getElementById(id).getContext('2d'),{
     type:'bar',
@@ -526,17 +674,19 @@ function mkBar(id,entries,colors){
   });
 }
 
-function renderChTable(data,totalRev){
+function renderChTable(data,totalRev) {
   const rv={},cnt={};
   data.forEach(r=>{const ch=r['AI']||'Pa kanal';rv[ch]=(rv[ch]||0)+getRev(r);cnt[ch]=(cnt[ch]||0)+1;});
-  const sorted=Object.entries(rv).sort((a,b)=>b[1]-a[1]); const mx=sorted[0]?.[1]||1;
+  const sorted=Object.entries(rv).sort((a,b)=>b[1]-a[1]);
+  const mx=sorted[0]?.[1]||1;
   document.getElementById('chTbl').innerHTML=sorted.map(([ch,rev])=>{
-    const pct=totalRev>0?((rev/totalRev)*100).toFixed(0):0; const bw=Math.round((rev/mx)*65);
+    const pct=totalRev>0?((rev/totalRev)*100).toFixed(0):0;
+    const bw=Math.round((rev/mx)*65);
     return`<tr><td><strong>${ch}</strong></td><td>${chTag(ch)}</td><td>${cnt[ch]}</td><td><strong>${rev.toLocaleString('sq-AL',{maximumFractionDigits:0})}</strong></td><td>${pct}%</td><td><div class="mbar" style="width:${bw}px"></div></td></tr>`;
   }).join('');
 }
 
-function renderNat(data){
+function renderNat(data) {
   const bn={};
   data.forEach(r=>{const n=r['Burimi Info.']||'?';if(!bn[n])bn[n]={cnt:0,rev:0};bn[n].cnt++;bn[n].rev+=getRev(r);});
   const sorted=Object.entries(bn).sort((a,b)=>b[1].rev-a[1].rev).slice(0,10);
@@ -545,24 +695,36 @@ function renderNat(data){
   ).join('');
 }
 
-function renderResTable(){
-  const tbody=document.getElementById('resTbl');
-  const q=(document.getElementById('srch').value||'').toLowerCase();
-  let rows=currentUser==='Manager'?[...filteredData]:[...storedData.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===currentUser)];
-  if(currentView==='today'){const d=document.getElementById('dateFilter').value||TODAY;rows=rows.filter(r=>getCD(r)===d);}
-  else if(currentView==='week') rows=rows.filter(r=>getCD(r)>=getWeekStart());
+function renderResTable() {
+  const tbody = document.getElementById('resTbl');
+  const q = (document.getElementById('srch').value||'').toLowerCase();
+  // For staff view show all filteredData; for searching in all-time show storedData
+  let rows = currentUser==='Manager' ? [...filteredData] : [...storedData.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===currentUser)];
+  if (currentView==='today') {
+    const d = document.getElementById('dateFilter').value || TODAY;
+    rows = rows.filter(r=>getCD(r)===d);
+  } else if(currentView==='week') rows=rows.filter(r=>getCD(r)>=getWeekStart());
   else if(currentView==='month') rows=rows.filter(r=>getCD(r)>=getMonthStart());
   if(q) rows=rows.filter(r=>r['Klienti'].toLowerCase().includes(q)||r['Nr Dhomes'].toLowerCase().includes(q));
   rows.sort((a,b)=>parseInt(b['Nr. Prenotimit']||0)-parseInt(a['Nr. Prenotimit']||0));
-  set('resCnt',rows.length+' rekorde');
-  const cb=document.getElementById('claimAllBtn');
-  if(cb) cb.style.display=(currentUser&&currentUser!=='Manager')?'inline-block':'none';
+
+  set('resCnt', rows.length+' rekorde');
+  const cb = document.getElementById('claimAllBtn');
+  if(cb) cb.style.display = (currentUser && currentUser!=='Manager') ? 'inline-block' : 'none';
+
   if(!rows.length){tbody.innerHTML='<tr><td colspan="13" class="es">Nuk ka rezervime për këtë periudhë</td></tr>';return;}
+
+  const cdToday = getCD; // reuse
   tbody.innerHTML=rows.map(r=>{
-    const nr=r['Nr. Prenotimit']; const as=staffMap[nr]||'';
-    const ci=(r['Data Fillimit']||'').slice(0,10); const isArrToday=ci===TODAY;
-    const cd=getCD(r); const plan=getPlan(r); const planCls=getPlanCls(plan);
-    const rev=getRev(r); const sCls=as==='Sara'?'sara':as==='Inva'?'inva':'';
+    const nr=r['Nr. Prenotimit'];
+    const as=staffMap[nr]||'';
+    const ci=(r['Data Fillimit']||'').slice(0,10);
+    const isArrToday=ci===TODAY;
+    const cd=getCD(r);
+    const plan=getPlan(r);
+    const planCls=getPlanCls(plan);
+    const rev=getRev(r);
+    const sCls=as==='Sara'?'sara':as==='Inva'?'inva':'';
     return`<tr${isArrToday?' style="background:#f0fdf4"':''}>
       <td><strong style="color:var(--navy)">#${nr}</strong></td>
       <td><strong>${r['Klienti'].trim()}</strong></td>
@@ -580,191 +742,319 @@ function renderResTable(){
         <option value="">— Cakto —</option>
         <option value="Sara"${as==='Sara'?' selected':''}>👩 Sara</option>
         <option value="Inva"${as==='Inva'?' selected':''}>👩 Inva</option>
-      </select></td></tr>`;
+      </select></td>
+    </tr>`;
   }).join('');
 }
 
-var monthChartInst=null;
-function updateMonthHistory(){
-  const data=filteredData; const byMonth={};
-  data.forEach(r=>{
-    const ci=(r['Data Fillimit']||'').slice(0,7);
-    if(!ci||ci.length<7)return;
-    if(!byMonth[ci])byMonth[ci]={cnt:0,rev:0};
-    byMonth[ci].cnt++; byMonth[ci].rev+=getRev(r);
+// ── CHECKIN MONTH DISTRIBUTION ──────────────────────────────────
+let monthChartInst = null;
+function updateMonthHistory() {
+  // Group the CURRENTLY FILTERED reservations by their check-in month
+  const data = filteredData;
+  const byMonth = {};
+  data.forEach(r => {
+    const ci = (r['Data Fillimit'] || '').slice(0,7); // "2026-06"
+    if (!ci || ci.length < 7) return;
+    if (!byMonth[ci]) byMonth[ci] = {cnt:0, rev:0};
+    byMonth[ci].cnt++;
+    byMonth[ci].rev += getRev(r);
   });
-  const months=Object.keys(byMonth).sort();
-  if(!months.length){if(monthChartInst){monthChartInst.destroy();monthChartInst=null;}document.getElementById('monthTblBody').innerHTML='';return;}
-  const mNames=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
-  const mShort=['Jan','Shk','Mar','Pri','Maj','Qer','Kor','Gus','Sht','Tet','Nën','Dhj'];
-  const labels=months.map(m=>{const[y,mo]=m.split('-');return mShort[+mo-1]+' '+y.slice(2);});
-  const counts=months.map(m=>byMonth[m].cnt); const total=data.length;
-  const bgColors=['#0e7c6e','#1a9c8c','#26bcac','#3ddccc','#5aecdc','#80f4e8','#b0faf4'];
-  if(monthChartInst){
-    monthChartInst.data.labels=labels;
-    monthChartInst.data.datasets[0].data=counts;
-    monthChartInst.data.datasets[0].backgroundColor=months.map((_,i)=>bgColors[i%bgColors.length]);
+
+  const months = Object.keys(byMonth).sort();
+  if (!months.length) {
+    if (monthChartInst) { monthChartInst.destroy(); monthChartInst = null; }
+    document.getElementById('monthTblBody').innerHTML = '';
+    return;
+  }
+
+  const mNames = ['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
+  const mShort = ['Jan','Shk','Mar','Pri','Maj','Qer','Kor','Gus','Sht','Tet','Nën','Dhj'];
+  const labels = months.map(m => { const [y,mo]=m.split('-'); return mShort[+mo-1]+' '+y.slice(2); });
+  const counts = months.map(m => byMonth[m].cnt);
+  const total = data.length;
+
+  // Palette: teal gradient shades
+  const bgColors = ['#0e7c6e','#1a9c8c','#26bcac','#3ddccc','#5aecdc','#80f4e8','#b0faf4'];
+
+  if (monthChartInst) {
+    monthChartInst.data.labels = labels;
+    monthChartInst.data.datasets[0].data = counts;
+    monthChartInst.data.datasets[0].backgroundColor = months.map((_,i) => bgColors[i % bgColors.length]);
     monthChartInst.update();
   } else {
-    monthChartInst=new Chart(document.getElementById('monthChart'),{
-      type:'bar',
-      data:{labels,datasets:[{label:'Rezervime',data:counts,backgroundColor:months.map((_,i)=>bgColors[i%bgColors.length]),borderRadius:4,borderSkipped:false}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} rezervime · ${byMonth[months[ctx.dataIndex]].rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} €`}}},scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#6b7a8d',autoSkip:false,maxRotation:0}},y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},color:'#6b7a8d',stepSize:1,precision:0}}}}
+    monthChartInst = new Chart(document.getElementById('monthChart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Rezervime',
+          data: counts,
+          backgroundColor: months.map((_,i) => bgColors[i % bgColors.length]),
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.raw} rezervime · ${byMonth[months[ctx.dataIndex]].rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} €` } }
+        },
+        scales: {
+          x: { grid:{display:false}, ticks:{font:{size:12}, color:'#6b7a8d', autoSkip:false, maxRotation:0} },
+          y: { beginAtZero:true, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:11}, color:'#6b7a8d', stepSize:1, precision:0} }
+        }
+      }
     });
   }
-  document.getElementById('monthTblBody').innerHTML=months.map(m=>{
-    const v=byMonth[m]; const[y,mo]=m.split('-');
-    const pct=total>0?Math.round(v.cnt/total*100):0;
-    return`<tr><td><strong>${mNames[+mo-1]} ${y}</strong></td><td><strong>${v.cnt}</strong></td><td><strong>${v.rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} €</strong></td>
-      <td style="min-width:120px"><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:var(--teal);border-radius:3px"></div></div><span style="font-size:12px;color:var(--muted);min-width:28px">${pct}%</span></div></td></tr>`;
+
+  document.getElementById('monthTblBody').innerHTML = months.map(m => {
+    const v = byMonth[m];
+    const [y,mo] = m.split('-');
+    const pct = total > 0 ? Math.round(v.cnt/total*100) : 0;
+    const barW = pct;
+    return `<tr>
+      <td><strong>${mNames[+mo-1]} ${y}</strong></td>
+      <td><strong>${v.cnt}</strong></td>
+      <td><strong>${v.rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} €</strong></td>
+      <td style="min-width:120px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden">
+            <div style="width:${barW}%;height:100%;background:var(--teal);border-radius:3px"></div>
+          </div>
+          <span style="font-size:12px;color:var(--muted);min-width:28px">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
   }).join('');
 }
 
-function clearAndReimport(){
-  if(!confirm('Fshij të gjitha të dhënat e ruajtura dhe caktimet e stafit?'))return;
-  localStorage.removeItem('fhData'); localStorage.removeItem('fhStaff');
-  storedData=[]; staffMap={};
-  document.getElementById('dataBadge').style.display='none';
-  document.getElementById('dayHistory').innerHTML='';
-  document.getElementById('monthTblBody').innerHTML='';
-  if(monthChartInst){monthChartInst.destroy();monthChartInst=null;}
-  set('viewTitle','Ngarko skedarin XLS nga Trinis');
-  set('viewSub','Kliko "Ngarko XLS Trinis" në shiritin e sipërm');
-  alert('✅ U pastrua. Tani ngarko skedarin XLS nga Trinis — rezervimet e reja do caktohen automatikisht te '+currentUser+'.');
+function clearAndReimport() {
+  if (!confirm('Fshij të gjitha të dhënat e ruajtura dhe caktimet e stafit? Pas kësaj duhet të importosh skedarin sërish.')) return;
+  localStorage.removeItem('fhData');
+  localStorage.removeItem('fhStaff');
+  storedData = [];
+  staffMap = {};
+  document.getElementById('dataBadge').style.display = 'none';
+  document.getElementById('dayHistory').innerHTML = '';
+  document.getElementById('monthTblBody').innerHTML = '';
+  if (monthChartInst) { monthChartInst.destroy(); monthChartInst = null; }
+  document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis';
+  document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm';
+  alert('✅ U pastrua. Tani ngarko skedarin XLS nga Trinis — rezervimet e reja do caktohen automatikisht te ' + currentUser + '.');
 }
 
-function claimAll(){
-  if(currentUser==='Manager')return;
-  const dateVal=document.getElementById('dateFilter').value||TODAY;
-  let toAssign=storedData.filter(r=>getCD(r)===dateVal);
-  if(!toAssign.length)toAssign=filteredData;
-  const count=toAssign.filter(r=>!staffMap[r['Nr. Prenotimit']]).length;
-  if(!count){alert('Të gjitha rezervimet tashmë janë të caktuara.');return;}
-  if(!confirm(`Cakto ${count} rezervime (pa staf) te ${currentUser}?`))return;
-  toAssign.forEach(r=>{if(!staffMap[r['Nr. Prenotimit']])staffMap[r['Nr. Prenotimit']]=currentUser;});
-  saveState(); applyFilter(); updateDayHistory();
+function claimAll() {
+  // Assign all reservations in current filtered view to current user
+  if (currentUser === 'Manager') return;
+  const dateVal = document.getElementById('dateFilter').value || TODAY;
+  let toAssign = storedData.filter(r => getCD(r) === dateVal);
+  if (!toAssign.length) toAssign = filteredData;
+  const count = toAssign.filter(r => !staffMap[r['Nr. Prenotimit']]).length;
+  if (!count) { alert('Të gjitha rezervimet tashmë janë të caktuara.'); return; }
+  if (!confirm(`Cakto ${count} rezervime (pa staf) te ${currentUser}?`)) return;
+  toAssign.forEach(r => {
+    if (!staffMap[r['Nr. Prenotimit']]) staffMap[r['Nr. Prenotimit']] = currentUser;
+  });
+  saveState();
+  applyFilter();
+  updateDayHistory();
 }
 
-function assign(nr,sel){
-  staffMap[nr]=sel.value; saveState();
+function assign(nr,sel) {
+  staffMap[nr]=sel.value;
+  saveState();
   sel.className='ss '+(sel.value==='Sara'?'sara':sel.value==='Inva'?'inva':'');
   if(currentUser!=='Manager'){applyFilter();updateDayHistory();}
-  else{renderStaffComp(filteredData);renderResTable();}
+  else{if(currentUser==='Manager')renderStaffComp(filteredData);renderResTable();}
 }
 
 function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 
-var _metaStats=null;
-var SUPABASE_URL='https://ftevcplecbihhfffcxfd.supabase.co';
-var SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
+// ── META / SUPABASE ────────────────────────────────────────────
+var _metaStats = null; // { sara:{ig,me}, inva:{ig,me}, none:{ig,me}, total } or { myIg, myMe, total }
+const SUPABASE_URL = 'https://ftevcplecbihhfffcxfd.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
 
-async function loadMetaStats(){
-  const today=new Date().toISOString().slice(0,10);
-  const url=SUPABASE_URL+'/rest/v1/meta_conversations?select=platform,assigned_staff&conversation_date=eq.'+today;
-  try{
-    const r=await fetch(url,{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON}});
-    const rows=await r.json();
-    if(!Array.isArray(rows))return;
-    const s={ig:0,me:0},iv={ig:0,me:0},no={ig:0,me:0};
+async function loadMetaStats() {
+  const today = new Date().toISOString().slice(0,10);
+  const url = SUPABASE_URL + '/rest/v1/meta_conversations?select=platform,assigned_staff&conversation_date=eq.' + today;
+  try {
+    const r = await fetch(url, {headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON}});
+    const rows = await r.json();
+    if (!Array.isArray(rows)) return;
+    const s = {ig:0,me:0}, iv = {ig:0,me:0}, no = {ig:0,me:0};
     rows.forEach(function(row){
-      const staff=(row.assigned_staff||'').toLowerCase();
-      const target=staff==='sara'?s:staff==='inva'?iv:no;
-      if(row.platform==='instagram')target.ig++;else target.me++;
+      const staff = (row.assigned_staff||'').toLowerCase();
+      const target = staff==='sara'?s : staff==='inva'?iv : no;
+      if(row.platform==='instagram') target.ig++; else target.me++;
     });
-    if(currentUser==='Manager'){
-      _metaStats={sara:{ig:s.ig,me:s.me},inva:{ig:iv.ig,me:iv.me},none:{ig:no.ig,me:no.me},total:rows.length};
-    }else{
-      const mine=rows.filter(function(r){return(r.assigned_staff||'')===currentUser;});
-      _metaStats={myIg:mine.filter(function(r){return r.platform==='instagram';}).length,myMe:mine.filter(function(r){return r.platform==='messenger';}).length,total:rows.length};
+    if (currentUser === 'Manager') {
+      _metaStats = {sara:{ig:s.ig,me:s.me}, inva:{ig:iv.ig,me:iv.me}, none:{ig:no.ig,me:no.me}, total:rows.length};
+    } else {
+      const mine = rows.filter(function(r){return (r.assigned_staff||'')===currentUser;});
+      _metaStats = {myIg: mine.filter(function(r){return r.platform==='instagram';}).length, myMe: mine.filter(function(r){return r.platform==='messenger';}).length, total:rows.length};
     }
     renderMetaSection();
-    document.getElementById('metaLoading').style.display='none';
-  }catch(e){console.warn('Meta stats error:',e);}
+  } catch(e) { console.warn('Meta stats error:', e); }
 }
 
-function renderMetaSection(){
-  var el=document.getElementById('metaSection');
-  if(!el||!_metaStats)return;
-  el.style.display='block';
-  var isMgr=currentUser==='Manager'; var html='';
-  if(isMgr&&_metaStats.sara){
-    var saT=_metaStats.sara.ig+_metaStats.sara.me; var inT=_metaStats.inva.ig+_metaStats.inva.me;
-    html='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px">';
-    html+=mkMetaKpi('Instagram','📸',_metaStats.sara.ig+_metaStats.inva.ig+_metaStats.none.ig,'#e1306c');
-    html+=mkMetaKpi('Messenger','💬',_metaStats.sara.me+_metaStats.inva.me+_metaStats.none.me,'#1877f2');
-    html+=mkMetaKpi('Sara Total','👩',saT,'#ec4899');
-    html+=mkMetaKpi('Inva Total','👩',inT,'#7c3aed');
-    html+='</div>';
-  }else if(_metaStats.myIg!==undefined){
-    html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">';
-    html+=mkMetaKpi('Instagram','📸',_metaStats.myIg,'#e1306c');
-    html+=mkMetaKpi('Messenger','💬',_metaStats.myMe,'#1877f2');
-    html+=mkMetaKpi('Total Biseda','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
-    html+='</div>';
+function renderMetaSection() {
+  var el = document.getElementById('metaSection');
+  if (!el || !_metaStats) return;
+  el.style.display = 'block';
+  var isMgr = currentUser === 'Manager';
+  var html = '';
+  if (isMgr && _metaStats.sara) {
+    var saT = _metaStats.sara.ig + _metaStats.sara.me;
+    var inT = _metaStats.inva.ig + _metaStats.inva.me;
+    html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px">';
+    html += mkMetaKpi('Instagram','📸',_metaStats.sara.ig+_metaStats.inva.ig+_metaStats.none.ig,'#e1306c');
+    html += mkMetaKpi('Messenger','💬',_metaStats.sara.me+_metaStats.inva.me+_metaStats.none.me,'#1877f2');
+    html += mkMetaKpi('Sara Total','👩',saT,'#ec4899');
+    html += mkMetaKpi('Inva Total','👩',inT,'#7c3aed');
+    html += '</div>';
+  } else if (_metaStats.myIg !== undefined) {
+    html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">';
+    html += mkMetaKpi('Instagram','📸',_metaStats.myIg,'#e1306c');
+    html += mkMetaKpi('Messenger','💬',_metaStats.myMe,'#1877f2');
+    html += mkMetaKpi('Total Biseda','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
+    html += '</div>';
   }
-  el.innerHTML=html;
+  el.innerHTML = html;
 }
 
 function mkMetaKpi(lbl,ico,val,color){
-  return'<div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border-left:3px solid '+color+'">'+'<div style="font-size:18px;font-weight:800;color:'+color+'">'+ico+' '+val+'</div>'+'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:3px">'+lbl+'</div>'+'</div>';
+  return '<div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border-left:3px solid '+color+'">'+'<div style="font-size:18px;font-weight:800;color:'+color+'">'+ico+' '+val+'</div>'+'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:3px">'+lbl+'</div>'+'</div>';
 }
 
-function exportPDF(){window.print();}
+// ── EMAIL SUMMARY ───────────────────────────────────────────────
+function sendSummaryEmail() {
+  const isManager = currentUser === 'Manager';
+  var TO_STAFF   = 'pandiola.caci@hotel-flower.com, receptionflower@gmail.com, pandiolakerthi@gmail.com, reception@hotel-flower.com';
+  var TO_MANAGER = 'pandiola.caci@hotel-flower.com, receptionflower@gmail.com, pandiolakerthi@gmail.com, info@hotel-flower.com';
+  const TO = isManager ? TO_MANAGER : TO_STAFF;
+  const data = filteredData;
+  const dateVal = document.getElementById('dateFilter').value || TODAY;
 
-function sendSummaryEmail(){
-  const isManager=currentUser==='Manager';
-  var TO_STAFF='pandiola.caci@hotel-flower.com, receptionflower@gmail.com, pandiolakerthi@gmail.com, reception@hotel-flower.com';
-  var TO_MANAGER='pandiola.caci@hotel-flower.com, receptionflower@gmail.com, pandiolakerthi@gmail.com, info@hotel-flower.com';
-  const TO=isManager?TO_MANAGER:TO_STAFF;
-  const data=filteredData;
-  const dateVal=document.getElementById('dateFilter').value||TODAY;
-  function staffSummary(name){
-    const rows=isManager?data.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===name):data;
-    const cnt=rows.length; const rev=rows.reduce((s,r)=>s+getRev(r),0);
-    const nts=rows.reduce((s,r)=>s+getNts(r),0); const adr=nts>0?(rev/nts).toFixed(0):'—';
-    const ch={}; rows.forEach(r=>{const c=r['AI']||'Tjetër';ch[c]=(ch[c]||0)+1;});
-    const chLines=Object.entries(ch).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`    - ${k}: ${v}`).join('\n');
-    const mo={}; rows.forEach(r=>{const m=(r['Data Fillimit']||'').slice(0,7);if(m)mo[m]=(mo[m]||0)+1;});
-    const moLines=Object.entries(mo).sort().map(([k,v])=>{
-      const[y,mm]=k.split('-');
+  // Build per-staff breakdown
+  function staffSummary(name) {
+    const rows = isManager
+      ? data.filter(r => (staffMap[r['Nr. Prenotimit']]||'') === name)
+      : data;
+    const cnt = rows.length;
+    const rev = rows.reduce((s,r)=>s+getRev(r),0);
+    const nts = rows.reduce((s,r)=>s+getNts(r),0);
+    const adr = nts>0 ? (rev/nts).toFixed(0) : '—';
+    // Channel breakdown
+    const ch = {};
+    rows.forEach(r => { const c=r['AI']||'Tjetër'; ch[c]=(ch[c]||0)+1; });
+    const chLines = Object.entries(ch).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`    - ${k}: ${v}`).join('\n');
+    // Month distribution
+    const mo = {};
+    rows.forEach(r => { const m=(r['Data Fillimit']||'').slice(0,7); if(m) mo[m]=(mo[m]||0)+1; });
+    const moLines = Object.entries(mo).sort().map(([k,v])=>{
+      const [y,mm]=k.split('-');
       const mN=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
-      return`    - ${mN[+mm-1]} ${y}: ${v} rez.`;
+      return `    - ${mN[+mm-1]} ${y}: ${v} rez.`;
     }).join('\n');
-    const rezList=rows.map(r=>{
-      const cd=getCD(r);const ci=(r['Data Fillimit']||'').slice(0,10);const rev2=getRev(r);const plan=getPlan(r);
-      return`    #${r['Nr. Prenotimit']} ${(r['Klienti']||'').trim()} | ${fmtD(ci)} | ${getNts(r)} netë | ${plan} | ${r['AI']||'—'} | ${rev2>0?rev2.toFixed(0)+' EUR':'—'}`;
+    // Reservation list
+    const rezList = rows.map(r=>{
+      const cd=getCD(r); const ci=(r['Data Fillimit']||'').slice(0,10);
+      const rev2=getRev(r); const plan=getPlan(r);
+      return `    #${r['Nr. Prenotimit']} ${(r['Klienti']||'').trim()} | ${fmtD(ci)} | ${getNts(r)} netë | ${plan} | ${r['AI']||'—'} | ${rev2>0?rev2.toFixed(0)+' EUR':'—'}`;
     }).join('\n');
-    return{cnt,rev,nts,adr,chLines,moLines,rezList};
+    return {cnt,rev,nts,adr,chLines,moLines,rezList};
   }
-  const viewLabels={today:`Sot · ${fmtD(dateVal)}`,week:'Kjo Javë',month:'Ky Muaj',all:'Gjithë Historia'};
-  const viewLbl=viewLabels[currentView]||currentView;
-  const today2=new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'});
-  let subject,body;
-  if(!isManager){
-    const s=staffSummary(currentUser);
-    subject=`Flower Hotel — Permbledhje Shitjeve ${currentUser} · ${today2}`;
-    body=`FLOWER HOTEL — Permbledhje Shitjeve\nPeriudha: ${viewLbl}\nStafi: ${currentUser}\nGjeneruar: ${today2}\n${'='.repeat(50)}\n\nREZULTATE\n  Rezervime totale : ${s.cnt}\n  Te ardhura       : ${s.rev.toFixed(0)} EUR\n  Nete dhomash     : ${s.nts}\n  ADR              : ${s.adr} EUR/nate\n\nKANAET E SHITJES\n${s.chLines||'    (pa te dhena)'}\n\nSHPERNDARJE MUAJORE (check-in)\n${s.moLines||'    (pa te dhena)'}\n\nLISTA REZERVIMEVE\n${s.rezList||'    (pa rezervime)'}\n\n${'='.repeat(50)}\nRaporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
-  }else{
-    const sa=staffSummary('Sara'); const inv=staffSummary('Inva');
-    const tot=data.length; const totRev=data.reduce((s,r)=>s+getRev(r),0);
-    subject=`Flower Hotel — Raport Manager · ${viewLbl} · ${today2}`;
-    body=`FLOWER HOTEL — RAPORT MENAXHER\nPeriudha: ${viewLbl}\nGjeneruar: ${today2}\n${'='.repeat(50)}\n\nPERMBLEDHJE TOTALE\n  Rezervime : ${tot}\n  Te ardhura: ${totRev.toFixed(0)} EUR\n\nSARA\n  Rezervime  : ${sa.cnt}  |  Te ardhura: ${sa.rev.toFixed(0)} EUR  |  ADR: ${sa.adr} EUR\n  Kanalet:\n${sa.chLines||'    (pa te dhena)'}\n  Muajt (check-in):\n${sa.moLines||'    (pa te dhena)'}\n  Rezervimet:\n${sa.rezList||'    (pa rezervime)'}\n\nINVA\n  Rezervime  : ${inv.cnt}  |  Te ardhura: ${inv.rev.toFixed(0)} EUR  |  ADR: ${inv.adr} EUR\n  Kanalet:\n${inv.chLines||'    (pa te dhena)'}\n  Muajt (check-in):\n${inv.moLines||'    (pa te dhena)'}\n  Rezervimet:\n${inv.rezList||'    (pa rezervime)'}\n\n${'='.repeat(50)}\nRaporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
+
+  const viewLabels = {today:`Sot · ${fmtD(dateVal)}`, week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
+  const viewLbl = viewLabels[currentView] || currentView;
+  const today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+  let subject, body;
+
+  if (!isManager) {
+    const s = staffSummary(currentUser);
+    subject = `Flower Hotel — Permbledhje Shitjeve ${currentUser} · ${today2}`;
+    body = `FLOWER HOTEL — Permbledhje Shitjeve
+Periudha: ${viewLbl}
+Stafi: ${currentUser}
+Gjeneruar: ${today2}
+${'='.repeat(50)}
+
+REZULTATE
+  Rezervime totale : ${s.cnt}
+  Te ardhura       : ${s.rev.toFixed(0)} EUR
+  Nete dhomash     : ${s.nts}
+  ADR              : ${s.adr} EUR/nate
+
+KANAET E SHITJES
+${s.chLines || '    (pa te dhena)'}
+
+SHPERNDARJE MUAJORE (check-in)
+${s.moLines || '    (pa te dhena)'}
+
+LISTA REZERVIMEVE
+${s.rezList || '    (pa rezervime)'}
+
+${'='.repeat(50)}
+Raporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
+  } else {
+    const sa = staffSummary('Sara');
+    const inv = staffSummary('Inva');
+    const tot = data.length;
+    const totRev = data.reduce((s,r)=>s+getRev(r),0);
+    subject = `Flower Hotel — Raport Manager · ${viewLbl} · ${today2}`;
+    body = `FLOWER HOTEL — RAPORT MENAXHER
+Periudha: ${viewLbl}
+Gjeneruar: ${today2}
+${'='.repeat(50)}
+
+PERMBLEDHJE TOTALE
+  Rezervime : ${tot}
+  Te ardhura: ${totRev.toFixed(0)} EUR
+
+SARA
+  Rezervime  : ${sa.cnt}  |  Te ardhura: ${sa.rev.toFixed(0)} EUR  |  ADR: ${sa.adr} EUR
+  Kanalet:
+${sa.chLines || '    (pa te dhena)'}
+  Muajt (check-in):
+${sa.moLines || '    (pa te dhena)'}
+  Rezervimet:
+${sa.rezList || '    (pa rezervime)'}
+
+INVA
+  Rezervime  : ${inv.cnt}  |  Te ardhura: ${inv.rev.toFixed(0)} EUR  |  ADR: ${inv.adr} EUR
+  Kanalet:
+${inv.chLines || '    (pa te dhena)'}
+  Muajt (check-in):
+${inv.moLines || '    (pa te dhena)'}
+  Rezervimet:
+${inv.rezList || '    (pa rezervime)'}
+
+${'='.repeat(50)}
+Raporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
   }
-  if(_metaStats){
-    var ms='\n'+'='.repeat(50)+'\nSOCIAL MEDIA META (sot)\n';
-    if(currentUser==='Manager'&&_metaStats.sara){
-      ms+='  Sara:  Instagram '+_metaStats.sara.ig+' / Messenger '+_metaStats.sara.me+'\n';
-      ms+='  Inva:  Instagram '+_metaStats.inva.ig+' / Messenger '+_metaStats.inva.me+'\n';
-      ms+='  Total: '+_metaStats.total+' biseda';
-    }else if(_metaStats.myIg!==undefined){
-      ms+='  Instagram: '+_metaStats.myIg+' / Messenger: '+_metaStats.myMe;
-      ms+='\n  Total turni: '+(_metaStats.myIg+_metaStats.myMe)+' biseda';
+
+
+  // Add Meta stats to body
+  if (_metaStats) {
+    var metaSection = '\n' + '='.repeat(50) + '\nSOCIAL MEDIA META (sot)\n';
+    if (currentUser === 'Manager' && _metaStats.sara) {
+      metaSection += '  Sara:  Instagram ' + _metaStats.sara.ig + ' / Messenger ' + _metaStats.sara.me + '\n';
+      metaSection += '  Inva:  Instagram ' + _metaStats.inva.ig + ' / Messenger ' + _metaStats.inva.me + '\n';
+      metaSection += '  Total: ' + _metaStats.total + ' biseda';
+    } else if (_metaStats.myIg !== undefined) {
+      metaSection += '  Instagram: ' + _metaStats.myIg + ' / Messenger: ' + _metaStats.myMe;
+      metaSection += '\n  Total turni: ' + (_metaStats.myIg+_metaStats.myMe) + ' biseda';
     }
-    body+=ms;
+    body += metaSection;
   }
-  const mailto=`mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href=mailto;
+  
+    const mailto = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
 }
 </script>
 </body>
-</html>
