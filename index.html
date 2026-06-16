@@ -163,6 +163,36 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .import-status.hidden{display:none}
 
 footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-top:4px}
+
+/* ─── EMAIL PREVIEW MODAL ─── */
+.em-overlay{display:none;position:fixed;inset:0;background:rgba(10,34,64,.55);z-index:9000;align-items:center;justify-content:center;padding:20px}
+.em-overlay.open{display:flex}
+.em-box{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(10,34,64,.25);max-width:680px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.em-header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.em-header h3{font-size:16px;font-weight:800;margin:0}
+.em-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.em-close:hover{background:rgba(255,255,255,.28)}
+.em-meta{padding:14px 24px;border-bottom:1px solid var(--border);background:#f8fafc}
+.em-to{font-size:12px;color:var(--muted);margin-bottom:4px}
+.em-subj{font-size:13px;font-weight:700;color:var(--navy)}
+.em-body{padding:20px 24px;overflow-y:auto;flex:1}
+.em-body pre{font-family:'Segoe UI',system-ui,sans-serif;font-size:12.5px;line-height:1.7;white-space:pre-wrap;color:var(--text);margin:0}
+.em-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;background:#f8fafc}
+
+/* ─── PRINT / PDF ─── */
+@media print{
+  header,.controls,#loginScreen,.day-history,.view-tabs,footer,
+  .btn,.upload-lbl,#importStatus,.em-overlay,#metaRefreshBtn,
+  .ss,.claim-btn{display:none!important}
+  body{background:#fff!important;font-size:11px}
+  main{padding:10px!important;max-width:100%!important}
+  .card{box-shadow:none!important;border:1px solid #ddd!important;break-inside:avoid}
+  .kpi{box-shadow:none!important;border:1px solid #ddd!important}
+  .g2,.g3{grid-template-columns:1fr 1fr!important}
+  .rw{overflow:visible!important}
+  .rt{font-size:10px!important}
+  canvas{max-height:160px!important}
+}
 </style>
 </head>
 <body>
@@ -1055,9 +1085,51 @@ Raporti u gjenerua automatikisht nga Flower Hotel Sales Monitor.`;
     body += metaSection;
   }
 
-    const mailto = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // Show preview modal instead of opening directly
+  _emailDraft = {TO, subject, body};
+  document.getElementById('emTo').textContent = 'Dërguar: ' + TO;
+  document.getElementById('emSubj').textContent = subject;
+  document.getElementById('emPre').textContent = body;
+  document.getElementById('emailModal').classList.add('open');
+}
+
+var _emailDraft = null;
+function closeEmailModal() {
+  document.getElementById('emailModal').classList.remove('open');
+  _emailDraft = null;
+}
+function confirmSendEmail() {
+  if (!_emailDraft) return;
+  const {TO, subject, body} = _emailDraft;
+  const mailto = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const a = document.createElement('a'); a.href = mailto; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  closeEmailModal();
+}
+function exportPDF() {
+  window.print();
 }
 </script>
+
+<!-- ═══════════ EMAIL PREVIEW MODAL ═══════════ -->
+<div class="em-overlay" id="emailModal" onclick="if(event.target===this)closeEmailModal()">
+  <div class="em-box">
+    <div class="em-header">
+      <h3>✉️ Preview Email — Permbledhje Shitjeve</h3>
+      <button class="em-close" onclick="closeEmailModal()">✕</button>
+    </div>
+    <div class="em-meta">
+      <div class="em-to" id="emTo"></div>
+      <div class="em-subj" id="emSubj"></div>
+    </div>
+    <div class="em-body">
+      <pre id="emPre"></pre>
+    </div>
+    <div class="em-footer">
+      <button class="btn btn-ghost" onclick="closeEmailModal()" style="background:#f1f5f9;color:var(--navy);border:1px solid var(--border)">Anulo</button>
+      <button class="btn btn-gold" onclick="confirmSendEmail()" style="padding:8px 24px;font-size:14px">✉️ Dërgo Email</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
