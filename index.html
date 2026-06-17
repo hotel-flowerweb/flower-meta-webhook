@@ -333,10 +333,19 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       <div class="ct-left">
         <span class="dot" style="background:#c9a84c"></span>
         📊 90-Day Booking Pace &amp; Budget
-        <span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:8px">Rolling view · Direkte vetëm · Dhoma të përjashtuara nuk llogariten</span>
+        <span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:8px">Rolling view · Të gjitha kanalet · Dhoma të përjashtuara nuk llogariten</span>
       </div>
     </div>
     <div id="pace90Summary"></div>
+    <div style="position:relative;height:220px;margin:0 0 8px 0;background:var(--surface);border-radius:8px;border:1px solid var(--border);padding:8px 8px 4px 8px">
+      <canvas id="pace90Chart"></canvas>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;font-size:10px;color:var(--muted);padding:0 2px">
+      <span><span style="display:inline-block;width:10px;height:10px;background:#c9a84c;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Para monitorimit</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Të monitoruara</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Rezervime të ardhshme</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border:2px dashed #dc2626;box-sizing:border-box;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Target ditor (buxhet)</span>
+    </div>
     <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
       <div id="pace90Table"></div>
     </div>
@@ -582,6 +591,14 @@ const BUDGET = {
   '2026-07': {name:'Korrik',  short:'Jul', occ:99, rn:4900, days:31},
   '2026-08': {name:'Gusht',   short:'Aug', occ:99, rn:4900, days:31},
   '2026-09': {name:'Shtator', short:'Sep', occ:95, rn:4320, days:30}
+};
+// Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
+// Këto janë FIKSE — nuk mbishkruhen nga XLS
+const HISTORICAL_RN = {
+  '2026-06-01':99,'2026-06-02':96,'2026-06-03':110,'2026-06-04':121,
+  '2026-06-05':122,'2026-06-06':118,'2026-06-07':89,'2026-06-08':116,
+  '2026-06-09':112,'2026-06-10':127,'2026-06-11':129,'2026-06-12':131,
+  '2026-06-13':140,'2026-06-14':118,'2026-06-15':100,'2026-06-16':106
 };
 
 function getWeekStart() {
@@ -912,9 +929,8 @@ function render90Day() {
   if (!el90s || !el90t) return;
 
   try {
-    var dirData = storedData.filter(function(r){ return !isExcluded(r); }); // të gjitha kanalet për pace total
+    var dirData = storedData.filter(function(r){ return !isExcluded(r); });
 
-    // Find months in 90-day window with budget targets
     var todayD = new Date(TODAY);
     var end90D = new Date(TODAY); end90D.setDate(end90D.getDate()+90);
     var months90 = [];
@@ -930,29 +946,9 @@ function render90Day() {
       el90t.innerHTML = ''; return;
     }
 
-    // Compute monthly room nights: overlap of reservation stay with month
-    function p90MonthRN(mk) {
-      var pts = mk.split('-');
-      var y = +pts[0], mo = +pts[1];
-      var mS = new Date(y, mo-1, 1).getTime();
-      var mE = new Date(y, mo,   1).getTime();
-      var tot = 0;
-      for (var i=0; i<dirData.length; i++) {
-        var r = dirData[i];
-        var ci = (r['Data Fillimit']||'').slice(0,10);
-        var co = (r['Data Mbarimit']||'').slice(0,10);
-        if (!ci || !co || ci.length<10 || co.length<10) continue;
-        var ciT = new Date(ci).getTime();
-        var coT = new Date(co).getTime();
-        var oS = Math.max(ciT, mS);
-        var oE = Math.min(coT, mE);
-        if (oE > oS) tot += (oE - oS) / 86400000;
-      }
-      return Math.round(tot);
-    }
-
-    // Count reservations where the given date falls within the stay
+    // Room nights for a date — HISTORICAL_RN has priority over XLS data
     function p90DayOcc(iso) {
+      if (HISTORICAL_RN[iso] !== undefined) return HISTORICAL_RN[iso];
       var n = 0;
       for (var i=0; i<dirData.length; i++) {
         var r = dirData[i];
@@ -961,6 +957,18 @@ function render90Day() {
         if (ci && co && ci <= iso && co > iso) n++;
       }
       return n;
+    }
+
+    // Monthly total via day-by-day sum so HISTORICAL is automatically included
+    function p90MonthRN(mk) {
+      var pts = mk.split('-');
+      var y = +pts[0], mo = +pts[1];
+      var dInM = new Date(y, mo, 0).getDate();
+      var tot = 0;
+      for (var d=1; d<=dInM; d++) {
+        tot += p90DayOcc(mk + '-' + ('0'+d).slice(-2));
+      }
+      return tot;
     }
 
     function p90HeatBg(occ, budget) {
@@ -978,7 +986,6 @@ function render90Day() {
       return (occ/budget) >= 0.60 ? '#fff' : '#166534';
     }
 
-    // Pre-compute monthly actuals (avoid calling p90MonthRN many times)
     var monthActual = {};
     for (var mi=0; mi<months90.length; mi++) {
       monthActual[months90[mi]] = p90MonthRN(months90[mi]);
@@ -996,6 +1003,10 @@ function render90Day() {
       var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
       var icon = pct>=80 ? '✅' : pct>=60 ? '⚠️' : '🚨';
       var barW = Math.min(100, pct);
+      var insight = pct>=100 ? '🏆 Tejkaluar buxhetin!'
+                  : pct>=80  ? 'Ritëm i mirë — mbeten ' + remaining.toLocaleString() + ' rn'
+                  : pct>=50  ? 'Nën target — duhen ' + remaining.toLocaleString() + ' rn shtesë'
+                  :            'Deficit — kërkon vëmendje urgente';
       sc += '<div style="background:'+sc_bg+';border-radius:10px;padding:14px 16px;border-left:4px solid '+sc_c+'">'
         + '<div style="font-weight:800;color:#0a2240;font-size:13px;margin-bottom:10px">'+icon+' '+b.name+' '+todayD.getFullYear()+'</div>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">'
@@ -1006,11 +1017,98 @@ function render90Day() {
         + '</div>'
         + '<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
         + '<div style="width:'+barW+'%;height:100%;background:'+sc_c+';border-radius:4px"></div></div>'
-        + '<div style="font-size:12px;color:#6b7a8d">Mbeten: <strong style="color:'+(remaining>0?'#dc2626':'#166534')+'">'+remaining.toLocaleString()+' rn</strong></div>'
+        + '<div style="font-size:11px;color:'+sc_c+';font-weight:600">'+insight+'</div>'
         + '</div>';
     }
     sc += '</div>';
     el90s.innerHTML = sc;
+
+    // ── Chart.js daily bar + budget line ───────────────────────
+    try {
+      var chartLabels = [], chartRN = [], chartBgCol = [], chartBudget = [];
+      for (var ci2=0; ci2<months90.length; ci2++) {
+        var mk2 = months90[ci2];
+        var b2 = BUDGET[mk2];
+        var pts0 = mk2.split('-');
+        var dInM0 = new Date(+pts0[0], +pts0[1], 0).getDate();
+        var dailyB0 = b2.rn / b2.days;
+        for (var d2=1; d2<=dInM0; d2++) {
+          var iso2 = mk2 + '-' + ('0'+d2).slice(-2);
+          var occ2 = p90DayOcc(iso2);
+          chartLabels.push((d2===1 ? b2.short+' ' : '') + d2);
+          chartRN.push(occ2);
+          chartBudget.push(Math.round(dailyB0));
+          if (HISTORICAL_RN[iso2] !== undefined) {
+            chartBgCol.push('rgba(201,168,76,0.85)');
+          } else if (iso2 < TODAY) {
+            chartBgCol.push('rgba(59,130,246,0.8)');
+          } else if (iso2 === TODAY) {
+            chartBgCol.push('rgba(37,99,235,1)');
+          } else {
+            chartBgCol.push('rgba(34,197,94,0.7)');
+          }
+        }
+      }
+      var ctx90el = document.getElementById('pace90Chart');
+      if (ctx90el && typeof Chart !== 'undefined') {
+        if (window._pace90Chart && typeof window._pace90Chart.destroy === 'function') {
+          window._pace90Chart.destroy();
+        }
+        window._pace90Chart = new Chart(ctx90el.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: chartLabels,
+            datasets: [
+              {
+                label: 'Room Nights',
+                data: chartRN,
+                backgroundColor: chartBgCol,
+                borderWidth: 0,
+                borderRadius: 2,
+                order: 2
+              },
+              {
+                label: 'Target Ditor',
+                data: chartBudget,
+                type: 'line',
+                borderColor: '#dc2626',
+                backgroundColor: 'transparent',
+                borderWidth: 1.5,
+                borderDash: [5,3],
+                pointRadius: 0,
+                tension: 0,
+                order: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  title: function(items) { return items[0].label; },
+                  label: function(item) { return item.dataset.label + ': ' + item.raw + ' rn'; }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { font:{size:8}, maxRotation:0, autoSkip:true, maxTicksLimit:32 },
+                grid: { display:false }
+              },
+              y: {
+                min: 0,
+                ticks: { font:{size:9} },
+                grid: { color:'#f0f4f8' }
+              }
+            }
+          }
+        });
+      }
+    } catch(ce) { console.warn('pace90Chart error:', ce.message); }
 
     // ── Heatmap table ──────────────────────────────────────────
     var th = '<table style="width:100%;border-collapse:collapse;font-size:11px">';
@@ -1029,12 +1127,15 @@ function render90Day() {
         var dInM = new Date(+pts2[0], +pts2[1], 0).getDate();
         if (day > dInM) { th += '<td style="background:#f8fafc"></td>'; continue; }
         var iso = mk + '-' + ('0'+day).slice(-2);
+        var isHistorical = HISTORICAL_RN[iso] !== undefined;
         var isPast = iso < TODAY, isToday2 = iso === TODAY;
         var b = BUDGET[mk];
         var dailyB = b.rn / b.days;
         var occ = p90DayOcc(iso);
         var bg2, tc2, fw2 = occ>0 ? '700' : '400';
-        if (isPast) {
+        if (isHistorical) {
+          bg2 = '#fef3c7'; tc2 = '#92400e';
+        } else if (isPast) {
           bg2 = occ>0 ? '#dbeafe' : '#f8fafc';
           tc2 = occ>0 ? '#1d4ed8' : '#cbd5e1';
         } else {
@@ -1042,7 +1143,8 @@ function render90Day() {
           tc2 = p90HeatTc(occ, dailyB);
         }
         var brd2 = isToday2 ? '2px solid #c9a84c' : '1px solid rgba(0,0,0,0.04)';
-        th += '<td style="padding:2px 2px;text-align:center;background:'+bg2+';border:'+brd2+';color:'+tc2+';font-weight:'+fw2+'" title="'+iso+': '+occ+' rooms">'+(occ||'')+'</td>';
+        var ttl2 = iso+': '+occ+' rn'+(isHistorical?' (historike)':'');
+        th += '<td style="padding:2px 2px;text-align:center;background:'+bg2+';border:'+brd2+';color:'+tc2+';font-weight:'+fw2+'" title="'+ttl2+'">'+(occ||'')+'</td>';
       }
       th += '</tr>';
     }
@@ -1275,51 +1377,96 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var summaryText='Departamenti i shitjeve direkte regjistroi '+data.length+' rezervime per periudhen e raportuar, me te ardhura totale prej '+totalRev.toFixed(0)+' EUR dhe '+totalNts+' nete qendrimi. ADR mesatare: '+adr+' EUR/nate. Kanali me kontributin me te larte ishte '+topCh+', me '+topChRev.toFixed(0)+' EUR ('+topChPct+'% e totalit) dhe '+chNts[topCh]+' nete qendrimi. Rezervimet targetojne kryesisht muajin '+topMoName+', me '+(moMap[topMo]||0)+' rezervime. Mesatarja e kohezgiatjes se qendrimit eshte '+avgLos+' nete per rezervim.'+metaNote2;
 
   // ── 90-Day Budget Section for email ───────────────────────────
-  var emailDirData = storedData.filter(function(r){return !isExcluded(r);}); // të gjitha kanalet për pace total
+  var emailDirData = storedData.filter(function(r){return !isExcluded(r);});
   var todayD = new Date(TODAY);
   var end90D = new Date(TODAY); end90D.setDate(end90D.getDate()+90);
   var eMo90 = [];
   var emCur = new Date(todayD.getFullYear(), todayD.getMonth(), 1);
   while(emCur<=end90D && eMo90.length<4){
-    var emk=emCur.getFullYear()+'-'+String(emCur.getMonth()+1).padStart(2,'0');
+    var emk=emCur.getFullYear()+'-'+('0'+(emCur.getMonth()+1)).slice(-2);
     if(BUDGET[emk]) eMo90.push(emk);
     emCur.setMonth(emCur.getMonth()+1);
   }
-  function emailGetMonthRN(mk){
-    var yy=+mk.split('-')[0],mm=+mk.split('-')[1];
-    var mS=new Date(yy,mm-1,1),mE=new Date(yy,mm,1);
-    var tot=0;
-    emailDirData.forEach(function(r){
+  // Day-level occupancy with HISTORICAL_RN priority
+  function emailDayOcc(iso){
+    if(HISTORICAL_RN[iso]!==undefined) return HISTORICAL_RN[iso];
+    var n=0;
+    for(var i=0;i<emailDirData.length;i++){
+      var r=emailDirData[i];
       var ci=(r['Data Fillimit']||'').slice(0,10),co=(r['Data Mbarimit']||'').slice(0,10);
-      if(!ci||!co)return;
-      var oS=new Date(Math.max(new Date(ci),mS)),oE=new Date(Math.min(new Date(co),mE));
-      tot+=Math.max(0,(oE-oS)/86400000);
-    });
-    return Math.round(tot);
+      if(ci&&co&&ci<=iso&&co>iso) n++;
+    }
+    return n;
+  }
+  // Monthly total via day-by-day (includes HISTORICAL automatically)
+  function emailGetMonthRN(mk){
+    var pts=mk.split('-'),y=+pts[0],mo=+pts[1];
+    var dInM=new Date(y,mo,0).getDate(),tot=0;
+    for(var d=1;d<=dInM;d++) tot+=emailDayOcc(mk+'-'+('0'+d).slice(-2));
+    return tot;
   }
   var pace90Html='';
   if(eMo90.length){
     pace90Html+='<tr><td colspan="99" style="padding:20px 0 4px"><div style="height:1px;background:linear-gradient(90deg,#c9a84c,transparent);margin-bottom:6px"></div></td></tr>';
-    // Monthly summary cards in a table
-    pace90Html+='<tr><td colspan="99" style="padding:0 0 4px"><table style="width:100%;border-collapse:collapse;font-size:12px">';
-    pace90Html+='<tr>';
+    // Section header
+    pace90Html+='<tr><td colspan="99" style="padding:0 0 10px"><span style="font-size:11px;font-weight:800;color:#c9a84c;letter-spacing:1px;text-transform:uppercase">08 ▸ 90-DAY BOOKING PACE &amp; BUDGET</span></td></tr>';
+
+    // ── SVG progress chart ─────────────────────────────────────
+    var svgW=540,svgH=eMo90.length*56+16,barH=18,labelW=68,numW=52,barAreaW=svgW-labelW-numW-20;
+    var svgLines='';
+    eMo90.forEach(function(mk,idx){
+      var b=BUDGET[mk],actual=emailGetMonthRN(mk);
+      var pct=Math.round(actual/b.rn*100),capped=Math.min(100,pct);
+      var clr=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
+      var y0=idx*56+8;
+      // Month label
+      svgLines+='<text x="0" y="'+(y0+barH/2+1)+'" font-size="11" font-weight="bold" fill="#0a2240" dominant-baseline="middle">'+b.name+'</text>';
+      // Budget bar (grey bg)
+      svgLines+='<rect x="'+labelW+'" y="'+y0+'" width="'+barAreaW+'" height="'+barH+'" rx="4" fill="#e2e8f0"/>';
+      // Historical segment (gold) for June
+      if(mk==='2026-06'){
+        var histRN=Object.keys(HISTORICAL_RN).reduce(function(s,k){return k.slice(0,7)===mk?s+HISTORICAL_RN[k]:s;},0);
+        var histW=Math.round(Math.min(histRN,b.rn)/b.rn*barAreaW);
+        svgLines+='<rect x="'+labelW+'" y="'+y0+'" width="'+histW+'" height="'+barH+'" rx="4" fill="#c9a84c" opacity="0.7"/>';
+        var monW=Math.max(0,Math.round(capped/100*barAreaW)-histW);
+        if(monW>0) svgLines+='<rect x="'+(labelW+histW)+'" y="'+y0+'" width="'+monW+'" height="'+barH+'" rx="0" fill="'+clr+'"/>';
+      } else {
+        var actW=Math.round(capped/100*barAreaW);
+        if(actW>0) svgLines+='<rect x="'+labelW+'" y="'+y0+'" width="'+actW+'" height="'+barH+'" rx="4" fill="'+clr+'"/>';
+      }
+      // % text inside bar
+      svgLines+='<text x="'+(labelW+4)+'" y="'+(y0+barH/2+1)+'" font-size="10" fill="#fff" font-weight="bold" dominant-baseline="middle">'+pct+'%</text>';
+      // Actual / budget text on right
+      svgLines+='<text x="'+(labelW+barAreaW+6)+'" y="'+(y0+barH/2+1)+'" font-size="10" fill="#0a2240" font-weight="700" dominant-baseline="middle">'+actual.toLocaleString()+'/'+b.rn.toLocaleString()+'</text>';
+      // Insight below bar
+      var remaining=Math.max(0,b.rn-actual);
+      var insight=pct>=100?'🏆 Tejkaluar!':pct>=80?'✅ Ritëm i mirë — mbeten '+remaining.toLocaleString()+' rn':pct>=50?'⚠️ Nën target — nevojiten '+remaining.toLocaleString()+' rn':'🚨 Deficit — kërkon vëmendje urgente';
+      svgLines+='<text x="'+labelW+'" y="'+(y0+barH+13)+'" font-size="9.5" fill="'+clr+'" font-weight="600">'+insight+'</text>';
+    });
+    pace90Html+='<tr><td colspan="99" style="padding:0 0 8px"><svg width="'+svgW+'" height="'+svgH+'" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">'+svgLines+'</svg></td></tr>';
+
+    // Legend row
+    pace90Html+='<tr><td colspan="99" style="padding:0 0 6px"><span style="font-size:10px;color:#6b7a8d">&#9646; <span style="color:#c9a84c">▋</span> Para monitorimit &nbsp; <span style="color:#166534">▋</span> Aktual &nbsp; <span style="color:#e2e8f0">▋</span> Mbeten</span></td></tr>';
+
+    // Monthly cards in a table
+    pace90Html+='<tr><td colspan="99" style="padding:4px 0"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr>';
     eMo90.forEach(function(mk){
       var b=BUDGET[mk],actual=emailGetMonthRN(mk);
       var pct=Math.round(actual/b.rn*100),remaining=Math.max(0,b.rn-actual);
       var sc=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
       var sbg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fef2f2';
       var icon=pct>=80?'✅':pct>=60?'⚠️':'🚨';
-      var barW=Math.min(100,pct);
+      var barW2=Math.min(100,pct);
       pace90Html+='<td style="padding:6px;vertical-align:top"><div style="background:'+sbg+';border-radius:8px;padding:12px;border-left:4px solid '+sc+'">'
         +'<div style="font-weight:800;color:#0a2240;font-size:13px;margin-bottom:8px">'+icon+' '+b.name+'</div>'
-        +'<div style="font-size:11px;color:#6b7a8d;margin-bottom:2px">Budget Room Nights</div>'
+        +'<div style="font-size:11px;color:#6b7a8d;margin-bottom:2px">Budget RN</div>'
         +'<div style="font-weight:800;color:#2563eb;font-size:16px;margin-bottom:6px">'+b.rn.toLocaleString()+' <span style="font-size:10px;color:#6b7a8d">('+b.occ+'% occ)</span></div>'
-        +'<div style="font-size:11px;color:#6b7a8d;margin-bottom:2px">Aktual Booked RN</div>'
+        +'<div style="font-size:11px;color:#6b7a8d;margin-bottom:2px">Aktual RN</div>'
         +'<div style="font-weight:800;color:#0a2240;font-size:18px;margin-bottom:6px">'+actual.toLocaleString()+'</div>'
         +'<div style="height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:6px">'
-        +'<div style="width:'+barW+'%;height:100%;background:'+sc+';border-radius:3px"></div></div>'
+        +'<div style="width:'+barW2+'%;height:100%;background:'+sc+';border-radius:3px"></div></div>'
         +'<div style="display:flex;justify-content:space-between;align-items:center">'
-        +'<span style="font-weight:800;color:'+sc+';font-size:14px">'+pct+'% arritja</span>'
+        +'<span style="font-weight:800;color:'+sc+';font-size:14px">'+pct+'%</span>'
         +'<span style="font-size:11px;color:'+(remaining>0?'#dc2626':'#166534')+';font-weight:700">−'+remaining.toLocaleString()+' rn</span>'
         +'</div></div></td>';
     });
