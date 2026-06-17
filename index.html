@@ -1878,10 +1878,17 @@ function confirmSendEmail() {
   btn.disabled = true;
   btn.textContent = '⏳ Duke dërguar...';
 
+  // Minify HTML to stay under EmailJS 50KB variable limit
+  var _html = _emailDraft.htmlContent;
+  _html = _html.replace(/>[ \t\r\n]+</g, '><').replace(/[ \t]{2,}/g, ' ');
+  if (_html.length > 47000) {
+    _html = _html.replace(/<svg[\s\S]*?<\/svg>/gi, '<p style="color:#888;font-style:italic;font-size:12px">[Grafiku 90-ditësh disponohet vetëm në PDF]</p>');
+  }
+
   emailjs.init(EJS_PUBLIC);
   emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
     subject: _emailDraft.subject,
-    html_content: _emailDraft.htmlContent,
+    html_content: _html,
     to_email: _emailDraft.TO
   }).then(function() {
     btn.textContent = '✅ U dërgua!';
