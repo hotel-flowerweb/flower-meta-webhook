@@ -10,17 +10,8 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// Albania = UTC+2 (CEST summer) / UTC+1 (CET winter)
-// Using fixed +2 for hotel operations (adjust if needed in winter)
+// Albania = UTC+2 (CEST summer)
 const ALB_OFFSET_H = 2;
-
-// Shift boundaries (Albanian local time):
-//   Shift 1 (Sara default): 23:00 to 15:00 next day (overnight + morning)
-//   Shift 2 (Inva default): 15:00 to 23:00
-const SHIFT1_STAFF  = 'Sara';
-const SHIFT2_STAFF  = 'Inva';
-const SHIFT1_END_H  = 15;   // 15:00 Albanian
-const SHIFT2_END_H  = 23;   // 23:00 Albanian
 
 // Convert raw Meta timestamp to Albanian hour (0-23)
 function albHour(ts) {
@@ -31,8 +22,7 @@ function albHour(ts) {
 // Albanian date string (YYYY-MM-DD) handles midnight crossover correctly
 function albDateStr(ts) {
   const ms = ts > 1e10 ? ts : ts * 1000;
-  const d = new Date(ms + ALB_OFFSET_H * 3600 * 1000);
-  return d.toISOString().slice(0, 10);
+  return new Date(ms + ALB_OFFSET_H * 3600 * 1000).toISOString().slice(0, 10);
 }
 
 // UTC ISO string for first_message_time storage
@@ -41,40 +31,43 @@ function toISO(ts) {
   return new Date(ms).toISOString();
 }
 
-async function findAssignedStaff(ts, dateStr) {
+async function findAssignedStaff(ts) {
   const h = albHour(ts);
+  const ms = ts > 1e10 ? ts : ts * 1000;
 
-  // Check dynamic shifts table first (allows overriding who's on duty)
+  // Shift 1 starts at 23:00 and ends 15:00 NEXT day.
+  // Staff log in at start of shift -> recorded under NEXT Albanian day when h >= 23.
+  // So for messages at h >= 23, query NEXT day. All other hours: query TODAY.
+  let shiftDateMs = ms + ALB_OFFSET_H * 3600 * 1000;
+  if (h >= 23) shiftDateMs += 86400000;
+  const shiftDate = new Date(shiftDateMs).toISOString().slice(0, 10);
+
   const { data: shifts } = await supabase
     .from('shifts')
     .select('staff_name, start_time, end_time')
-    .eq('date', dateStr);
+    .eq('date', shiftDate);
 
   if (shifts && shifts.length > 0) {
     for (const shift of shifts) {
       const sH = parseInt(shift.start_time.slice(0, 2), 10);
       const eH = parseInt(shift.end_time.slice(0, 2), 10);
-      // Overnight shift: start_time > end_time (e.g. 23:00 -> 15:00)
+      // Overnight shift (e.g. 23:00->15:00): sH > eH
       if (sH > eH) {
         if (h >= sH || h < eH) return shift.staff_name;
       } else {
         if (h >= sH && h < eH) return shift.staff_name;
       }
     }
-    return null;
   }
 
-  // Default: Shift 1 (23:00-15:00) -> Sara, Shift 2 (15:00-23:00) -> Inva
-  if (h >= SHIFT2_END_H || h < SHIFT1_END_H) return SHIFT1_STAFF;  // 23:00-15:00
-  return SHIFT2_STAFF;                                                // 15:00-23:00
+  return null; // No shift data -> unassigned
 }
 
 async function processEvent(platform, senderId, timestamp) {
-  const dateStr      = albDateStr(timestamp);  // Albanian date (correct midnight handling)
-  const firstMsgTime = toISO(timestamp);       // UTC ISO for storage
+  const dateStr      = albDateStr(timestamp);
+  const firstMsgTime = toISO(timestamp);
   const h            = albHour(timestamp);
 
-  // Deduplicate: one record per sender per platform per Albanian day
   const { data: existing, error: selErr } = await supabase
     .from('meta_conversations')
     .select('id')
@@ -84,9 +77,9 @@ async function processEvent(platform, senderId, timestamp) {
     .maybeSingle();
 
   if (selErr) { console.error('SELECT error:', selErr.message); return; }
-  if (existing) return;  // already recorded today
+  if (existing) return;
 
-  const assignedStaff = await findAssignedStaff(timestamp, dateStr);
+  const assignedStaff = await findAssignedStaff(timestamp);
 
   console.log('NEW ' + platform + ' from ' + senderId + ' | Albanian ' + dateStr + ' ' + String(h).padStart(2,'0') + ':xx | -> ' + assignedStaff);
 
