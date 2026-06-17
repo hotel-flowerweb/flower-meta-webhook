@@ -1277,22 +1277,46 @@ async function loadMetaStats() {
   }
 
   var shiftStart, shiftEnd, shiftLabel;
-  if (localHour >= 23 || localHour < 0) {
-    // Just after 23:00 — beginning of Shift 1 for TOMORROW
-    shiftStart = localHourToUTC(23, 0);
-    shiftEnd   = localHourToUTC(15, 1);
-    shiftLabel = 'Turni 1 (23:00 → 15:00)';
-  } else if (localHour < 15) {
-    // 00:00-14:59 local → still inside Shift 1
-    // Shift 1 started at 23:00 YESTERDAY
-    shiftStart = localHourToUTC(23, -1);
-    shiftEnd   = localHourToUTC(15, 0);
-    shiftLabel = 'Turni 1 (23:00 → 15:00)';
-  } else {
-    // 15:00-22:59 local → Shift 2
-    shiftStart = localHourToUTC(15, 0);
-    shiftEnd   = localHourToUTC(23, 0);
-    shiftLabel = 'Turni 2 (15:00 → 23:00)';
+
+  if (currentUser && currentUser !== 'Manager') {
+    try {
+      const todayAlb = new Date(now.getTime() + tzOffH * 3600000).toISOString().slice(0, 10);
+      const sr = await fetch(
+        SUPABASE_URL + '/rest/v1/shifts?select=start_time,end_time&staff_name=eq.'
+        + encodeURIComponent(currentUser) + '&date=eq.' + todayAlb + '&limit=1',
+        {headers: {'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON}}
+      );
+      const shData = await sr.json();
+      if (Array.isArray(shData) && shData.length > 0) {
+        const sH = parseInt(shData[0].start_time.slice(0, 2), 10);
+        const eH = parseInt(shData[0].end_time.slice(0, 2), 10);
+        if (sH > eH) {
+          shiftStart = localHourToUTC(23, -1);
+          shiftEnd   = localHourToUTC(15,  0);
+          shiftLabel = 'Turni 1 (23:00 → 15:00)';
+        } else {
+          shiftStart = localHourToUTC(15, 0);
+          shiftEnd   = localHourToUTC(23, 0);
+          shiftLabel = 'Turni 2 (15:00 → 23:00)';
+        }
+      }
+    } catch(e) {}
+  }
+
+  if (!shiftStart) {
+    if (localHour >= 23) {
+      shiftStart = localHourToUTC(23, 0);
+      shiftEnd   = localHourToUTC(15, 1);
+      shiftLabel = 'Turni 1 (23:00 → 15:00)';
+    } else if (localHour < 15) {
+      shiftStart = localHourToUTC(23, -1);
+      shiftEnd   = localHourToUTC(15, 0);
+      shiftLabel = 'Turni 1 (23:00 → 15:00)';
+    } else {
+      shiftStart = localHourToUTC(15, 0);
+      shiftEnd   = localHourToUTC(23, 0);
+      shiftLabel = 'Turni 2 (15:00 → 23:00)';
+    }
   }
 
   // Query by first_message_time range (stored UTC in Supabase)
