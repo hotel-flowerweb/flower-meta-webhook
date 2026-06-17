@@ -1407,9 +1407,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
   var pace90Html='';
   if(eMo90.length){
-    pace90Html+='<tr><td colspan="99" style="padding:20px 0 4px"><div style="height:1px;background:linear-gradient(90deg,#c9a84c,transparent);margin-bottom:6px"></div></td></tr>';
-    // Section header
-    pace90Html+='<tr><td colspan="99" style="padding:0 0 10px"><span style="font-size:11px;font-weight:800;color:#c9a84c;letter-spacing:1px;text-transform:uppercase">08 ▸ 90-DAY BOOKING PACE &amp; BUDGET</span></td></tr>';
+    pace90Html+='<tr><td colspan="99" style="padding:4px 0 4px"><div style="height:1px;background:linear-gradient(90deg,#c9a84c44,transparent);margin-bottom:6px"></div></td></tr>';
 
     // ── SVG progress chart ─────────────────────────────────────
     var svgW=540,svgH=eMo90.length*56+16,barH=18,labelW=68,numW=52,barAreaW=svgW-labelW-numW-20;
@@ -1474,11 +1472,12 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
 
   // Helper for table rows
-  function thStyle(){ return 'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#6b7a8d;padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;background:#f8fafc'; }
-  function thR(){ return 'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#6b7a8d;padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;background:#f8fafc'; }
-  function tdStyle(){ return 'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:13px;color:#1a2533'; }
-  function tdR(){ return 'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:13px;text-align:right;color:#1a2533'; }
-  function secHead(n,title){ return '<tr><td colspan="99" style="padding:20px 0 8px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;font-weight:800;color:#2563eb;letter-spacing:1px">'+n+'</span><span style="font-size:12px;font-weight:800;color:#0a2240;text-transform:uppercase;letter-spacing:.8px">'+title+'</span></div><div style="height:1px;background:linear-gradient(90deg,#e2e8f0,transparent);margin-top:6px"></div></td></tr>'; }
+  var dtc = 'font-family:Montserrat,Segoe UI,Arial,sans-serif;';
+  function thStyle(){ return dtc+'font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#6b7a8d;padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;background:#f8fafc'; }
+  function thR(){ return dtc+'font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#6b7a8d;padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;background:#f8fafc'; }
+  function tdStyle(){ return dtc+'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:12px;color:#1a2533'; }
+  function tdR(){ return dtc+'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:12px;text-align:right;color:#1a2533'; }
+  function secHead(n,title){ return '<tr><td colspan="99" style="padding:22px 0 10px"><div style="display:flex;align-items:center;gap:10px"><span style="font-family:Montserrat,Segoe UI,Arial,sans-serif;font-size:9px;font-weight:900;color:#fff;background:#0a2240;letter-spacing:1.5px;padding:3px 8px;border-radius:3px">'+n+'</span><span style="font-family:Montserrat,Segoe UI,Arial,sans-serif;font-size:11px;font-weight:800;color:#0a2240;text-transform:uppercase;letter-spacing:1px">'+title+'</span></div><div style="height:1px;background:linear-gradient(90deg,#c9a84c,#c9a84c44,transparent);margin-top:8px"></div></td></tr>'; }
 
   // Channel rows
   var chRows=chSorted.map(function(ch){
@@ -1535,7 +1534,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     var iPct=totalRev>0?Math.round(si.rev/totalRev*100):0;
 
     mgrExtraHtml += secHead('02','Krahasimi i Stafit — Sara vs Inva')
-      +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+      +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
       +'<tr><th style="'+thStyle()+'">Stafi</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">% Totali</th></tr>'
       +'<tr style="background:#fdf2f8">'
         +'<td style="'+tdStyle()+';font-weight:800;color:#9d174d">👩 Sara</td>'
@@ -1561,7 +1560,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'<td style="'+tdR()+';font-weight:800;border-top:2px solid #c5d8f0">'+adr+' EUR</td>'
         +'<td style="'+tdR()+';font-weight:700;border-top:2px solid #c5d8f0">100%</td>'
       +'</tr>'
-      +'</table></td></tr>';
+      +'</table></div></td></tr>';
 
     var moNm=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
     var moS={},moI={},moT={};
@@ -1586,10 +1585,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     }).join('');
 
     mgrExtraHtml += secHead('03','Shpërndarje Mujore — Netë Qendrimi (Sara / Inva / Total)')
-      +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+      +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
       +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+';color:#9d174d">Sara 🌙</th><th style="'+thStyle()+'"></th><th style="'+thR()+';color:#5b21b6">Inva 🌙</th><th style="'+thStyle()+'"></th><th style="'+thR()+'">Total 🌙</th></tr>'
       +moRows2
-      +'</table></td></tr>';
+      +'</table></div></td></tr>';
   }
 
   // ── STAFF-ONLY: Month distribution by nights ─────────────────────
@@ -1613,10 +1612,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'</tr>';
       }).join('');
       staffMoHtml = secHead(sn(7),'Shpërndarje Mujore — Netë Qendrimi')
-        +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+        +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
         +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+'">Netë 🌙</th><th style="'+thStyle()+'">Grafiku</th></tr>'
         +moRowsX
-        +'</table></td></tr>';
+        +'</table></div></td></tr>';
     }
   }
 
@@ -1626,84 +1625,112 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var paceSecStr = isManager ? String(2+2+1).padStart(2,'0') : '02'; // manager:05 no, let's be direct:
   paceSecStr = isManager ? String(4).padStart(2,'0') : String(2).padStart(2,'0');
 
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f0f4f8;font-family:Segoe UI,Arial,sans-serif">'
-    +'<div style="max-width:700px;margin:0 auto;background:#fff">'
-    +'<div style="height:6px;background:linear-gradient(90deg,#c9a84c,#f0d080,#c9a84c)"></div>'
-    +'<div style="padding:28px 36px 20px">'
-      +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#6b7a8d">FLOWER HOTEL</div>'
-      +'<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:#c9a84c;margin-bottom:16px">DEPARTAMENTI I SHITJEVE DIREKTE</div>'
-      +'<h1 style="margin:0 0 8px;font-size:26px;font-weight:800;color:#0a2240">Raporti Ditor i Performances</h1>'
-      +'<div style="font-size:13px;color:#6b7a8d">'+dateVal+'&nbsp;&nbsp;<strong style="color:#0a2240">'+displayName+'</strong></div>'
-      +'<div style="height:1px;background:#e2e8f0;margin-top:20px"></div>'
+  var emailFF = "font-family:Montserrat,'Segoe UI',Arial,sans-serif;";
+  return '<!DOCTYPE html><html lang="sq"><head>'
+    +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+    +'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">'
+    +'<style>'
+    +'*{box-sizing:border-box}'
+    +'body{margin:0;padding:0;background:#f0f4f8;'+emailFF+'}'
+    +'.ew{max-width:700px;margin:0 auto;background:#fff}'
+    +'.eh{padding:28px 36px 20px}'
+    +'.eb{padding:0 36px 28px}'
+    +'.kpi-row{width:100%;border-collapse:collapse}'
+    +'.kpi-c{width:22%;text-align:center;padding:18px 8px;background:#f0f7ff;border-radius:10px}'
+    +'.kpi-g{width:4%}'
+    +'.kpi-v{'+emailFF+'font-size:30px;font-weight:900;color:#2563eb;line-height:1}'
+    +'.kpi-l{'+emailFF+'font-size:9px;font-weight:700;color:#6b7a8d;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}'
+    +'@media only screen and (max-width:600px){'
+    +'.eh{padding:18px 14px 14px !important}'
+    +'.eb{padding:0 14px 18px !important}'
+    +'.email-title{font-size:20px !important}'
+    +'.kpi-row,.kpi-row tbody,.kpi-row tr{display:flex !important;flex-wrap:wrap !important;gap:8px !important}'
+    +'.kpi-c{width:calc(50% - 4px) !important;flex:1 1 calc(50% - 4px) !important;min-width:130px !important;border-radius:8px !important}'
+    +'.kpi-g{display:none !important}'
+    +'.kpi-v{font-size:24px !important}'
+    +'.dtbl th,.dtbl td{font-size:10px !important;padding:5px 5px !important}'
+    +'.svgchart{max-width:100% !important;width:100% !important}'
+    +'}'
+    +'</style>'
+    +'</head>'
+    +'<body style="margin:0;padding:0;background:#f0f4f8">'
+    +'<div class="ew">'
+    +'<div style="height:5px;background:linear-gradient(90deg,#c9a84c,#f0d080,#c9a84c)"></div>'
+    +'<div class="eh">'
+      +'<div style="'+emailFF+'font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:#aac4e0">FLOWER HOTEL</div>'
+      +'<div style="'+emailFF+'font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#c9a84c;margin-bottom:18px">DEPARTAMENTI I SHITJEVE DIREKTE</div>'
+      +'<h1 class="email-title" style="margin:0 0 8px;'+emailFF+'font-size:24px;font-weight:900;color:#0a2240;letter-spacing:-.3px">Raporti Ditor i Performances</h1>'
+      +'<div style="'+emailFF+'font-size:12px;color:#6b7a8d">'+dateVal+'&nbsp;&nbsp;<strong style="color:#0a2240">'+displayName+'</strong></div>'
+      +'<div style="height:1px;background:linear-gradient(90deg,#e2e8f0,transparent);margin-top:18px"></div>'
     +'</div>'
-    +'<div style="padding:0 36px 28px">'
-    +'<table style="width:100%;border-collapse:collapse">'
+    +'<div class="eb">'
+    +'<table style="width:100%;border-collapse:collapse;'+emailFF+'">'
     +secHead('01','Permbledhja e Dites')
     +'<tr><td colspan="99" style="padding:8px 0 16px">'
-    +'<table style="width:100%;border-collapse:collapse"><tr>'
-    +'<td style="width:25%;text-align:center;padding:16px 8px;background:#f0f7ff;border-radius:8px;margin:4px">'
-      +'<div style="font-size:32px;font-weight:900;color:#2563eb;line-height:1">'+data.length+'</div>'
-      +'<div style="font-size:10px;font-weight:700;color:#6b7a8d;text-transform:uppercase;margin-top:4px">Rezervime Direkte</div>'
+    +'<table class="kpi-row"><tbody><tr>'
+    +'<td class="kpi-c">'
+      +'<div class="kpi-v">'+data.length+'</div>'
+      +'<div class="kpi-l">Rezervime Direkte</div>'
     +'</td>'
-    +'<td style="width:4%"></td>'
-    +'<td style="width:25%;text-align:center;padding:16px 8px;background:#f0f7ff;border-radius:8px">'
-      +'<div style="font-size:32px;font-weight:900;color:#2563eb;line-height:1">'+totalRev.toFixed(0)+'</div>'
-      +'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:4px">Te Ardhura <span style="font-size:9px">EUR</span></div>'
+    +'<td class="kpi-g"></td>'
+    +'<td class="kpi-c">'
+      +'<div class="kpi-v">'+totalRev.toFixed(0)+'</div>'
+      +'<div class="kpi-l">Të Ardhura EUR</div>'
     +'</td>'
-    +'<td style="width:4%"></td>'
-    +'<td style="width:25%;text-align:center;padding:16px 8px;background:#f0f7ff;border-radius:8px">'
-      +'<div style="font-size:32px;font-weight:900;color:#2563eb;line-height:1">'+totalNts+'</div>'
-      +'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:4px">Nete Qendrimi</div>'
+    +'<td class="kpi-g"></td>'
+    +'<td class="kpi-c">'
+      +'<div class="kpi-v">'+totalNts+'</div>'
+      +'<div class="kpi-l">Netë Qendrimi</div>'
     +'</td>'
-    +'<td style="width:4%"></td>'
-    +'<td style="width:25%;text-align:center;padding:16px 8px;background:#f0f7ff;border-radius:8px">'
-      +'<div style="font-size:32px;font-weight:900;color:#2563eb;line-height:1">'+adr+'</div>'
-      +'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:4px">ADR <span style="font-size:9px">EUR/nate</span></div>'
+    +'<td class="kpi-g"></td>'
+    +'<td class="kpi-c">'
+      +'<div class="kpi-v">'+adr+'</div>'
+      +'<div class="kpi-l">ADR EUR/natë</div>'
     +'</td>'
-    +'</tr></table>'
+    +'</tr></tbody></table>'
     +'</td></tr>'
     +mgrExtraHtml
     +(eMo90.length ? secHead(paceSecStr,'90-Day Booking Pace & Budget') : '')
     +pace90Html
     +secHead(sn(2),'Performanca Sipas Kanaleve Direkte')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
     +'<tr><th style="'+thStyle()+'">Kanali</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">%</th></tr>'
     +chRows
-    +'</table></td></tr>'
+    +'</table></div></td></tr>'
     +secHead(sn(3),'Kombesia e Klienteve')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
     +'<tr><th style="'+thStyle()+'">Kombesia</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">%</th></tr>'
     +natRows
-    +'</table></td></tr>'
+    +'</table></div></td></tr>'
     +secHead(sn(4),'Shitja e Paketave')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
     +'<tr><th style="'+thStyle()+'">Paketa</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">%</th></tr>'
     +planRows
     +'</table>'
     +'<div style="margin-top:8px;border-left:3px solid #c9a84c;padding:8px 12px;font-size:12px;color:#6b7a8d;background:#fffbf0">Paketa me me shume te ardhura: <strong>'+topPlan+'</strong> ('+planRev[topPlan].toFixed(0)+' EUR)&nbsp;|&nbsp;ADR me e larte: <strong>'+(planSorted.reduce(function(a,b){return (planNts[b]>0&&(planRev[b]/planNts[b])>((planNts[a]>0?planRev[a]/planNts[a]:0)))?b:a;},planSorted[0]||'—'))+'</strong> ('+(function(){var bp=planSorted.reduce(function(a,b){return (planNts[b]>0&&(planRev[b]/planNts[b])>(planNts[a]>0?planRev[a]/planNts[a]:0))?b:a;},planSorted[0]||'');return planNts[bp]>0?(planRev[bp]/planNts[bp]).toFixed(0):'—';}())+' EUR/nate)</div>'
     +'</td></tr>'
     +secHead(sn(5),'Tipologjite e Dhomave')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
     +'<tr><th style="'+thStyle()+'">Tipologjia</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">%</th></tr>'
     +rmRows
     +'</table>'
     +'<div style="margin-top:8px;border-left:3px solid #c9a84c;padding:8px 12px;font-size:12px;color:#6b7a8d;background:#fffbf0">Tipologjia me me shume te ardhura: <strong>'+topRm+'</strong> ('+rmRev[topRm].toFixed(0)+' EUR)&nbsp;|&nbsp;ADR me e larte: <strong>'+(rmSorted.reduce(function(a,b){return (rmNts[b]>0&&(rmRev[b]/rmNts[b])>((rmNts[a]>0?rmRev[a]/rmNts[a]:0)))?b:a;},rmSorted[0]||'—'))+'</strong> ('+(function(){var br=rmSorted.reduce(function(a,b){return (rmNts[b]>0&&(rmRev[b]/rmNts[b])>(rmNts[a]>0?rmRev[a]/rmNts[a]:0))?b:a;},rmSorted[0]||'');return rmNts[br]>0?(rmRev[br]/rmNts[br]).toFixed(0):'—';}())+' EUR/nate)</div>'
     +'</td></tr>'
     +secHead(sn(6),'Rezervimet Kryesore te Dites')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'
+    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
     +'<tr><th style="'+thStyle()+'">Nr.</th><th style="'+thStyle()+'">Klienti</th><th style="'+thStyle()+'">Kombesia</th><th style="'+thStyle()+'">Kanali</th><th style="'+thStyle()+'">Mbertitje</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Vlera</th></tr>'
     +rezRows
-    +'</table></td></tr>'
-    +(metaHtml?secHead(sn(7),'Aktiviteti Social Media — Meta')+'<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'+metaHtml+'</table></td></tr>':'')
+    +'</table></div></td></tr>'
+    +(metaHtml?secHead(sn(7),'Aktiviteti Social Media — Meta')+'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'+metaHtml+'</table></div></td></tr>':'')
     +(isManager?'':staffMoHtml)
     +secHead(isManager?(metaHtml?sn(8):sn(7)):(staffMoHtml?(metaHtml?sn(9):sn(8)):(metaHtml?sn(8):sn(7))),'Permbledhja e Menaxhimit')
     +'<tr><td colspan="99" style="padding:8px 0 20px"><p style="margin:0;font-size:14px;line-height:1.8;color:#1a2533">'+summaryText+'</p></td></tr>'
     +'</table>'
     +'</div>'
-    +'<div style="background:#0a2240;color:#aac4e0;padding:14px 36px;font-size:10px;text-align:center;letter-spacing:.5px">'
-    +'FLOWER HOTEL — DAILY DIRECT SALES REPORT&nbsp;&nbsp;'+ts
+    +'<div style="background:#0a2240;color:#aac4e0;padding:16px 36px;font-size:9px;text-align:center;letter-spacing:1.5px;font-family:Montserrat,Segoe UI,Arial,sans-serif;font-weight:700;text-transform:uppercase">'
+    +'FLOWER HOTEL &nbsp;·&nbsp; DAILY DIRECT SALES REPORT &nbsp;·&nbsp; '+ts
     +'</div>'
-    +'<div style="padding:10px;text-align:center;font-size:10px;color:#aac4e0;background:#f8fafc">Email sent via EmailJS.com</div>'
+    +'<div style="padding:10px;text-align:center;font-size:9px;color:#b0bec5;background:#f8fafc;font-family:Montserrat,Segoe UI,Arial,sans-serif;letter-spacing:.5px">Dërguar automatikisht · EmailJS.com</div>'
     +'</div></body></html>';
 }
 
