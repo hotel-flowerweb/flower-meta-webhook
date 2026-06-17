@@ -420,7 +420,7 @@ function doLogin(user) {
   chip.textContent = user === 'Manager' ? '👔 Manager' : (user === 'Sara' ? '👩 Sara' : '👩 Inva');
   chip.className = 'user-chip ' + (user==='Sara'?'sara':user==='Inva'?'inva':'none');
   if (storedData.length) { applyFilter(); updateDayHistory(); updateBadge(); }
-  else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; }
+  else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; render90Day(); }
   loadMetaStats();
 }
 function logout() {
@@ -559,19 +559,19 @@ function chTag(ch) {
 }
 
 // ── ROOM / CLIENT EXCLUSIONS ───────────────────────────────────
+// EXACT match: only the specific room+client pair is excluded.
+// Dhoma 212 me emrin "Olti Caci" NUK përjashtohet — vetëm VILA1+OLTICACI.
 function isExcluded(r) {
   const room   = (r['Nr Dhomes']||'').trim().toUpperCase().replace(/\s+/g,' ');
   const client = (r['Klienti']||'').trim().toUpperCase().replace(/\s+/g,' ');
-  const cFlat  = client.replace(/\s/g,'');
-  // Specific room+client pairs
-  if (room==='VILA 1' && client.includes('OLTI CACI'))   return true;
-  if (room==='VILA 2' && client.includes('ERNEST CACI')) return true;
-  if (room==='313'    && client.includes('AHMET CACI'))  return true;
-  // Room always excluded
+  // Exact room+client pairs (ONLY these specific combinations)
+  if (room==='VILA 1' && client==='OLTI CACI')   return true;
+  if (room==='VILA 2' && client==='ERNEST CACI') return true;
+  if (room==='313'    && client==='AHMET CACI')  return true;
+  // Room always excluded regardless of client
   if (room==='114 FR' || room==='114FR') return true;
-  // Excluded client names (collapse whitespace for fuzzy match)
-  if (cFlat.includes('JASHTEPUNE') || cFlat.includes('JASHTPUNE') ||
-      cFlat.includes('PAPASTRUAR')) return true;
+  // Excluded client names (exact, after collapsing whitespace)
+  if (client==='JASHTE PUNE' || client==='JASHT PUNE' || client==='PA PASTRUAR') return true;
   return false;
 }
 
@@ -906,140 +906,171 @@ function updateMonthHistory() {
 
 // ── 90-DAY BOOKING PACE ────────────────────────────────────────
 function render90Day() {
-  const dirData = storedData.filter(r => !isExcluded(r) && chType(r['AI']||'')==='dir');
-  const el90s = document.getElementById('pace90Summary');
-  const el90t = document.getElementById('pace90Table');
+  var el90s = document.getElementById('pace90Summary');
+  var el90t = document.getElementById('pace90Table');
   if (!el90s || !el90t) return;
 
-  // Months in 90-day window that have budget targets
-  const today0 = new Date(TODAY);
-  const end90  = new Date(TODAY); end90.setDate(end90.getDate()+90);
-  const months90 = [];
-  const mCur = new Date(today0.getFullYear(), today0.getMonth(), 1);
-  while (mCur <= end90 && months90.length < 4) {
-    const mk = mCur.getFullYear()+'-'+String(mCur.getMonth()+1).padStart(2,'0');
-    if (BUDGET[mk]) months90.push(mk);
-    mCur.setMonth(mCur.getMonth()+1);
-  }
-  if (!months90.length) { el90s.innerHTML='<p style="color:var(--muted);font-size:13px;padding:8px">Nuk ka target buxheti për 90 ditët e ardhshme.</p>'; el90t.innerHTML=''; return; }
+  try {
+    var dirData = storedData.filter(function(r){ return !isExcluded(r) && chType(r['AI']||'')==='dir'; });
 
-  // Monthly room nights (overlap between reservation stay and month)
-  function getMonthRN(mk) {
-    const [y,mo] = mk.split('-').map(Number);
-    const mS=new Date(y,mo-1,1), mE=new Date(y,mo,1);
-    let tot=0;
-    dirData.forEach(r=>{
-      const ci=(r['Data Fillimit']||'').slice(0,10);
-      const co=(r['Data Mbarimit']||'').slice(0,10);
-      if(!ci||!co)return;
-      const oS=new Date(Math.max(new Date(ci),mS));
-      const oE=new Date(Math.min(new Date(co),mE));
-      tot+=Math.max(0,(oE-oS)/86400000);
-    });
-    return Math.round(tot);
-  }
+    // Find months in 90-day window with budget targets
+    var todayD = new Date(TODAY);
+    var end90D = new Date(TODAY); end90D.setDate(end90D.getDate()+90);
+    var months90 = [];
+    var mCur = new Date(todayD.getFullYear(), todayD.getMonth(), 1);
+    while (mCur <= end90D && months90.length < 4) {
+      var mk0 = mCur.getFullYear()+'-'+('0'+(mCur.getMonth()+1)).slice(-2);
+      if (BUDGET[mk0]) months90.push(mk0);
+      mCur.setMonth(mCur.getMonth()+1);
+    }
 
-  // Daily occupancy: count reservations covering a specific date
-  function getDayOcc(iso) {
-    return dirData.filter(r=>{
-      const ci=(r['Data Fillimit']||'').slice(0,10);
-      const co=(r['Data Mbarimit']||'').slice(0,10);
-      return ci&&co&&ci<=iso&&co>iso;
-    }).length;
-  }
+    if (!months90.length) {
+      el90s.innerHTML = '<p style="color:#6b7a8d;padding:8px">Nuk ka target buxheti për 90 ditët e ardhshme.</p>';
+      el90t.innerHTML = ''; return;
+    }
 
-  // Heatmap color (days in future)
-  function heatBg(occ, budget) {
-    if(!budget||occ===0) return '#f1f5f9';
-    const p=occ/budget;
-    if(p>=0.95)return'#166534'; if(p>=0.80)return'#16a34a';
-    if(p>=0.60)return'#4ade80'; if(p>=0.40)return'#86efac';
-    if(p>=0.20)return'#bbf7d0'; return'#dcfce7';
-  }
-  function heatTc(occ, budget) {
-    if(!budget||occ===0) return'#94a3b8';
-    return(occ/budget)>=0.60?'#fff':'#166534';
-  }
-
-  // ── Heatmap table ──────────────────────────────────────────────
-  let th='<table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed">';
-  // Header
-  th+='<thead><tr><th style="width:32px;padding:5px 4px;background:#0a2240;color:#aac4e0;font-size:10px;text-align:center">Day</th>';
-  months90.forEach(mk=>{
-    const b=BUDGET[mk];
-    th+=`<th style="padding:6px 4px;background:#0a2240;color:#fff;text-align:center;font-size:12px">${b.name}<div style="font-size:10px;color:#7dd3fc;font-weight:400">${b.occ}% · ${b.rn.toLocaleString()} rn</div></th>`;
-  });
-  th+='</tr></thead><tbody>';
-
-  // Day rows
-  const maxDays=31;
-  for(let day=1;day<=maxDays;day++){
-    th+=`<tr><td style="padding:3px 4px;text-align:center;font-size:10px;font-weight:700;color:#6b7a8d;background:#f8fafc;border-bottom:1px solid #e2e8f0">${day}</td>`;
-    months90.forEach(mk=>{
-      const [y,mo]=mk.split('-').map(Number);
-      const dInM=new Date(y,mo,0).getDate();
-      if(day>dInM){th+='<td style="background:#f8fafc"></td>';return;}
-      const iso=mk+'-'+String(day).padStart(2,'0');
-      const isPast=iso<TODAY, isToday=iso===TODAY;
-      const b=BUDGET[mk];
-      const dailyB=b.rn/b.days;
-      const occ=getDayOcc(iso);
-      let bg,tc,fw='400';
-      if(isPast){
-        bg=occ>0?'#dbeafe':'#f8fafc'; tc=occ>0?'#1d4ed8':'#cbd5e1';
-        if(occ>0)fw='700';
-      } else {
-        bg=heatBg(occ,dailyB); tc=heatTc(occ,dailyB);
-        if(occ>0)fw='700';
+    // Compute monthly room nights: overlap of reservation stay with month
+    function p90MonthRN(mk) {
+      var pts = mk.split('-');
+      var y = +pts[0], mo = +pts[1];
+      var mS = new Date(y, mo-1, 1).getTime();
+      var mE = new Date(y, mo,   1).getTime();
+      var tot = 0;
+      for (var i=0; i<dirData.length; i++) {
+        var r = dirData[i];
+        var ci = (r['Data Fillimit']||'').slice(0,10);
+        var co = (r['Data Mbarimit']||'').slice(0,10);
+        if (!ci || !co || ci.length<10 || co.length<10) continue;
+        var ciT = new Date(ci).getTime();
+        var coT = new Date(co).getTime();
+        var oS = Math.max(ciT, mS);
+        var oE = Math.min(coT, mE);
+        if (oE > oS) tot += (oE - oS) / 86400000;
       }
-      const brd=isToday?'2px solid #c9a84c':'1px solid rgba(255,255,255,.3)';
-      th+=`<td style="padding:3px 2px;text-align:center;background:${bg};border:${brd};color:${tc};font-weight:${fw};font-size:11px" title="${iso}: ${occ} rooms">${occ||''}</td>`;
-    });
-    th+='</tr>';
+      return Math.round(tot);
+    }
+
+    // Count reservations where the given date falls within the stay
+    function p90DayOcc(iso) {
+      var n = 0;
+      for (var i=0; i<dirData.length; i++) {
+        var r = dirData[i];
+        var ci = (r['Data Fillimit']||'').slice(0,10);
+        var co = (r['Data Mbarimit']||'').slice(0,10);
+        if (ci && co && ci <= iso && co > iso) n++;
+      }
+      return n;
+    }
+
+    function p90HeatBg(occ, budget) {
+      if (!budget || occ===0) return '#f1f5f9';
+      var p = occ/budget;
+      if (p>=0.95) return '#166534';
+      if (p>=0.80) return '#16a34a';
+      if (p>=0.60) return '#4ade80';
+      if (p>=0.40) return '#86efac';
+      if (p>=0.20) return '#bbf7d0';
+      return '#dcfce7';
+    }
+    function p90HeatTc(occ, budget) {
+      if (!budget || occ===0) return '#94a3b8';
+      return (occ/budget) >= 0.60 ? '#fff' : '#166534';
+    }
+
+    // Pre-compute monthly actuals (avoid calling p90MonthRN many times)
+    var monthActual = {};
+    for (var mi=0; mi<months90.length; mi++) {
+      monthActual[months90[mi]] = p90MonthRN(months90[mi]);
+    }
+
+    // ── Summary cards ──────────────────────────────────────────
+    var sc = '<div style="display:grid;grid-template-columns:repeat('+months90.length+',1fr);gap:12px;margin-bottom:16px">';
+    for (var mi=0; mi<months90.length; mi++) {
+      var mk = months90[mi];
+      var b = BUDGET[mk];
+      var actual = monthActual[mk];
+      var pct = b.rn > 0 ? Math.round(actual/b.rn*100) : 0;
+      var remaining = Math.max(0, b.rn - actual);
+      var sc_c = pct>=80 ? '#166534' : pct>=60 ? '#b45309' : '#dc2626';
+      var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
+      var icon = pct>=80 ? '✅' : pct>=60 ? '⚠️' : '🚨';
+      var barW = Math.min(100, pct);
+      sc += '<div style="background:'+sc_bg+';border-radius:10px;padding:14px 16px;border-left:4px solid '+sc_c+'">'
+        + '<div style="font-weight:800;color:#0a2240;font-size:13px;margin-bottom:10px">'+icon+' '+b.name+' '+todayD.getFullYear()+'</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">'
+        + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Budget RN</div><div style="font-weight:800;color:#2563eb;font-size:15px">'+b.rn.toLocaleString()+'</div></div>'
+        + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Budget Occ</div><div style="font-weight:800;color:#2563eb;font-size:15px">'+b.occ+'%</div></div>'
+        + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Aktual RN</div><div style="font-weight:800;color:#0a2240;font-size:18px">'+actual.toLocaleString()+'</div></div>'
+        + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Arritja</div><div style="font-weight:800;color:'+sc_c+';font-size:18px">'+pct+'%</div></div>'
+        + '</div>'
+        + '<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
+        + '<div style="width:'+barW+'%;height:100%;background:'+sc_c+';border-radius:4px"></div></div>'
+        + '<div style="font-size:12px;color:#6b7a8d">Mbeten: <strong style="color:'+(remaining>0?'#dc2626':'#166534')+'">'+remaining.toLocaleString()+' rn</strong></div>'
+        + '</div>';
+    }
+    sc += '</div>';
+    el90s.innerHTML = sc;
+
+    // ── Heatmap table ──────────────────────────────────────────
+    var th = '<table style="width:100%;border-collapse:collapse;font-size:11px">';
+    th += '<thead><tr><th style="width:30px;padding:5px 3px;background:#0a2240;color:#aac4e0;font-size:10px;text-align:center">Day</th>';
+    for (var mi=0; mi<months90.length; mi++) {
+      var b = BUDGET[months90[mi]];
+      th += '<th style="padding:6px 4px;background:#0a2240;color:#fff;text-align:center">'+b.name+'<div style="font-size:10px;color:#7dd3fc;font-weight:400">'+b.occ+'% · '+b.rn.toLocaleString()+' rn</div></th>';
+    }
+    th += '</tr></thead><tbody>';
+
+    for (var day=1; day<=31; day++) {
+      th += '<tr><td style="padding:2px 3px;text-align:center;font-size:10px;font-weight:700;color:#6b7a8d;background:#f8fafc;border-bottom:1px solid #e2e8f0">'+day+'</td>';
+      for (var mi=0; mi<months90.length; mi++) {
+        var mk = months90[mi];
+        var pts2 = mk.split('-');
+        var dInM = new Date(+pts2[0], +pts2[1], 0).getDate();
+        if (day > dInM) { th += '<td style="background:#f8fafc"></td>'; continue; }
+        var iso = mk + '-' + ('0'+day).slice(-2);
+        var isPast = iso < TODAY, isToday2 = iso === TODAY;
+        var b = BUDGET[mk];
+        var dailyB = b.rn / b.days;
+        var occ = p90DayOcc(iso);
+        var bg2, tc2, fw2 = occ>0 ? '700' : '400';
+        if (isPast) {
+          bg2 = occ>0 ? '#dbeafe' : '#f8fafc';
+          tc2 = occ>0 ? '#1d4ed8' : '#cbd5e1';
+        } else {
+          bg2 = p90HeatBg(occ, dailyB);
+          tc2 = p90HeatTc(occ, dailyB);
+        }
+        var brd2 = isToday2 ? '2px solid #c9a84c' : '1px solid rgba(0,0,0,0.04)';
+        th += '<td style="padding:2px 2px;text-align:center;background:'+bg2+';border:'+brd2+';color:'+tc2+';font-weight:'+fw2+'" title="'+iso+': '+occ+' rooms">'+(occ||'')+'</td>';
+      }
+      th += '</tr>';
+    }
+
+    // Summary rows
+    var sumRows = [
+      {lbl:'TOTAL',  fn: function(mk){ var a=monthActual[mk]; return {v:a.toLocaleString(), bg:'#1e3a5c', tc:'#7dd3fc'}; }},
+      {lbl:'%',      fn: function(mk){ var a=monthActual[mk],b2=BUDGET[mk],p=b2.rn>0?Math.round(a/b2.rn*100):0; return {v:p+'%', bg:p>=80?'#166534':p>=60?'#854d0e':'#7f1d1d', tc:'#fff'}; }},
+      {lbl:'BUDGET', fn: function(mk){ return {v:BUDGET[mk].rn.toLocaleString(), bg:'#1d4ed8', tc:'#bfdbfe'}; }},
+      {lbl:'B.OCC',  fn: function(mk){ return {v:BUDGET[mk].occ+'%', bg:'#1e40af', tc:'#93c5fd'}; }},
+      {lbl:'DIFF',   fn: function(mk){ var a=monthActual[mk],b2=BUDGET[mk],d=a-b2.rn; return {v:(d>=0?'+':'')+d.toLocaleString(), bg:d>=0?'#166534':'#7f1d1d', tc:'#fff'}; }},
+      {lbl:'DIFF%',  fn: function(mk){ var a=monthActual[mk],b2=BUDGET[mk],p=b2.rn>0?Math.round((a-b2.rn)/b2.rn*100):0; return {v:(p>=0?'+':'')+p+'%', bg:p>=0?'#166534':'#7f1d1d', tc:'#fff'}; }}
+    ];
+    for (var si=0; si<sumRows.length; si++) {
+      var sr = sumRows[si];
+      th += '<tr><td style="padding:4px 3px;font-size:10px;font-weight:800;background:#0a2240;color:#aac4e0;text-align:center">'+sr.lbl+'</td>';
+      for (var mi=0; mi<months90.length; mi++) {
+        var c2 = sr.fn(months90[mi]);
+        th += '<td style="padding:4px 3px;text-align:center;background:'+c2.bg+';color:'+c2.tc+';font-weight:800;font-size:12px;border-top:1px solid rgba(255,255,255,.1)">'+c2.v+'</td>';
+      }
+      th += '</tr>';
+    }
+    th += '</tbody></table>';
+    el90t.innerHTML = th;
+
+  } catch(e) {
+    if (document.getElementById('pace90Summary'))
+      document.getElementById('pace90Summary').innerHTML = '<p style="color:#dc2626;font-size:12px;padding:8px">Gabim: '+e.message+'</p>';
   }
-
-  // Summary rows (TOTAL, %, BUDGET, BUDGET%, DIFF, DIFF%)
-  const rowDefs=[
-    {lbl:'TOTAL RN',  bg:'#1e3a5c', tc:'#7dd3fc', fn:mk=>{ const a=getMonthRN(mk); return {v:a.toLocaleString(), bg:'#1e3a5c', tc:'#7dd3fc'}; }},
-    {lbl:'%',         bg:'#0f172a', tc:'#e2e8f0', fn:mk=>{ const b=BUDGET[mk],a=getMonthRN(mk),p=Math.round(a/b.rn*100); const bg=p>=80?'#166534':p>=60?'#854d0e':'#7f1d1d'; return{v:p+'%',bg,tc:'#fff'}; }},
-    {lbl:'BUDGET RN', bg:'#1d4ed8', tc:'#bfdbfe', fn:mk=>({v:BUDGET[mk].rn.toLocaleString(),bg:'#1d4ed8',tc:'#bfdbfe'})},
-    {lbl:'BUDGET%',   bg:'#1d4ed8', tc:'#93c5fd', fn:mk=>({v:BUDGET[mk].occ+'% occ',bg:'#1e40af',tc:'#93c5fd'})},
-    {lbl:'DIFF',      bg:'#7f1d1d', tc:'#fca5a5', fn:mk=>{ const b=BUDGET[mk],a=getMonthRN(mk),d=a-b.rn; return{v:(d>=0?'+':'')+d.toLocaleString(),bg:d>=0?'#166534':'#7f1d1d',tc:'#fff'}; }},
-    {lbl:'DIFF%',     bg:'#7f1d1d', tc:'#fca5a5', fn:mk=>{ const b=BUDGET[mk],a=getMonthRN(mk),p=Math.round((a-b.rn)/b.rn*100); return{v:(p>=0?'+':'')+p+'%',bg:p>=0?'#166534':'#7f1d1d',tc:'#fff'}; }},
-  ];
-  rowDefs.forEach(rd=>{
-    th+=`<tr><td style="padding:5px 4px;font-size:10px;font-weight:800;background:${rd.bg};color:${rd.tc};text-align:center">${rd.lbl}</td>`;
-    months90.forEach(mk=>{const c=rd.fn(mk);th+=`<td style="padding:5px 4px;text-align:center;background:${c.bg};color:${c.tc};font-weight:800;font-size:12px;border-top:1px solid rgba(255,255,255,.1)">${c.v}</td>`;});
-    th+='</tr>';
-  });
-  th+='</tbody></table>';
-  el90t.innerHTML=th;
-
-  // ── Summary cards ──────────────────────────────────────────────
-  let sc=`<div style="display:grid;grid-template-columns:repeat(${months90.length},1fr);gap:12px;margin-bottom:16px">`;
-  months90.forEach(mk=>{
-    const b=BUDGET[mk], actual=getMonthRN(mk);
-    const pct=Math.round(actual/b.rn*100);
-    const remaining=Math.max(0,b.rn-actual);
-    const sc_color=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
-    const sc_bg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fef2f2';
-    const icon=pct>=80?'✅':pct>=60?'⚠️':'🚨';
-    sc+=`<div style="background:${sc_bg};border-radius:10px;padding:14px 16px;border-left:4px solid ${sc_color}">
-      <div style="font-weight:800;color:#0a2240;font-size:13px;margin-bottom:10px">${icon} ${b.name} ${new Date(TODAY).getFullYear()}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">
-        <div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase;letter-spacing:.5px">Budget RN</div><div style="font-weight:800;color:#2563eb;font-size:15px">${b.rn.toLocaleString()}</div></div>
-        <div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase;letter-spacing:.5px">Budget Occ</div><div style="font-weight:800;color:#2563eb;font-size:15px">${b.occ}%</div></div>
-        <div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase;letter-spacing:.5px">Aktual RN</div><div style="font-weight:800;color:#0a2240;font-size:18px">${actual.toLocaleString()}</div></div>
-        <div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase;letter-spacing:.5px">Arritja</div><div style="font-weight:800;color:${sc_color};font-size:18px">${pct}%</div></div>
-      </div>
-      <div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">
-        <div style="width:${Math.min(100,pct)}%;height:100%;background:${sc_color};border-radius:4px;transition:width .8s"></div>
-      </div>
-      <div style="font-size:12px;color:#6b7a8d">Mbeten: <strong style="color:${remaining>0?'#dc2626':'#166534'}">${remaining.toLocaleString()} rn</strong></div>
-    </div>`;
-  });
-  sc+='</div>';
-  el90s.innerHTML=sc;
 }
 
 function clearAndReimport() {
