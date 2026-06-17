@@ -1821,11 +1821,11 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +'</table>'
     +'<div style="margin-top:8px;border-left:3px solid #c9a84c;padding:8px 12px;font-size:12px;color:#6b7a8d;background:#fffbf0">Tipologjia me me shume te ardhura: <strong>'+topRm+'</strong> ('+rmRev[topRm].toFixed(0)+' EUR)&nbsp;|&nbsp;ADR me e larte: <strong>'+(rmSorted.reduce(function(a,b){return (rmNts[b]>0&&(rmRev[b]/rmNts[b])>((rmNts[a]>0?rmRev[a]/rmNts[a]:0)))?b:a;},rmSorted[0]||'—'))+'</strong> ('+(function(){var br=rmSorted.reduce(function(a,b){return (rmNts[b]>0&&(rmRev[b]/rmNts[b])>(rmNts[a]>0?rmRev[a]/rmNts[a]:0))?b:a;},rmSorted[0]||'');return rmNts[br]>0?(rmRev[br]/rmNts[br]).toFixed(0):'—';}())+' EUR/nate)</div>'
     +'</td></tr>'
-    +secHead(sn(6),'Rezervimet Kryesore te Dites')
+    +(!isManager?(secHead(sn(6),'Rezervimet Kryesore te Dites')
     +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
     +'<tr><th style="'+thStyle()+'">Nr.</th><th style="'+thStyle()+'">Klienti</th><th style="'+thStyle()+'">Kombesia</th><th style="'+thStyle()+'">Kanali</th><th style="'+thStyle()+'">Mbertitje</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Vlera</th></tr>'
     +rezRows
-    +'</table></div></td></tr>'
+    +'</table></div></td></tr>'):'')
     +(metaHtml?secHead(sn(7),'Aktiviteti Social Media — Meta')+'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'+metaHtml+'</table></div></td></tr>':'')
     +(isManager?'':staffMoHtml)
     +secHead(isManager?(metaHtml?sn(8):sn(7)):(staffMoHtml?(metaHtml?sn(9):sn(8)):(metaHtml?sn(8):sn(7))),'Permbledhja e Menaxhimit')
