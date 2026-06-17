@@ -1496,7 +1496,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var planRows=planSorted.map(function(p){
     var pct=totalRev>0?Math.round(planRev[p]/totalRev*100):0;
     var pAdr=planNts[p]>0?(planRev[p]/planNts[p]).toFixed(0):'—';
-    return '<tr><td style="'+td(0,700)+'">'+p+'</td><td style="'+td(1,700)+'">'+planMap[p]+'</td><td style="'+td(1)+'">'+planNts[p]+'</td><td style="'+td(1,800,'#2563eb')+'">'+planRev[p].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+rAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
+    return '<tr><td style="'+td(0,700)+'">'+p+'</td><td style="'+td(1,700)+'">'+planMap[p]+'</td><td style="'+td(1)+'">'+planNts[p]+'</td><td style="'+td(1,800,'#2563eb')+'">'+planRev[p].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+pAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
   var rmRows=rmSorted.map(function(rm){
@@ -1771,7 +1771,7 @@ function sendSummaryEmail() {
   var dateVal = document.getElementById('dateFilter').value || TODAY;
   var viewLabels = {today:'Sot · '+fmtD(dateVal), week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
   var viewLbl = viewLabels[currentView] || currentView;
-  var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\/\//g,'.');
+  var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'.');
   var subject = isManager
     ? 'Flower Hotel — Raport Manager · '+viewLbl+' · '+today2
     : 'Flower Hotel — Permbledhje Shitjeve '+currentUser+' · '+today2;
