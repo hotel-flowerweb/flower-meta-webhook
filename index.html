@@ -1617,8 +1617,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var sStaff=isManager?sn():null,sMo=isManager?sn():null;
   var sPace=eMo90.length?sn():null;
   var sCh=sn(),sNat=sn(),sPlan=sn(),sRm=sn();
-  var sRez
-!isManager?sn():null;
+  var sRez=!isManager?sn():null;
   var sMeta=hasMetaData?sn():null;
   var sMoX=!isManager&&staffMoRows?sn():null;
   var sSum=sn();
@@ -1717,7 +1716,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +'note(\'Tipologjia kryesore: <strong>'+topRm+'</strong>&nbsp;·&nbsp;ADR: <strong>'+topRmADR+' EUR/natë</strong>\')'
 
     // Top reservations (staff only)
-    +(!sManager&&sRez?(
+    +(!isManager&&sRez?(
       secH(sRez,'Rezervimet Kryesore te Dites')
       +tbl('<tr><th style="'+th(0)+'">Klienti</th><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Vlera</th></tr>',rezRows)
     ):'')
