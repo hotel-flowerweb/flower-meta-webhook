@@ -912,7 +912,7 @@ function render90Day() {
   if (!el90s || !el90t) return;
 
   try {
-    var dirData = storedData.filter(function(r){ return !isExcluded(r) && chType(r['AI']||'')==='dir'; });
+    var dirData = storedData.filter(function(r){ return !isExcluded(r); }); // të gjitha kanalet për pace total
 
     // Find months in 90-day window with budget targets
     var todayD = new Date(TODAY);
@@ -1275,7 +1275,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var summaryText='Departamenti i shitjeve direkte regjistroi '+data.length+' rezervime per periudhen e raportuar, me te ardhura totale prej '+totalRev.toFixed(0)+' EUR dhe '+totalNts+' nete qendrimi. ADR mesatare: '+adr+' EUR/nate. Kanali me kontributin me te larte ishte '+topCh+', me '+topChRev.toFixed(0)+' EUR ('+topChPct+'% e totalit) dhe '+chNts[topCh]+' nete qendrimi. Rezervimet targetojne kryesisht muajin '+topMoName+', me '+(moMap[topMo]||0)+' rezervime. Mesatarja e kohezgiatjes se qendrimit eshte '+avgLos+' nete per rezervim.'+metaNote2;
 
   // ── 90-Day Budget Section for email ───────────────────────────
-  var emailDirData = storedData.filter(function(r){return !isExcluded(r)&&chType(r['AI']||'')==='dir';});
+  var emailDirData = storedData.filter(function(r){return !isExcluded(r);}); // të gjitha kanalet për pace total
   var todayD = new Date(TODAY);
   var end90D = new Date(TODAY); end90D.setDate(end90D.getDate()+90);
   var eMo90 = [];
