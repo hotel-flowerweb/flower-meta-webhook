@@ -1311,7 +1311,7 @@ function renderMetaSection() {
     html = shiftBadge + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
     html += mkMetaKpi('Instagram','📸',_metaStats.myIg,'#e1306c');
     html += mkMetaKpi('Messenger','💬',_metaStats.myMe,'#1877f2');
-    html += mkMetaKpi('Total Biseda','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
+    html += mkMetaKpi('Total Turni Im','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
     html += '</div>';
   }
   el.innerHTML = html;
@@ -1398,10 +1398,12 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       metaHtml+='<tr><td colspan="2" style="padding:6px 0 0"><div style="border-left:3px solid #c9a84c;padding:6px 10px;font-size:11px;color:#6b7a8d;background:#fffbf0">'+metaNote+'</div></td></tr>';
     } else if(_metaStats.myIg!==undefined){
       var myTot=_metaStats.myIg+_metaStats.myMe;
+      var hotelTot=_metaStats.total||myTot;
+      var shiftLbl=_metaStats.shiftLabel||'turni';
       metaHtml='<tr><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px">Instagram DM</td><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:800;color:#e1306c;font-size:16px">'+_metaStats.myIg+'</td></tr>'+
         '<tr><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px">Messenger</td><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:800;color:#1877f2;font-size:16px">'+_metaStats.myMe+'</td></tr>'+
-        '<tr><td style="padding:10px 0;font-size:14px;font-weight:700">Total Biseda Sot</td><td style="padding:10px 0;text-align:right;font-weight:800;font-size:18px;color:#0a2240">'+myTot+'</td></tr>';
-      metaHtml+='<tr><td colspan="2" style="padding:6px 0 0"><div style="border-left:3px solid #c9a84c;padding:6px 10px;font-size:11px;color:#6b7a8d;background:#fffbf0">Total hoteli: '+(_metaStats.total||myTot)+' biseda | Tuat: '+myTot+'</div></td></tr>';
+        '<tr><td style="padding:10px 0;font-size:14px;font-weight:700">Bisedat e Mia (Turni)</td><td style="padding:10px 0;text-align:right;font-weight:800;font-size:18px;color:#0a2240">'+myTot+'</td></tr>';
+      metaHtml+='<tr><td colspan="2" style="padding:6px 0 0"><div style="border-left:3px solid #c9a84c;padding:6px 10px;font-size:11px;color:#6b7a8d;background:#fffbf0">⏱ '+shiftLbl+' &nbsp;|&nbsp; Hoteli gjithsej: <strong>'+hotelTot+' biseda</strong> (Sara+Inva) &nbsp;|&nbsp; Tuajat: <strong>'+myTot+'</strong></div></td></tr>';
     }
   }
 
@@ -1636,6 +1638,12 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       +'</table></div></td></tr>';
   }
 
+  // ── Section numbering (must be defined before staffMoHtml uses sn()) ──
+  var paceCount = eMo90.length > 0 ? 1 : 0;
+  var so = isManager ? (2 + paceCount) : paceCount;
+  function sn(n){ return String(n+so).padStart(2,'0'); }
+  var paceSecStr = isManager ? String(4).padStart(2,'0') : String(2).padStart(2,'0');
+
   // ── STAFF-ONLY: Month distribution by nights ─────────────────────
   var staffMoHtml = '';
   if (!isManager) {
@@ -1664,11 +1672,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     }
   }
 
-  var paceCount = eMo90.length > 0 ? 1 : 0;
-  var so = isManager ? (2 + paceCount) : paceCount;
-  function sn(n){ return String(n+so).padStart(2,'0'); }
-  var paceSecStr = isManager ? String(2+2+1).padStart(2,'0') : '02'; // manager:05 no, let's be direct:
-  paceSecStr = isManager ? String(4).padStart(2,'0') : String(2).padStart(2,'0');
+  // (paceCount / so / sn / paceSecStr already defined above staffMoHtml)
 
   var emailFF = "font-family:Montserrat,'Segoe UI',Arial,sans-serif;";
   return '<!DOCTYPE html><html lang="sq"><head>'
