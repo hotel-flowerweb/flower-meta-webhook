@@ -431,6 +431,7 @@ function doLogin(user) {
   chip.className = 'user-chip ' + (user==='Sara'?'sara':user==='Inva'?'inva':'none');
   if (storedData.length) { applyFilter(); updateDayHistory(); updateBadge(); }
   else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; render90Day(); }
+  if (user !== 'Manager') recordShift(user);
   loadMetaStats();
 }
 function logout() {
@@ -1224,6 +1225,37 @@ var _metaStats = null; // { sara:{ig,me}, inva:{ig,me}, none:{ig,me}, total } or
 var SUPABASE_URL = 'https://ftevcplecbihhfffcxfd.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
 
+async function recordShift(user) {
+  // Record who is on duty when they log in — webhook reads this to assign Meta messages
+  try {
+    const now = new Date();
+    const ALB = 2; // UTC+2
+    const albH = (now.getUTCHours() + ALB) % 24;
+    const albMs = now.getTime() + ALB * 3600 * 1000;
+    var shiftDate, startTime, endTime;
+    if (albH >= 23) {
+      shiftDate = new Date(albMs + 86400000).toISOString().slice(0,10);
+      startTime = '23:00'; endTime = '15:00';
+    } else if (albH < 15) {
+      shiftDate = new Date(albMs).toISOString().slice(0,10);
+      startTime = '23:00'; endTime = '15:00';
+    } else {
+      shiftDate = new Date(albMs).toISOString().slice(0,10);
+      startTime = '15:00'; endTime = '23:00';
+    }
+    await fetch(SUPABASE_URL + '/rest/v1/shifts', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': 'Bearer ' + SUPABASE_ANON,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({date: shiftDate, staff_name: user, start_time: startTime, end_time: endTime})
+    });
+  } catch(e) { console.warn('recordShift error:', e); }
+}
+
 async function loadMetaStats() {
   // ── Shift boundaries (Albania = UTC+2 summer) ──────────────────
   // Shift 1: 23:00 prev night → 15:00 today  (ora 23-15)
@@ -1874,4 +1906,4 @@ function exportPDF() {
 </div>
 
 </body>
-</html>
+  </html>
