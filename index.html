@@ -1384,461 +1384,382 @@ var EJS_PUBLIC   = 'mce87cm88ruWn-jwp';
 
 // ── BUILD HTML EMAIL ────────────────────────────────────────────
 function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
-  var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'});
+  // Fix: use dots to avoid &#x2F; encoding in email clients
+  var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'.');
   var ts = new Date().toLocaleString('sq-AL');
 
-  // Common computed values
-  var totalRev = data.reduce(function(s,r){return s+getRev(r);},0);
-  var totalNts = data.reduce(function(s,r){return s+getNts(r);},0);
-  var adr = totalNts>0?(totalRev/totalNts).toFixed(0):'—';
-
-  // Channel breakdown
-  var chMap={}, chRev={}, chNts={};
-  data.forEach(function(r){
-    var ch=r['AI']||'Tjetër';
-    chMap[ch]=(chMap[ch]||0)+1;
-    chRev[ch]=(chRev[ch]||0)+getRev(r);
-    chNts[ch]=(chNts[ch]||0)+getNts(r);
-  });
-  var chSorted=Object.keys(chMap).sort(function(a,b){return chRev[b]-chRev[a];});
-  var topCh=chSorted[0]||'—', topChRev=chRev[topCh]||0, topChPct=totalRev>0?Math.round(topChRev/totalRev*100):0;
-
-  // Nationality
-  var natMap={}, natRev={}, natNts={};
-  data.forEach(function(r){
-    var n=r['Burimi Info.']||'?';
-    natMap[n]=(natMap[n]||0)+1;
-    natRev[n]=(natRev[n]||0)+getRev(r);
-    natNts[n]=(natNts[n]||0)+getNts(r);
-  });
-  var natSorted=Object.keys(natMap).sort(function(a,b){return natRev[b]-natRev[a];});
-
-  // Plan breakdown
-  var planMap={}, planRev={}, planNts={};
-  data.forEach(function(r){
-    var p=getPlan(r);
-    planMap[p]=(planMap[p]||0)+1;
-    planRev[p]=(planRev[p]||0)+getRev(r);
-    planNts[p]=(planNts[p]||0)+getNts(r);
-  });
-  var planSorted=Object.keys(planMap).sort(function(a,b){return planRev[b]-planRev[a];});
-  var topPlan=planSorted[0]||'—', topPlanADR=planNts[topPlan]>0?(planRev[topPlan]/planNts[topPlan]).toFixed(0):'—';
-
-  // Room type
-  var rmMap={}, rmRev={}, rmNts={};
-  data.forEach(function(r){
-    var rm=(r['LLoji Dhomes']||'').trim()||'?';
-    rmMap[rm]=(rmMap[rm]||0)+1;
-    rmRev[rm]=(rmRev[rm]||0)+getRev(r);
-    rmNts[rm]=(rmNts[rm]||0)+getNts(r);
-  });
-  var rmSorted=Object.keys(rmMap).sort(function(a,b){return rmRev[b]-rmRev[a];});
-  var topRm=rmSorted[0]||'—', topRmADR=rmNts[topRm]>0?(rmRev[topRm]/rmNts[topRm]).toFixed(0):'—';
-
-  // Top reservations (up to 10 by revenue)
-  var topRez=[].concat(data).sort(function(a,b){return getRev(b)-getRev(a);}).slice(0,10);
-
-  // Average LOS
+  // ── DATA ──────────────────────────────────────────────────────
+  var totalRev=data.reduce(function(s,r){return s+getRev(r);},0);
+  var totalNts=data.reduce(function(s,r){return s+getNts(r);},0);
+  var adr=totalNts>0?(totalRev/totalNts).toFixed(0):'—';
   var avgLos=data.length>0?(totalNts/data.length).toFixed(1):'—';
 
-  // Meta stats
-  var metaHtml='';
+  var chMap={},chRev={},chNts={};
+  data.forEach(function(r){var ch=r['AI']||'Tjetër';chMap[ch]=(chMap[ch]||0)+1;chRev[ch]=(chRev[ch]||0)+getRev(r);chNts[ch]=(chNts[ch]||0)+getNts(r);});
+  var chSorted=Object.keys(chMap).sort(function(a,b){return chRev[b]-chRev[a];});
+  var topCh=chSorted[0]||'—',topChRev=chRev[topCh]||0,topChPct=totalRev>0?Math.round(topChRev/totalRev*100):0;
+
+  var natMap={},natRev={},natNts={};
+  data.forEach(function(r){var n=r['Burimi Info.']||'?';natMap[n]=(natMap[n]||0)+1;natRev[n]=(natRev[n]||0)+getRev(r);natNts[n]=(natNts[n]||0)+getNts(r);});
+  var natSorted=Object.keys(natMap).sort(function(a,b){return natRev[b]-natRev[a];});
+
+  var planMap={},planRev={},planNts={};
+  data.forEach(function(r){var p=getPlan(r);planMap[p]=(planMap[p]||0)+1;planRev[p]=(planRev[p]||0)+getRev(r);planNts[p]=(planNts[p]||0)+getNts(r);});
+  var planSorted=Object.keys(planMap).sort(function(a,b){return planRev[b]-planRev[a];});
+  var topPlan=planSorted[0]||'—',topPlanADR=planNts[topPlan]>0?(planRev[topPlan]/planNts[topPlan]).toFixed(0):'—';
+
+  var rmMap={},rmRev={},rmNts={};
+  data.forEach(function(r){var rm=(r['LLoji Dhomes']||'').trim()||'?';rmMap[rm]=(rmMap[rm]||0)+1;rmRev[rm]=(rmRev[rm]||0)+getRev(r);rmNts[rm]=(rmNts[rm]||0)+getNts(r);});
+  var rmSorted=Object.keys(rmMap).sort(function(a,b){return rmRev[b]-rmRev[a];});
+  var topRm=rmSorted[0]||'—',topRmADR=rmNts[topRm]>0?(rmRev[topRm]/rmNts[topRm]).toFixed(0):'—';
+
+  var topRez=[].concat(data).sort(function(a,b){return getRev(b)-getRev(a);}).slice(0,10);
+
+  // ── META STATS ─────────────────────────────────────────────────
+  var igT=0,meT=0,metaMode='none',shiftLbl='';
   if(_metaStats){
-    if(isManager && _metaStats.sara){
-      var igT=_metaStats.sara.ig+_metaStats.inva.ig+(_metaStats.none?_metaStats.none.ig:0);
-      var meT=_metaStats.sara.me+_metaStats.inva.me+(_metaStats.none?_metaStats.none.me:0);
-      metaHtml='<tr><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px">Instagram DM</td><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:800;color:#e1306c;font-size:16px">'+igT+'</td></tr>'+
-        '<tr><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px">Messenger</td><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:800;color:#1877f2;font-size:16px">'+meT+'</td></tr>'+
-        '<tr><td style="padding:10px 0;font-size:14px;font-weight:700">Total Biseda Sot</td><td style="padding:10px 0;text-align:right;font-weight:800;font-size:18px;color:#0a2240">'+(igT+meT)+'</td></tr>';
-      var metaNote='Total hoteli: '+(igT+meT)+' biseda';
-      metaHtml+='<tr><td colspan="2" style="padding:6px 0 0"><div style="border-left:3px solid #c9a84c;padding:6px 10px;font-size:11px;color:#6b7a8d;background:#fffbf0">'+metaNote+'</div></td></tr>';
+    if(isManager&&_metaStats.sara){
+      igT=(_metaStats.sara.ig||0)+(_metaStats.inva.ig||0)+((_metaStats.none&&_metaStats.none.ig)||0);
+      meT=(_metaStats.sara.me||0)+(_metaStats.inva.me||0)+((_metaStats.none&&_metaStats.none.me)||0);
+      metaMode='manager';
     } else if(_metaStats.myIg!==undefined){
-      var myTot=_metaStats.myIg+_metaStats.myMe;
-      var hotelTot=_metaStats.total||myTot;
-      var shiftLbl=_metaStats.shiftLabel||'turni';
-      metaHtml='<tr><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px">Instagram DM</td><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:800;color:#e1306c;font-size:16px">'+_metaStats.myIg+'</td></tr>'+
-        '<tr><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px">Messenger</td><td style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:800;color:#1877f2;font-size:16px">'+_metaStats.myMe+'</td></tr>'+
-        '<tr><td style="padding:10px 0;font-size:14px;font-weight:700">Bisedat e Mia (Turni)</td><td style="padding:10px 0;text-align:right;font-weight:800;font-size:18px;color:#0a2240">'+myTot+'</td></tr>';
-      metaHtml+='<tr><td colspan="2" style="padding:6px 0 0"><div style="border-left:3px solid #c9a84c;padding:6px 10px;font-size:11px;color:#6b7a8d;background:#fffbf0">⏱ '+shiftLbl+' &nbsp;|&nbsp; Hoteli gjithsej: <strong>'+hotelTot+' biseda</strong> (Sara+Inva) &nbsp;|&nbsp; Tuajat: <strong>'+myTot+'</strong></div></td></tr>';
+      igT=_metaStats.myIg||0; meT=_metaStats.myMe||0;
+      shiftLbl=_metaStats.shiftLabel||'';
+      metaMode='staff';
     }
   }
+  var hasMetaData=metaMode!=='none';
 
-  // Auto-summary text (section 08)
+  // ── SUMMARY TEXT ───────────────────────────────────────────────
   var moMap={};
   data.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);if(m)moMap[m]=(moMap[m]||0)+1;});
   var moKeys=Object.keys(moMap).sort();
-  var topMo=moKeys.reduce(function(a,b){return (moMap[b]>moMap[a])?b:a;},moKeys[0]||'');
-  var mN=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
-  var topMoName=topMo?(mN[+topMo.split('-')[1]-1]+' '+topMo.split('-')[0]):'—';
-  var metaNote2='';
-  if(_metaStats){
-    var tot2=isManager&&_metaStats.sara?(_metaStats.sara.ig+_metaStats.sara.me+_metaStats.inva.ig+_metaStats.inva.me):(_metaStats.myIg!==undefined?(_metaStats.myIg+_metaStats.myMe):0);
-    var igN=isManager&&_metaStats.sara?(_metaStats.sara.ig+_metaStats.inva.ig):(_metaStats.myIg||0);
-    var meN=isManager&&_metaStats.sara?(_metaStats.sara.me+_metaStats.inva.me):(_metaStats.myMe||0);
-    metaNote2=' Gjate turnit u regjistruan '+tot2+' biseda te reja nga Meta ('+igN+' Instagram, '+meN+' Messenger).';
-  }
-  var summaryText='Departamenti i shitjeve direkte regjistroi '+data.length+' rezervime per periudhen e raportuar, me te ardhura totale prej '+totalRev.toFixed(0)+' EUR dhe '+totalNts+' nete qendrimi. ADR mesatare: '+adr+' EUR/nate. Kanali me kontributin me te larte ishte '+topCh+', me '+topChRev.toFixed(0)+' EUR ('+topChPct+'% e totalit) dhe '+chNts[topCh]+' nete qendrimi. Rezervimet targetojne kryesisht muajin '+topMoName+', me '+(moMap[topMo]||0)+' rezervime. Mesatarja e kohezgiatjes se qendrimit eshte '+avgLos+' nete per rezervim.'+metaNote2;
+  var topMo=moKeys.length?moKeys.reduce(function(a,b){return moMap[b]>moMap[a]?b:a;}):'';;
+  var mNm=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
+  var topMoName=topMo?(mNm[+topMo.split('-')[1]-1]+' '+topMo.split('-')[0]):'—';
+  var metaNote2=hasMetaData?' Gjate turnit u regjistruan '+(igT+meT)+' biseda te reja nga Meta ('+igT+' Instagram, '+meT+' Messenger).':'';
+  var summaryText='Departamenti i shitjeve direkte regjistroi '+data.length+' rezervime per periudhen e raportuar, me te ardhura totale prej '+totalRev.toFixed(0)+' EUR dhe '+totalNts+' nete qendrimi. ADR mesatare: '+adr+' EUR/nate. Kanali me kontributin me te larte ishte '+topCh+', me '+topChRev.toFixed(0)+' EUR ('+topChPct+'% e totalit). Rezervimet targetojne kryesisht muajin '+topMoName+'. Mesatarja e LOS eshte '+avgLos+' nete.'+metaNote2;
 
-  // ── 90-Day Budget Section for email ───────────────────────────
-  var emailDirData = storedData.filter(function(r){return !isExcluded(r);});
-  var todayD = new Date(TODAY);
-  var end90D = new Date(TODAY); end90D.setDate(end90D.getDate()+90);
-  var eMo90 = [];
-  var emCur = new Date(todayD.getFullYear(), todayD.getMonth(), 1);
-  while(emCur<=end90D && eMo90.length<4){
+  // ── 90-DAY BUDGET ──────────────────────────────────────────────
+  var emailDirData=storedData.filter(function(r){return !isExcluded(r);});
+  var todayD=new Date(TODAY),end90D=new Date(TODAY);
+  end90D.setDate(end90D.getDate()+90);
+  var eMo90=[],emCur=new Date(todayD.getFullYear(),todayD.getMonth(),1);
+  while(emCur<=end90D&&eMo90.length<4){
     var emk=emCur.getFullYear()+'-'+('0'+(emCur.getMonth()+1)).slice(-2);
     if(BUDGET[emk]) eMo90.push(emk);
     emCur.setMonth(emCur.getMonth()+1);
   }
-  // Day-level occupancy with HISTORICAL_RN priority
   function emailDayOcc(iso){
     if(HISTORICAL_RN[iso]!==undefined) return HISTORICAL_RN[iso];
     var n=0;
     for(var i=0;i<emailDirData.length;i++){
-      var r=emailDirData[i];
-      var ci=(r['Data Fillimit']||'').slice(0,10),co=(r['Data Mbarimit']||'').slice(0,10);
+      var r=emailDirData[i],ci=(r['Data Fillimit']||'').slice(0,10),co=(r['Data Mbarimit']||'').slice(0,10);
       if(ci&&co&&ci<=iso&&co>iso) n++;
     }
     return n;
   }
-  // Monthly total via day-by-day (includes HISTORICAL automatically)
   function emailGetMonthRN(mk){
-    var pts=mk.split('-'),y=+pts[0],mo=+pts[1];
-    var dInM=new Date(y,mo,0).getDate(),tot=0;
+    var pts=mk.split('-'),y=+pts[0],mo=+pts[1],dInM=new Date(y,mo,0).getDate(),tot=0;
     for(var d=1;d<=dInM;d++) tot+=emailDayOcc(mk+'-'+('0'+d).slice(-2));
     return tot;
   }
-  var pace90Html='';
-  if(eMo90.length){
-    pace90Html+='<tr><td colspan="99" style="padding:4px 0 4px"><div style="height:1px;background:linear-gradient(90deg,#c9a84c44,transparent);margin-bottom:6px"></div></td></tr>';
 
-    // ── SVG progress chart ─────────────────────────────────────
-    var svgW=540,svgH=eMo90.length*56+16,barH=18,labelW=68,numW=52,barAreaW=svgW-labelW-numW-20;
-    var svgLines='';
-    eMo90.forEach(function(mk,idx){
-      var b=BUDGET[mk],actual=emailGetMonthRN(mk);
-      var pct=Math.round(actual/b.rn*100),capped=Math.min(100,pct);
-      var clr=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
-      var y0=idx*56+8;
-      // Month label
-      svgLines+='<text x="0" y="'+(y0+barH/2+1)+'" font-size="11" font-weight="bold" fill="#0a2240" dominant-baseline="middle">'+b.name+'</text>';
-      // Budget bar (grey bg)
-      svgLines+='<rect x="'+labelW+'" y="'+y0+'" width="'+barAreaW+'" height="'+barH+'" rx="4" fill="#e2e8f0"/>';
-      // Historical segment (gold) for June
-      if(mk==='2026-06'){
-        var histRN=Object.keys(HISTORICAL_RN).reduce(function(s,k){return k.slice(0,7)===mk?s+HISTORICAL_RN[k]:s;},0);
-        var histW=Math.round(Math.min(histRN,b.rn)/b.rn*barAreaW);
-        svgLines+='<rect x="'+labelW+'" y="'+y0+'" width="'+histW+'" height="'+barH+'" rx="4" fill="#c9a84c" opacity="0.7"/>';
-        var monW=Math.max(0,Math.round(capped/100*barAreaW)-histW);
-        if(monW>0) svgLines+='<rect x="'+(labelW+histW)+'" y="'+y0+'" width="'+monW+'" height="'+barH+'" rx="0" fill="'+clr+'"/>';
-      } else {
-        var actW=Math.round(capped/100*barAreaW);
-        if(actW>0) svgLines+='<rect x="'+labelW+'" y="'+y0+'" width="'+actW+'" height="'+barH+'" rx="4" fill="'+clr+'"/>';
-      }
-      // % text inside bar
-      svgLines+='<text x="'+(labelW+4)+'" y="'+(y0+barH/2+1)+'" font-size="10" fill="#fff" font-weight="bold" dominant-baseline="middle">'+pct+'%</text>';
-      // Actual / budget text on right
-      svgLines+='<text x="'+(labelW+barAreaW+6)+'" y="'+(y0+barH/2+1)+'" font-size="10" fill="#0a2240" font-weight="700" dominant-baseline="middle">'+actual.toLocaleString()+'/'+b.rn.toLocaleString()+'</text>';
-      // Insight below bar
-      var remaining=Math.max(0,b.rn-actual);
-      var insight=pct>=100?'🏆 Tejkaluar!':pct>=80?'✅ Ritëm i mirë — mbeten '+remaining.toLocaleString()+' rn':pct>=50?'⚠️ Nën target — nevojiten '+remaining.toLocaleString()+' rn':'🚨 Deficit — kërkon vëmendje urgente';
-      svgLines+='<text x="'+labelW+'" y="'+(y0+barH+13)+'" font-size="9.5" fill="'+clr+'" font-weight="600">'+insight+'</text>';
-    });
-    pace90Html+='<tr><td colspan="99" style="padding:0 0 8px"><svg width="'+svgW+'" height="'+svgH+'" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">'+svgLines+'</svg></td></tr>';
-
-    // Legend row
-    pace90Html+='<tr><td colspan="99" style="padding:0 0 6px"><span style="font-size:10px;color:#6b7a8d">&#9646; <span style="color:#c9a84c">▋</span> Para monitorimit &nbsp; <span style="color:#166534">▋</span> Aktual &nbsp; <span style="color:#e2e8f0">▋</span> Mbeten</span></td></tr>';
-
-    // Monthly cards in a table
-    pace90Html+='<tr><td colspan="99" style="padding:4px 0"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr>';
-    eMo90.forEach(function(mk){
-      var b=BUDGET[mk],actual=emailGetMonthRN(mk);
-      var pct=Math.round(actual/b.rn*100),remaining=Math.max(0,b.rn-actual);
-      var sc=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
-      var sbg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fef2f2';
-      var icon=pct>=80?'✅':pct>=60?'⚠️':'🚨';
-      var barW2=Math.min(100,pct);
-      pace90Html+='<td style="padding:6px;vertical-align:top"><div style="background:'+sbg+';border-radius:8px;padding:12px;border-left:4px solid '+sc+'">'
-        +'<div style="font-weight:800;color:#0a2240;font-size:13px;margin-bottom:8px">'+icon+' '+b.name+'</div>'
-        +'<div style="font-size:11px;color:#6b7a8d;margin-bottom:2px">Budget RN</div>'
-        +'<div style="font-weight:800;color:#2563eb;font-size:16px;margin-bottom:6px">'+b.rn.toLocaleString()+' <span style="font-size:10px;color:#6b7a8d">('+b.occ+'% occ)</span></div>'
-        +'<div style="font-size:11px;color:#6b7a8d;margin-bottom:2px">Aktual RN</div>'
-        +'<div style="font-weight:800;color:#0a2240;font-size:18px;margin-bottom:6px">'+actual.toLocaleString()+'</div>'
-        +'<div style="height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:6px">'
-        +'<div style="width:'+barW2+'%;height:100%;background:'+sc+';border-radius:3px"></div></div>'
-        +'<div style="display:flex;justify-content:space-between;align-items:center">'
-        +'<span style="font-weight:800;color:'+sc+';font-size:14px">'+pct+'%</span>'
-        +'<span style="font-size:11px;color:'+(remaining>0?'#dc2626':'#166534')+';font-weight:700">−'+remaining.toLocaleString()+' rn</span>'
-        +'</div></div></td>';
-    });
-    pace90Html+='</tr></table></td></tr>';
+  // ── STYLE HELPERS ──────────────────────────────────────────────
+  var FF="font-family:Montserrat,'Segoe UI',Arial,sans-serif;";
+  function th(r){return FF+'font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#6b7a8d;padding:9px 10px;border-bottom:2px solid #e2e8f0;background:#f8fafc;text-align:'+(r?'right':'left')+';white-space:nowrap';}
+  function td(r,bold,color){return FF+'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:12px;color:'+(color||'#1a2533')+';text-align:'+(r?'right':'left')+(bold?';font-weight:'+bold:'');}
+  function secH(num,title){
+    return '<tr><td colspan="99" style="padding:22px 0 10px">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      +'<span style="'+FF+'font-size:9px;font-weight:900;color:#fff;background:#0a2240;padding:3px 9px;border-radius:4px;letter-spacing:1px">'+num+'</span>'
+      +'<span style="'+FF+'font-size:11px;font-weight:800;color:#0a2240;text-transform:uppercase;letter-spacing:1.2px">'+title+'</span>'
+      +'</div>'
+      +'<div style="height:2px;background:linear-gradient(90deg,#c9a84c 40%,rgba(201,168,76,.3) 80%,transparent)"></div>'
+      +'</td></tr>';
   }
+  function tbl(hdr,rows){return '<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'+hdr+rows+'</table></td></tr>';}
+  function note(txt){return '<tr><td colspan="99" style="padding:0 0 14px"><div style="border-left:3px solid #c9a84c;padding:8px 12px;font-size:11px;color:#6b7a8d;background:#fffbf0;border-radius:0 4px 4px 0">'+txt+'</div></td></tr>';}
 
-  // Helper for table rows
-  var dtc = 'font-family:Montserrat,Segoe UI,Arial,sans-serif;';
-  function thStyle(){ return dtc+'font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#6b7a8d;padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;background:#f8fafc'; }
-  function thR(){ return dtc+'font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#6b7a8d;padding:8px 10px;text-align:right;border-bottom:2px solid #e2e8f0;background:#f8fafc'; }
-  function tdStyle(){ return dtc+'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:12px;color:#1a2533'; }
-  function tdR(){ return dtc+'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:12px;text-align:right;color:#1a2533'; }
-  function secHead(n,title){ return '<tr><td colspan="99" style="padding:22px 0 10px"><div style="display:flex;align-items:center;gap:10px"><span style="font-family:Montserrat,Segoe UI,Arial,sans-serif;font-size:9px;font-weight:900;color:#fff;background:#0a2240;letter-spacing:1.5px;padding:3px 8px;border-radius:3px">'+n+'</span><span style="font-family:Montserrat,Segoe UI,Arial,sans-serif;font-size:11px;font-weight:800;color:#0a2240;text-transform:uppercase;letter-spacing:1px">'+title+'</span></div><div style="height:1px;background:linear-gradient(90deg,#c9a84c,#c9a84c44,transparent);margin-top:8px"></div></td></tr>'; }
-
-  // Channel rows
+  // ── TABLE ROWS ─────────────────────────────────────────────────
   var chRows=chSorted.map(function(ch){
     var pct=totalRev>0?Math.round(chRev[ch]/totalRev*100):0;
     var cAdr=chNts[ch]>0?(chRev[ch]/chNts[ch]).toFixed(0):'—';
-    return '<tr><td style="'+tdStyle()+'">'+ch+'</td><td style="'+tdR()+'">'+chMap[ch]+'</td><td style="'+tdR()+';color:#2563eb;font-weight:700">'+chRev[ch].toFixed(0)+' EUR</td><td style="'+tdR()+'">'+chNts[ch]+'</td><td style="'+tdR()+'">'+cAdr+' EUR</td><td style="'+tdR()+';color:#6b7a8d">'+pct+'%</td></tr>';
+    return '<tr><td style="'+td(0)+'">'+ch+'</td><td style="'+td(1,700)+'">'+chMap[ch]+'</td><td style="'+td(1,800,'#2563eb')+'">'+chRev[ch].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+chNts[ch]+'</td><td style="'+td(1)+'">'+cAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
-  // Nat rows
-  var natRows=natSorted.slice(0,6).map(function(n){
+  var natRows=natSorted.slice(0,8).map(function(n){
     var pct=totalRev>0?Math.round(natRev[n]/totalRev*100):0;
-    return '<tr><td style="'+tdStyle()+'">'+n+'</td><td style="'+tdR()+'">'+natMap[n]+'</td><td style="'+tdR()+'">'+natNts[n]+'</td><td style="'+tdR()+';color:#2563eb;font-weight:700">'+natRev[n].toFixed(0)+' EUR</td><td style="'+tdR()+';color:#6b7a8d">'+pct+'%</td></tr>';
+    return '<tr><td style="'+td(0)+'">'+n+'</td><td style="'+td(1,700)+'">'+natMap[n]+'</td><td style="'+td(1)+'">'+natNts[n]+'</td><td style="'+td(1,800,'#2563eb')+'">'+natRev[n].toFixed(0)+' EUR</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
-  // Plan rows
   var planRows=planSorted.map(function(p){
     var pct=totalRev>0?Math.round(planRev[p]/totalRev*100):0;
     var pAdr=planNts[p]>0?(planRev[p]/planNts[p]).toFixed(0):'—';
-    return '<tr><td style="'+tdStyle()+';font-weight:700">'+p+'</td><td style="'+tdR()+'">'+planMap[p]+'</td><td style="'+tdR()+'">'+planNts[p]+'</td><td style="'+tdR()+';color:#2563eb;font-weight:700">'+planRev[p].toFixed(0)+' EUR</td><td style="'+tdR()+'">'+pAdr+' EUR</td><td style="'+tdR()+';color:#6b7a8d">'+pct+'%</td></tr>';
+    return '<tr><td style="'+td(0,700)+'">'+p+'</td><td style="'+td(1,700)+'">'+planMap[p]+'</td><td style="'+td(1)+'">'+planNts[p]+'</td><td style="'+td(1,800,'#2563eb')+'">'+planRev[p].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+rAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
-  // Room rows
   var rmRows=rmSorted.map(function(rm){
     var pct=totalRev>0?Math.round(rmRev[rm]/totalRev*100):0;
     var rAdr=rmNts[rm]>0?(rmRev[rm]/rmNts[rm]).toFixed(0):'—';
-    return '<tr><td style="'+tdStyle()+'">'+rm+'</td><td style="'+tdR()+'">'+rmMap[rm]+'</td><td style="'+tdR()+'">'+rmNts[rm]+'</td><td style="'+tdR()+';color:#2563eb;font-weight:700">'+rmRev[rm].toFixed(0)+' EUR</td><td style="'+tdR()+'">'+rAdr+' EUR</td><td style="'+tdR()+';color:#6b7a8d">'+pct+'%</td></tr>';
+    return '<tr><td style="'+td(0)+'">'+rm+'</td><td style="'+td(1,700)+'">'+rmMap[rm]+'</td><td style="'+td(1)+'">'+rmNts[rm]+'</td><td style="'+td(1,800,'#2563eb')+'">'+rmRev[rm].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+rAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
-  // Top reservations rows
   var rezRows=topRez.map(function(r){
-    var ci=(r['Data Fillimit']||'').slice(0,10);
-    var nat=r['Burimi Info.']||'—';
-    var ch=r['AI']||'—';
     var rev=getRev(r);
-    return '<tr><td style="'+tdStyle()+';color:#6b7a8d;font-size:11px">'+r['Nr. Prenotimit']+'</td>'
-      +'<td style="'+tdStyle()+';font-weight:700">'+((r['Klienti']||'').trim())+'</td>'
-      +'<td style="'+tdStyle()+'">'+nat+'</td>'
-      +'<td style="'+tdStyle()+'">'+ch+'</td>'
-      +'<td style="'+tdStyle()+'">'+fmtD(ci)+'</td>'
-      +'<td style="'+tdR()+'">'+getNts(r)+'</td>'
-      +'<td style="'+tdR()+';color:#2563eb;font-weight:700">'+(rev>0?rev.toFixed(0)+' EUR':'—')+'</td></tr>';
+    return '<tr><td style="'+td(0,700)+'">'+((r['Klienti']||'').trim())+'</td><td style="'+td(0)+'">'+( r['AI']||'—')+'</td><td style="'+td(1,700)+'">'+getNts(r)+'</td><td style="'+td(1,800,'#2563eb')+'">'+(rev>0?rev.toFixed(0)+' EUR':'—')+'</td></tr>';
   }).join('');
 
-  var displayName = isManager ? 'Manager' : staffName;
-
-  // ── MANAGER-ONLY: Staff comparison + Month distribution ─────────
-  var mgrExtraHtml = '';
-  if(isManager) {
+  // ── MANAGER: Staff comparison ──────────────────────────────────
+  var mgrStaffHtml='';
+  if(isManager){
     var saraD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Sara';});
     var invaD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Inva';});
     function calcSt(sd){var rv=sd.reduce(function(s,r){return s+getRev(r);},0),nt=sd.reduce(function(s,r){return s+getNts(r);},0);return{cnt:sd.length,rev:rv,nts:nt,adr:nt>0?(rv/nt).toFixed(0):'—'};}
-    var ss=calcSt(saraD), si=calcSt(invaD);
-    var sPct=totalRev>0?Math.round(ss.rev/totalRev*100):0;
-    var iPct=totalRev>0?Math.round(si.rev/totalRev*100):0;
-
-    mgrExtraHtml += secHead('02','Krahasimi i Stafit — Sara vs Inva')
-      +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-      +'<tr><th style="'+thStyle()+'">Stafi</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">% Totali</th></tr>'
-      +'<tr style="background:#fdf2f8">'
-        +'<td style="'+tdStyle()+';font-weight:800;color:#9d174d">👩 Sara</td>'
-        +'<td style="'+tdR()+';font-weight:700;font-size:15px;color:#0a2240">'+ss.cnt+'</td>'
-        +'<td style="'+tdR()+';font-weight:800;font-size:15px;color:#ec4899">'+ss.rev.toFixed(0)+' EUR</td>'
-        +'<td style="'+tdR()+'">'+ss.nts+'</td>'
-        +'<td style="'+tdR()+'">'+ss.adr+' EUR</td>'
-        +'<td style="padding:9px 10px;border-bottom:1px solid #f0f4f8"><div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:10px;background:#f0f4f8;border-radius:5px;overflow:hidden"><div style="width:'+sPct+'%;height:10px;background:#ec4899;border-radius:5px"></div></div><span style="font-size:12px;color:#9d174d;font-weight:800;min-width:32px">'+sPct+'%</span></div></td>'
-      +'</tr>'
-      +'<tr style="background:#f5f3ff">'
-        +'<td style="'+tdStyle()+';font-weight:800;color:#5b21b6">👩 Inva</td>'
-        +'<td style="'+tdR()+';font-weight:700;font-size:15px;color:#0a2240">'+si.cnt+'</td>'
-        +'<td style="'+tdR()+';font-weight:800;font-size:15px;color:#7c3aed">'+si.rev.toFixed(0)+' EUR</td>'
-        +'<td style="'+tdR()+'">'+si.nts+'</td>'
-        +'<td style="'+tdR()+'">'+si.adr+' EUR</td>'
-        +'<td style="padding:9px 10px;border-bottom:1px solid #f0f4f8"><div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:10px;background:#f0f4f8;border-radius:5px;overflow:hidden"><div style="width:'+iPct+'%;height:10px;background:#7c3aed;border-radius:5px"></div></div><span style="font-size:12px;color:#5b21b6;font-weight:800;min-width:32px">'+iPct+'%</span></div></td>'
-      +'</tr>'
-      +'<tr style="background:#e8f0fe;border-top:2px solid #c5d8f0">'
-        +'<td style="'+tdStyle()+';font-weight:900;color:#0a2240;font-size:14px;border-top:2px solid #c5d8f0">📊 TOTALI</td>'
-        +'<td style="'+tdR()+';font-weight:900;font-size:18px;color:#0a2240;border-top:2px solid #c5d8f0">'+data.length+'</td>'
-        +'<td style="'+tdR()+';font-weight:900;font-size:18px;color:#2563eb;border-top:2px solid #c5d8f0">'+totalRev.toFixed(0)+' EUR</td>'
-        +'<td style="'+tdR()+';font-weight:800;border-top:2px solid #c5d8f0">'+totalNts+'</td>'
-        +'<td style="'+tdR()+';font-weight:800;border-top:2px solid #c5d8f0">'+adr+' EUR</td>'
-        +'<td style="'+tdR()+';font-weight:700;border-top:2px solid #c5d8f0">100%</td>'
-      +'</tr>'
-      +'</table></div></td></tr>';
-
-    var moNm=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
-    var moS={},moI={},moT={};
-    saraD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);var n=getNts(r);if(m){moS[m]=(moS[m]||0)+n;moT[m]=(moT[m]||0)+n;}});
-    invaD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);var n=getNts(r);if(m){moI[m]=(moI[m]||0)+n;moT[m]=(moT[m]||0)+n;}});
-    var allMo=Object.keys(moT).sort();
-    var mxMo=allMo.reduce(function(mx,m){return Math.max(mx,moT[m]||0);},1);
-
-    var moRows2=allMo.map(function(m){
-      var pts=m.split('-');
-      var nm=moNm[+pts[1]-1]+' '+pts[0];
-      var sN=moS[m]||0,iN=moI[m]||0,tN=moT[m];
-      var sw=Math.round(sN/mxMo*70),iw=Math.round(iN/mxMo*70);
-      return '<tr>'
-        +'<td style="'+tdStyle()+';font-weight:700">'+nm+'</td>'
-        +'<td style="'+tdR()+';color:#9d174d;font-weight:800;font-size:14px">'+sN+'</td>'
-        +'<td style="padding:6px 8px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:10px;width:'+(sw||2)+'px;background:#ec4899;border-radius:4px"></div></td>'
-        +'<td style="'+tdR()+';color:#5b21b6;font-weight:800;font-size:14px">'+iN+'</td>'
-        +'<td style="padding:6px 8px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:10px;width:'+(iw||2)+'px;background:#7c3aed;border-radius:4px"></div></td>'
-        +'<td style="'+tdR()+';font-weight:900;color:#0a2240;font-size:14px">'+tN+'</td>'
+    var ss=calcSt(saraD),si=calcSt(invaD);
+    var sPct=totalRev>0?Math.round(ss.rev/totalRev*100):0,iPct=totalRev>0?Math.round(si.rev/totalRev*100):0;
+    function staffCard(name,st,pct,bg,bar,tc){
+      return '<td style="'+td(0)+';vertical-align:top;background:'+bg+';border-radius:10px;padding:14px 16px">'
+        +'<div style="'+FF+'font-size:10px;font-weight:700;color:'+tc+';letter-spacing:.5px;margin-bottom:6px">'+name+'</div>'
+        +'<div style="'+FF+'font-size:22px;font-weight:900;color:#0a2240;line-height:1">'+st.rev.toFixed(0)+'</div>'
+        +'<div style="'+FF+'font-size:9px;color:#6b7a8d;margin-bottom:10px">EUR</div>'
+        +'<div style="'+FF+'font-size:11px;color:#374151;margin-bottom:10px">'+st.cnt+' rez &nbsp;·&nbsp; '+st.nts+' netë &nbsp;·&nbsp; ADR '+st.adr+'</div>'
+        +'<div style="height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px"></div></div>'
+        +'<div style="'+FF+'font-size:11px;font-weight:800;color:'+tc+'">'+pct+'%</div>'
+        +'</td>';
+    }
+    mgrStaffHtml='<tr>'
+      +staffCard('Sara',ss,sPct,'#fdf2f8','#ec4899','#9d174d')
+      +'<td style="width:10px"></td>'
+      +staffCard('Inva',si,iPct,'#f5f3ff','#7c3aed','#5b21b6')
       +'</tr>';
-    }).join('');
 
-    mgrExtraHtml += secHead('03','Shpërndarje Mujore — Netë Qendrimi (Sara / Inva / Total)')
-      +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-      +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+';color:#9d174d">Sara 🌙</th><th style="'+thStyle()+'"></th><th style="'+thR()+';color:#5b21b6">Inva 🌙</th><th style="'+thStyle()+'"></th><th style="'+thR()+'">Total 🌙</th></tr>'
-      +moRows2
-      +'</table></div></td></tr>';
+    // Manager month distribution
+    var moNm2=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Néntor','Dhjetor'];
+    var moS={},moI={},moTt={};
+    saraD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7),n=getNts(r);if(m){moS[m]=(moS[m]||0)+n;moTt[m]=(moTt[m]||0)+n;}});
+    invaD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7),n=getNts(r);if(m){moI[m]=(moI[m]||0)+n;moTt[m]=(moTt[m]||0)+n;}});
+    var allMo2=Object.keys(moTt).sort(),mxMo=allMo2.reduce(function(mx,m){return Math.max(mx,moTt[m]||0);},1);
+    var moRows2=allMo2.map(function(m){
+      var pts=m.split('-'),nm=moNm2[+pts[1]-1]+' '+pts[0],sN=moS[m]||0,iN=moI[m]||0,tN=moTt[m];
+      var sw=Math.round(sN/mxMo*80),iw=Math.round(iN/mxMo*80);
+      return '<tr><td style="'+td(0,700)+'">'+nm+'</td>'
+        +'<td style="'+td(1,800,'#9d174d')+'">'+sN+'</td>'
+        +'<td style="padding:6px 6px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:8px;width:'+(sw||2)+'px;background:#ec4899;border-radius:3px"></div></td>'
+        +'<td style="'+td(1,800,'#5b21b6')+'">'+iN+'</td>'
+        +'<td style="padding:6px 6px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:8px;width:'+(iw||2)+'px;background:#7c3aed;border-radius:3px"></div></td>'
+        +'<td style="'+td(1,900,'#0a2240')+'">'+tN+'</td></tr>';
+    }).join('');
+    mgrStaffHtml+='__MGR_MO_ROWS__'+moRows2+'__MGR_MO_END__';
   }
 
-  // ── Section numbering (must be defined before staffMoHtml uses sn()) ──
-  var paceCount = eMo90.length > 0 ? 1 : 0;
-  var so = isManager ? (2 + paceCount) : paceCount;
-  function sn(n){ return String(n+so).padStart(2,'0'); }
-  var paceSecStr = isManager ? String(4).padStart(2,'0') : String(2).padStart(2,'0');
-
-  // ── STAFF-ONLY: Month distribution by nights ─────────────────────
-  var staffMoHtml = '';
-  if (!isManager) {
+  // ── STAFF MONTH DISTRIBUTION ───────────────────────────────────
+  var staffMoRows='';
+  if(!isManager){
     var moNmX=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
     var moDataX={};
-    data.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);var n=getNts(r);if(m){moDataX[m]=(moDataX[m]||0)+n;}});
-    var allMoX=Object.keys(moDataX).sort();
-    var mxMoX=allMoX.reduce(function(mx,m){return Math.max(mx,moDataX[m]||0);},1);
-    if(allMoX.length>0){
-      var moRowsX=allMoX.map(function(m){
-        var pts=m.split('-');
-        var nm=moNmX[+pts[1]-1]+' '+pts[0];
-        var nts=moDataX[m];
-        var bw=Math.round(nts/mxMoX*140);
-        return '<tr>'
-          +'<td style="'+tdStyle()+';font-weight:700">'+nm+'</td>'
-          +'<td style="'+tdR()+';font-weight:900;font-size:15px;color:#0a2240">'+nts+'</td>'
-          +'<td style="padding:6px 12px;border-bottom:1px solid #f0f4f8;vertical-align:middle"><div style="height:12px;width:'+(bw||2)+'px;background:linear-gradient(90deg,#c9a84c,#f0d080);border-radius:4px"></div></td>'
-        +'</tr>';
-      }).join('');
-      staffMoHtml = secHead(sn(7),'Shpërndarje Mujore — Netë Qendrimi')
-        +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-        +'<tr><th style="'+thStyle()+'">Muaj</th><th style="'+thR()+'">Netë 🌙</th><th style="'+thStyle()+'">Grafiku</th></tr>'
-        +moRowsX
-        +'</table></div></td></tr>';
-    }
+    data.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7),n=getNts(r);if(m)moDataX[m]=(moDataX[m]||0)+n;});
+    var allMoX=Object.keys(moDataX).sort(),mxMoX=allMoX.reduce(function(mx,m){return Math.max(mx,moDataX[m]||0);},1);
+    staffMoRows=allMoX.map(function(m){
+      var pts=m.split('-'),nm=moNmX[+pts[1]-1]+' '+pts[0],nts=moDataX[m],bw=Math.round(nts/mxMoX*120);
+      return '<tr><td style="'+td(0,700)+'">'+nm+'</td><td style="'+td(1,900,'#0a2240')+';font-size:14px">'+nts+'</td>'
+        +'<td style="padding:9px 10px;border-bottom:1px solid #f0f4f8"><div style="height:10px;width:'+(bw||2)+'px;background:linear-gradient(90deg,#c9a84c,#f0d080);border-radius:4px;max-width:120px"></div></td></tr>';
+    }).join('');
   }
 
-  // (paceCount / so / sn / paceSecStr already defined above staffMoHtml)
+  // ── 90-DAY PACE (stacked mobile cards) ─────────────────────────
+  var pace90Html='';
+  if(eMo90.length){
+    eMo90.forEach(function(mk){
+      var b=BUDGET[mk],actual=emailGetMonthRN(mk);
+      var pct=Math.round(actual/b.rn*100),remaining=Math.max(0,b.rn-actual);
+      var clr=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
+      var bg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fff5f5';
+      var brd=pct>=80?'#86efac':pct>=60?'#fde68a':'#fecaca';
+      var icon=pct>=100?'🏆':pct>=80?'✅':pct>=60?'⚠️':'🚨';
+      var status=pct>=100?'Target tejkaluar!':pct>=80?'Ritëm i mirë — mbeten '+remaining.toLocaleString()+' rn':pct>=60?'Nën target — nevojiten '+remaining.toLocaleString()+' rn':'Deficit — kërkon vëmendje urgente';
+      pace90Html+='<div style="background:'+bg+';border:1px solid '+brd+';border-left:4px solid '+clr+';border-radius:8px;padding:14px 16px;margin-bottom:10px">'
+        +'<div style="display:table;width:100%">'
+        +'<div style="display:table-cell;vertical-align:middle">'
+        +'<div style="'+FF+'font-weight:800;font-size:14px;color:#0a2240">'+icon+' '+b.name+'</div>'
+        +'<div style="'+FF+'font-size:10px;color:#6b7a8d;margin-top:1px">'+b.occ+'% occ target</div>'
+        +'</div>'
+        +'<div style="display:table-cell;vertical-align:middle;text-align:right">'
+        +'<div style="'+FF+'font-weight:900;font-size:26px;color:'+clr+';line-height:1">'+pct+'%</div>'
+        +'</div>'
+        +'</div>'
+        +'<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin:10px 0">'
+        +'<div style="height:100%;width:'+Math.min(100,pct)+'%;background:'+clr+';border-radius:4px"></div>'
+        +'</div>'
+        +'<div style="display:table;width:100%">'
+        +'<div style="display:table-cell;text-align:left">'
+        +'<div style="'+FF+'font-size:9px;color:#6b7a8d;text-transform:uppercase;letter-spacing:.5px">Aktual</div>'
+        +'<div style="'+FF+'font-weight:900;font-size:18px;color:#0a2240">'+actual.toLocaleString()+' rn</div>'
+        +'</div>'
+        +'<div style="display:table-cell;text-align:center">'
+        +'<div style="'+FF+'font-size:9px;color:#6b7a8d;text-transform:uppercase;letter-spacing:.5px">Target</div>'
+        +'<div style="'+FF+'font-weight:700;font-size:14px;color:#6b7a8d">'+b.rn.toLocaleString()+' rn</div>'
+        +'</div>'
+        +'<div style="display:table-cell;text-align:right">'
+        +'<div style="'+FF+'font-size:9px;color:#6b7a8d;text-transform:uppercase;letter-spacing:.5px">Mbeten</div>'
+        +'<div style="'+FF+'font-weight:700;font-size:14px;color:'+clr+'">'+remaining.toLocaleString()+' rn</div>'
+        +'</div>'
+        +'</div>'
+        +'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
+        +'</div>';
+    });
+  }
 
-  var emailFF = "font-family:Montserrat,'Segoe UI',Arial,sans-serif;";
+  // ── SECTION NUMBERS ────────────────────────────────────────────
+  var _si=1;
+  function sn(){return ('0'+(_si++)).slice(-2);}
+  var s01=sn();
+  var sStaff=isManager?sn():null,sMo=isManager?sn():null;
+  var sPace=eMo90.length?sn():null;
+  var sCh=sn(),sNat=sn(),sPlan=sn(),sRm=sn();
+  var sRez
+!isManager?sn():null;
+  var sMeta=hasMetaData?sn():null;
+  var sMoX=!isManager&&staffMoRows?sn():null;
+  var sSum=sn();
+
+  var displayName=isManager?'Manager':staffName;
+
+  // Extract parts of mgrStaffHtml
+  var mgrCards='',mgrMoRows='';
+  if(isManager&&mgrStaffHtml){
+    var moSplit=mgrStaffHtml.split('__MGR_MO_ROWS__');
+    mgrCards=moSplit[0];
+    var moEnd=moSplit[1]?moSplit[1].split('__MGR_MO_END__'):['',''];
+    mgrMoRows=moEnd[0];
+  }
+
+  // ── CSS ────────────────────────────────────────────────────────
+  var css='*{box-sizing:border-box}'
+    +'body{margin:0;padding:0;background:#eef2f7;-webkit-text-size-adjust:100%}'
+    +'.w{max-width:600px;margin:0 auto;background:#fff}'
+    +'.p{padding:0 24px}'
+    +'.kg{width:100%;border-collapse:separate;border-spacing:8px 0}'
+    +'.kc{background:#f0f7ff;border-radius:10px;padding:18px 10px;text-align:center;vertical-align:top}'
+    +'.kv{font-family:Montserrat,sans-serif;font-size:26px;font-weight:900;color:#2563eb;line-height:1;margin-bottom:6px}'
+    +'.kl{font-family:Montserrat,sans-serif;font-size:9px;font-weight:700;color:#6b7a8d;text-transform:uppercase;letter-spacing:.6px}'
+    +'@media only screen and (max-width:580px){'
+    +'.w{width:100%!important}.p{padding:0 12px!important}'
+    +'.kg,.kg tbody,.kg tr{display:flex!important;flex-wrap:wrap!important;gap:8px!important;border-spacing:0!important}'
+    +'.kc{flex:1 1 calc(50% - 4px)!important;border-radius:8px!important;padding:14px 8px!important}'
+    +'.kv{font-size:20px!important}'
+    +'.etitle{font-size:18px!important}'
+    +'.dtbl th,.dtbl td{font-size:10px!important;padding:6px 5px!important}'
+    +'.dtbl th:nth-child(n+4),.dtbl td:nth-child(n+4){display:none!important}'
+    +'}';
+
+  // ── BUILD ──────────────────────────────────────────────────────
   return '<!DOCTYPE html><html lang="sq"><head>'
     +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-    +'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">'
-    +'<style>'
-    +'*{box-sizing:border-box}'
-    +'body{margin:0;padding:0;background:#f0f4f8;'+emailFF+'}'
-    +'.ew{max-width:700px;margin:0 auto;background:#fff}'
-    +'.eh{padding:28px 36px 20px}'
-    +'.eb{padding:0 36px 28px}'
-    +'.kpi-row{width:100%;border-collapse:collapse}'
-    +'.kpi-c{width:22%;text-align:center;padding:18px 8px;background:#f0f7ff;border-radius:10px}'
-    +'.kpi-g{width:4%}'
-    +'.kpi-v{'+emailFF+'font-size:30px;font-weight:900;color:#2563eb;line-height:1}'
-    +'.kpi-l{'+emailFF+'font-size:9px;font-weight:700;color:#6b7a8d;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}'
-    +'@media only screen and (max-width:600px){'
-    +'.eh{padding:18px 14px 14px !important}'
-    +'.eb{padding:0 14px 18px !important}'
-    +'.email-title{font-size:20px !important}'
-    +'.kpi-row,.kpi-row tbody,.kpi-row tr{display:flex !important;flex-wrap:wrap !important;gap:8px !important}'
-    +'.kpi-c{width:calc(50% - 4px) !important;flex:1 1 calc(50% - 4px) !important;min-width:130px !important;border-radius:8px !important}'
-    +'.kpi-g{display:none !important}'
-    +'.kpi-v{font-size:24px !important}'
-    +'.dtbl th,.dtbl td{font-size:10px !important;padding:5px 5px !important}'
-    +'.svgchart{max-width:100% !important;width:100% !important}'
-    +'}'
-    +'</style>'
-    +'</head>'
-    +'<body style="margin:0;padding:0;background:#f0f4f8">'
-    +'<div class="ew">'
-    +'<div style="height:5px;background:linear-gradient(90deg,#c9a84c,#f0d080,#c9a84c)"></div>'
-    +'<div class="eh">'
-      +'<div style="'+emailFF+'font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:#aac4e0">FLOWER HOTEL</div>'
-      +'<div style="'+emailFF+'font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#c9a84c;margin-bottom:18px">DEPARTAMENTI I SHITJEVE DIREKTE</div>'
-      +'<h1 class="email-title" style="margin:0 0 8px;'+emailFF+'font-size:24px;font-weight:900;color:#0a2240;letter-spacing:-.3px">Raporti Ditor i Performances</h1>'
-      +'<div style="'+emailFF+'font-size:12px;color:#6b7a8d">'+dateVal+'&nbsp;&nbsp;<strong style="color:#0a2240">'+displayName+'</strong></div>'
-      +'<div style="height:1px;background:linear-gradient(90deg,#e2e8f0,transparent);margin-top:18px"></div>'
+    +'<meta name="x-apple-disable-message-reformatting">'
+    +'<style>'+css+'</style></head>'
+    +'<body>'
+    +'<div class="w">'
+
+    // Gold top bar
+    +'<div style="height:4px;background:linear-gradient(90deg,#c9a84c,#f0d080 50%,#c9a84c)"></div>'
+
+    // Header
+    +'<div style="background:#0a2240;padding:26px 24px 22px">'
+    +'<div style="'+FF+'font-size:8px;font-weight:700;letter-spacing:3px;color:#c9a84c;margin-bottom:6px">FLOWER HOTEL · DIRECT SALES</div>'
+    +'<h1 class="etitle" style="margin:0 0 10px;'+FF+'font-size:22px;font-weight:900;color:#fff;letter-spacing:-.3px">Raporti Ditor i Performances</h1>'
+    +'<div style="'+FF+'font-size:12px;color:#94b8d4">'+dateVal+'&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:#c9a84c;font-weight:700">'+displayName+'</span></div>'
     +'</div>'
-    +'<div class="eb">'
-    +'<table style="width:100%;border-collapse:collapse;'+emailFF+'">'
-    +secHead('01','Permbledhja e Dites')
-    +'<tr><td colspan="99" style="padding:8px 0 16px">'
-    +'<table class="kpi-row"><tbody><tr>'
-    +'<td class="kpi-c">'
-      +'<div class="kpi-v">'+data.length+'</div>'
-      +'<div class="kpi-l">Rezervime Direkte</div>'
-    +'</td>'
-    +'<td class="kpi-g"></td>'
-    +'<td class="kpi-c">'
-      +'<div class="kpi-v">'+totalRev.toFixed(0)+'</div>'
-      +'<div class="kpi-l">Të Ardhura EUR</div>'
-    +'</td>'
-    +'<td class="kpi-g"></td>'
-    +'<td class="kpi-c">'
-      +'<div class="kpi-v">'+totalNts+'</div>'
-      +'<div class="kpi-l">Netë Qendrimi</div>'
-    +'</td>'
-    +'<td class="kpi-g"></td>'
-    +'<td class="kpi-c">'
-      +'<div class="kpi-v">'+adr+'</div>'
-      +'<div class="kpi-l">ADR EUR/natë</div>'
-    +'</td>'
-    +'</tr></tbody></table>'
-    +'</td></tr>'
-    +mgrExtraHtml
-    +(eMo90.length ? secHead(paceSecStr,'90-Day Booking Pace & Budget') : '')
-    +pace90Html
-    +secHead(sn(2),'Performanca Sipas Kanaleve Direkte')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-    +'<tr><th style="'+thStyle()+'">Kanali</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">%</th></tr>'
-    +chRows
-    +'</table></div></td></tr>'
-    +secHead(sn(3),'Kombesia e Klienteve')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-    +'<tr><th style="'+thStyle()+'">Kombesia</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">%</th></tr>'
-    +natRows
-    +'</table></div></td></tr>'
-    +secHead(sn(4),'Shitja e Paketave')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-    +'<tr><th style="'+thStyle()+'">Paketa</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">%</th></tr>'
-    +planRows
-    +'</table>'
-    +'<div style="margin-top:8px;border-left:3px solid #c9a84c;padding:8px 12px;font-size:12px;color:#6b7a8d;background:#fffbf0">Paketa me me shume te ardhura: <strong>'+topPlan+'</strong> ('+planRev[topPlan].toFixed(0)+' EUR)&nbsp;|&nbsp;ADR me e larte: <strong>'+(planSorted.reduce(function(a,b){return (planNts[b]>0&&(planRev[b]/planNts[b])>((planNts[a]>0?planRev[a]/planNts[a]:0)))?b:a;},planSorted[0]||'—'))+'</strong> ('+(function(){var bp=planSorted.reduce(function(a,b){return (planNts[b]>0&&(planRev[b]/planNts[b])>(planNts[a]>0?planRev[a]/planNts[a]:0))?b:a;},planSorted[0]||'');return planNts[bp]>0?(planRev[bp]/planNts[bp]).toFixed(0):'—';}())+' EUR/nate)</div>'
-    +'</td></tr>'
-    +secHead(sn(5),'Tipologjite e Dhomave')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-    +'<tr><th style="'+thStyle()+'">Tipologjia</th><th style="'+thR()+'">Rez.</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Te Ardhura</th><th style="'+thR()+'">ADR</th><th style="'+thR()+'">%</th></tr>'
-    +rmRows
-    +'</table>'
-    +'<div style="margin-top:8px;border-left:3px solid #c9a84c;padding:8px 12px;font-size:12px;color:#6b7a8d;background:#fffbf0">Tipologjia me me shume te ardhura: <strong>'+topRm+'</strong> ('+rmRev[topRm].toFixed(0)+' EUR)&nbsp;|&nbsp;ADR me e larte: <strong>'+(rmSorted.reduce(function(a,b){return (rmNts[b]>0&&(rmRev[b]/rmNts[b])>((rmNts[a]>0?rmRev[a]/rmNts[a]:0)))?b:a;},rmSorted[0]||'—'))+'</strong> ('+(function(){var br=rmSorted.reduce(function(a,b){return (rmNts[b]>0&&(rmRev[b]/rmNts[b])>(rmNts[a]>0?rmRev[a]/rmNts[a]:0))?b:a;},rmSorted[0]||'');return rmNts[br]>0?(rmRev[br]/rmNts[br]).toFixed(0):'—';}())+' EUR/nate)</div>'
-    +'</td></tr>'
-    +(!isManager?(secHead(sn(6),'Rezervimet Kryesore te Dites')
-    +'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'
-    +'<tr><th style="'+thStyle()+'">Nr.</th><th style="'+thStyle()+'">Klienti</th><th style="'+thStyle()+'">Kombesia</th><th style="'+thStyle()+'">Kanali</th><th style="'+thStyle()+'">Mbertitje</th><th style="'+thR()+'">Nete</th><th style="'+thR()+'">Vlera</th></tr>'
-    +rezRows
-    +'</table></div></td></tr>'):'')
-    +(metaHtml?secHead(sn(7),'Aktiviteti Social Media — Meta')+'<tr><td colspan="99" style="padding-bottom:4px"><div style="overflow-x:auto"><table class="dtbl" style="width:100%;border-collapse:collapse;font-family:Montserrat,Segoe UI,Arial,sans-serif">'+metaHtml+'</table></div></td></tr>':'')
-    +(isManager?'':staffMoHtml)
-    +secHead(isManager?(metaHtml?sn(8):sn(7)):(staffMoHtml?(metaHtml?sn(9):sn(8)):(metaHtml?sn(8):sn(7))),'Permbledhja e Menaxhimit')
-    +'<tr><td colspan="99" style="padding:8px 0 20px"><p style="margin:0;font-size:14px;line-height:1.8;color:#1a2533">'+summaryText+'</p></td></tr>'
-    +'</table>'
+
+    // Body
+    +'<div class="p"><table style="width:100%;border-collapse:collapse">'
+
+    // 01 KPIs
+    +secH(s01,'Permbledhja e Dites')
+    +'<tr><td colspan="99" style="padding:0 0 6px">'
+    +'<table class="kg"><tbody><tr>'
+    +'<td class="kc"><div class="kv">'+data.length+'</div><div class="kl">Rezervime Direkte</div></td>'
+    +'<td class="kc"><div class="kv">'+totalRev.toFixed(0)+'</div><div class="kl">Të Ardhura EUR</div></td>'
+    +'<td class="kc"><div class="kv">'+totalNts+'</div><div class="kl">Netë Qendrimi</div></td>'
+    +'<td class="kc"><div class="kv">'+adr+'</div><div class="kl">ADR ED-?natë</div></td>'
+    +'</tr></tbody></table></td></tr>'
+
+    // Manager: staff comparison
+    +(isManager&&mgrCards?(
+      secH(sStaff,'Sara vs Inva — Performanca')
+      +'<tr><td colspan="99" style="padding-bottom:12px"><table style="width:100%;border-collapse:separate;border-spacing:0">'+mgrCards+'</table></td></tr>'
+      +secH(sMo,'Shpërndarje Mujore — Sara / Inva')
+      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+';color:#9d174d">Sara</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+';color:#5b21b6">Inva</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+'">Total Netë</th></tr>',mgrMoRows)
+    ):'')
+
+    // 90-Day Pace
+    +(eMo90.length?(
+      secH(sPace,'90-Day Booking Pace & Budget')
+      +'<tr><td colspan="99" style="padding-bottom:8px">'+pace90Html+'</td></tr>'
+    ):'')
+
+    // Channels
+    +secH(sCh,'Performanca Sipas Kanaleve Direkte')
+    +tbl('<tr><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">Netê</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',chRows)
+
+    // Nationalities
+    +secH(sNat,'Kombesia e Klienteve')
+    +tbl('<tr><th style="'+th(0)+'">Kombesia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">%</th></tr>',natRows)
+
+    // Plans
+    +secH(sPlan,'Shitja e Paketave')
+    +tbl('<tr><th style="'+th(0)+'">Paketa</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',planRows)
+    + 'note(\'Paketa kryesore: <strong>'+topPlan('Paketa kryesore: <strong>'+topPlan+'</strong>&nbsp;·&nbsp;ADR: <strong>'+topPlanADR+' EUR/natë</strong>')'
+
+    // Rooms
+    +secH(sRm,'Tipologjite e Dhomave')
+    +tbl('<tr><th style="'+th(0)+'">Tipologjia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',rmRows)
+    +'note(\'Tipologjia kryesore: <strong>'+topRm+'</strong>&nbsp;·&nbsp;ADR: <strong>'+topRmADR+' EUR/natë</strong>\')'
+
+    // Top reservations (staff only)
+    +(!sManager&&sRez?(
+      secH(sRez,'Rezervimet Kryesore te Dites')
+      +tbl('<tr><th style="'+th(0)+'">Klienti</th><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Vlera</th></tr>',rezRows)
+    ):'')
+
+    // Meta
+    +(hasMetaData?(
+      secH(sMeta,'Aktiviteti Social Media — Meta')
+      +'<tr><td colspan="99" style="padding-bottom:14px">'
+      +'<div style="display:table;width:100%">'
+      +'<div style="display:table-cell;padding:16px;background:#fff0f6;border-radius:8px 0 0 8px;text-align:center">'
+      +'<div style="'+FF+'font-size:9px;font-weight:700;color:#e1306c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">📸 Instagram</div>'
+      +'<div style="'+FF+'font-size:30px;font-weight:900;color:#e1306c">'+igT+'</div>'
+      +'</div>'
+      +'<div style="display:table-cell;padding:16px;background:#f0f6ff;border-radius:0 8px 8px 0;text-align:center">'
+      +'<div style="'+FF+'font-size:9px;font-weight:700;color:#1877f2;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💬 Messenger</div>'
+      +'<div style="'+FF+'font-size:30px;font-weight:900;color:#1877f2">'+meT+'</div>'
+      +'</div>'
+      +'</div>'
+      +(shiftLbl?'<div style="margin-top:8px;'+FF+'font-size:11px;color:#6b7a8d;text-align:center">'+shiftLbl+'</div>':'')
+      +'</td></tr>'
+    ):'')
+
+    // Staff month distribution
+    +(!isManager&&staffMoRows?(
+      secH(sMoX,'Shpërndarje Mujore — Netë Qendrimi')
+      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+'">Netë</th><th style="'+th(0)+';width:130px">Grafiku</th></tr>',staffMoRows)
+    ):'')
+
+    // Summary
+    +secH(sSum,'Permbledhja e Menaxhimit')
+    +'<tr><td colspan="99" style="padding:6px 0 28px"><p style="margin:0;'+FF+'font-size:13px;line-height:1.9;color:#374151">'+summaryText+'</p></td></tr>'
+
+    +'</table></div>'
+
+    // Footer
+    +'<div style="background:#0a2240;padding:18px 24px;text-align:center">'
+    +'<div style="'+FF+'font-size:8px;font-weight:700;letter-spacing:2px;color:#94b8d4;text-transform:uppercase">Flower Hotel · Daily Direct Sales Report</div>'
+    +'<div style="'+FF+'font-size:8px;color:#3d5a73;margin-top:4px">'+ts+'</div>'
     +'</div>'
-    +'<div style="background:#0a2240;color:#aac4e0;padding:16px 36px;font-size:9px;text-align:center;letter-spacing:1.5px;font-family:Montserrat,Segoe UI,Arial,sans-serif;font-weight:700;text-transform:uppercase">'
-    +'FLOWER HOTEL &nbsp;·&nbsp; DAILY DIRECT SALES REPORT &nbsp;·&nbsp; '+ts
-    +'</div>'
-    +'<div style="padding:10px;text-align:center;font-size:9px;color:#b0bec5;background:#f8fafc;font-family:Montserrat,Segoe UI,Arial,sans-serif;letter-spacing:.5px">Dërguar automatikisht · EmailJS.com</div>'
+    +'<div style="padding:8px;text-align:center;'+FF+'font-size:9px;color:#9ca3af;background:#f9fafb">Dërguar automatikisht · EmailJS.com</div>'
     +'</div></body></html>';
 }
-
 // ── EMAIL SUMMARY ───────────────────────────────────────────────
 var _emailDraft = null;
 
@@ -1851,7 +1772,7 @@ function sendSummaryEmail() {
   var dateVal = document.getElementById('dateFilter').value || TODAY;
   var viewLabels = {today:'Sot · '+fmtD(dateVal), week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
   var viewLbl = viewLabels[currentView] || currentView;
-  var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\/\//g,'.');
   var subject = isManager
     ? 'Flower Hotel — Raport Manager · '+viewLbl+' · '+today2
     : 'Flower Hotel — Permbledhje Shitjeve '+currentUser+' · '+today2;
