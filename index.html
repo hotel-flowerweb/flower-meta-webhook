@@ -1225,8 +1225,50 @@ var SUPABASE_URL = 'https://ftevcplecbihhfffcxfd.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
 
 async function loadMetaStats() {
-  const today = new Date().toISOString().slice(0,10);
-  const url = SUPABASE_URL + '/rest/v1/meta_conversations?select=platform,assigned_staff&conversation_date=eq.' + today;
+  // ── Shift boundaries (Albania = UTC+2 summer) ──────────────────
+  // Shift 1: 23:00 prev night → 15:00 today  (ora 23-15)
+  // Shift 2: 15:00 today     → 23:00 tonight (ora 15-23)
+  // ──────────────────────────────────────────────────────────────
+  const now = new Date();
+  // Browser timezone offset in hours (Albania CEST = +120 min → +2h)
+  const tzOffH = -now.getTimezoneOffset() / 60; // e.g. 2 for UTC+2
+
+  // Current local hour (0-23)
+  const localHour = (now.getUTCHours() + tzOffH + 24) % 24;
+
+  // Helper: build a UTC Date for "today at HH:00 local time"
+  function localHourToUTC(h, dayOffset) {
+    var d = new Date(now);
+    d.setUTCDate(d.getUTCDate() + (dayOffset || 0));
+    d.setUTCHours(h - tzOffH, 0, 0, 0);
+    return d;
+  }
+
+  var shiftStart, shiftEnd, shiftLabel;
+  if (localHour >= 23 || localHour < 0) {
+    // Just after 23:00 — beginning of Shift 1 for TOMORROW
+    shiftStart = localHourToUTC(23, 0);
+    shiftEnd   = localHourToUTC(15, 1);
+    shiftLabel = 'Turni 1 (23:00 → 15:00)';
+  } else if (localHour < 15) {
+    // 00:00-14:59 local → still inside Shift 1
+    // Shift 1 started at 23:00 YESTERDAY
+    shiftStart = localHourToUTC(23, -1);
+    shiftEnd   = localHourToUTC(15, 0);
+    shiftLabel = 'Turni 1 (23:00 → 15:00)';
+  } else {
+    // 15:00-22:59 local → Shift 2
+    shiftStart = localHourToUTC(15, 0);
+    shiftEnd   = localHourToUTC(23, 0);
+    shiftLabel = 'Turni 2 (15:00 → 23:00)';
+  }
+
+  // Query by first_message_time range (stored UTC in Supabase)
+  var url = SUPABASE_URL + '/rest/v1/meta_conversations'
+    + '?select=platform,assigned_staff'
+    + '&first_message_time=gte.' + encodeURIComponent(shiftStart.toISOString())
+    + '&first_message_time=lt.'  + encodeURIComponent(shiftEnd.toISOString());
+
   try {
     const r = await fetch(url, {headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON}});
     const rows = await r.json();
@@ -1238,10 +1280,10 @@ async function loadMetaStats() {
       if(row.platform==='instagram') target.ig++; else target.me++;
     });
     if (currentUser === 'Manager') {
-      _metaStats = {sara:{ig:s.ig,me:s.me}, inva:{ig:iv.ig,me:iv.me}, none:{ig:no.ig,me:no.me}, total:rows.length};
+      _metaStats = {sara:{ig:s.ig,me:s.me}, inva:{ig:iv.ig,me:iv.me}, none:{ig:no.ig,me:no.me}, total:rows.length, shiftLabel:shiftLabel};
     } else {
       const mine = rows.filter(function(r){return (r.assigned_staff||'')===currentUser;});
-      _metaStats = {myIg: mine.filter(function(r){return r.platform==='instagram';}).length, myMe: mine.filter(function(r){return r.platform==='messenger';}).length, total:rows.length};
+      _metaStats = {myIg: mine.filter(function(r){return r.platform==='instagram';}).length, myMe: mine.filter(function(r){return r.platform==='messenger';}).length, total:rows.length, shiftLabel:shiftLabel};
     }
     renderMetaSection();
   } catch(e) { console.warn('Meta stats error:', e); }
@@ -1253,17 +1295,20 @@ function renderMetaSection() {
   el.style.display = 'block';
   var isMgr = currentUser === 'Manager';
   var html = '';
+  var shiftBadge = _metaStats.shiftLabel
+    ? '<div style="font-size:11px;color:#6b7a8d;margin-bottom:8px;font-weight:600">⏱ '+_metaStats.shiftLabel+'</div>'
+    : '';
   if (isMgr && _metaStats.sara) {
     var saT = _metaStats.sara.ig + _metaStats.sara.me;
     var inT = _metaStats.inva.ig + _metaStats.inva.me;
-    html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px">';
+    html = shiftBadge + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px">';
     html += mkMetaKpi('Instagram','📸',_metaStats.sara.ig+_metaStats.inva.ig+_metaStats.none.ig,'#e1306c');
     html += mkMetaKpi('Messenger','💬',_metaStats.sara.me+_metaStats.inva.me+_metaStats.none.me,'#1877f2');
     html += mkMetaKpi('Sara Total','👩',saT,'#ec4899');
     html += mkMetaKpi('Inva Total','👩',inT,'#7c3aed');
     html += '</div>';
   } else if (_metaStats.myIg !== undefined) {
-    html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">';
+    html = shiftBadge + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
     html += mkMetaKpi('Instagram','📸',_metaStats.myIg,'#e1306c');
     html += mkMetaKpi('Messenger','💬',_metaStats.myMe,'#1877f2');
     html += mkMetaKpi('Total Biseda','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
