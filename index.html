@@ -1332,7 +1332,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var rmSorted=Object.keys(rmMap).sort(function(a,b){return rmRev[b]-rmRev[a];});
   var topRm=rmSorted[0]||'—',topRmADR=rmNts[topRm]>0?(rmRev[topRm]/rmNts[topRm]).toFixed(0):'—';
 
-  var topRez=[].concat(data).sort(function(a,b){return getRev(b)-getRev(a);}).slice(0,10);
+  var topRez=[].concat(data).sort(function(a,b){return getRev(b)-getRev(a);}).slice(0,5);
 
   // ── META STATS ─────────────────────────────────────────────────
   var igT=0,meT=0,metaMode='none';
