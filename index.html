@@ -3,6 +3,10 @@
 <html lang="sq">
 <head>
 <meta charset="UTF-8">
+<!-- v25 deploy Jun17 -->
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flower Hotel — Sales Monitor</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -147,13 +151,13 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .rt tr:last-child td{border-bottom:none}
 .pb{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700}
 .pAI{background:#fef3c7;color:#b45309}.pBB{background:#dbeafe;color:#1e40af}.pHB{background:#dcfce7;color:#166534}.pTO{background:#f3f4f6;color:#4b5563}
-.ss{padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:#f8fafc;font-size:11px;color:var(--navy);cursor:pointer;font-weight:600}
+.ss`{padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:#f8fafc;font-size:11px;color:var(--navy);cursor:pointer;font-weight:600}
 .ss.sara{background:var(--sara-bg);border-color:var(--sara);color:#9d174d}.ss.inva{background:var(--inva-bg);border-color:var(--inva);color:#5b21b6}
 .new-badge{background:#f0fdf4;border:1px solid #86efac;color:#166534;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px}
 .es{text-align:center;color:var(--muted);padding:36px;font-size:13px}
 
 /* ─── NAT ─── */
-.ni{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
+.hi{display:flex;align-items:center;justify-content:space-between;;padding:7px 0;border-bottom:1px solid var(--border)}
 .ni:last-child{border-bottom:none}
 
 /* ─── SEARCH ─── */
@@ -164,10 +168,10 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .import-status{background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 16px;font-size:12px;color:#15803d;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .import-status.hidden{display:none}
 
-footer{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-top:4px}
+f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-top:4px}
 
-/* ─── EMAIL PREVIEW MODAL ─── */
-.em-overlay{display:none;position:fixed;inset:0;background:rgba(10,34,64,.55);z-index:9000;align-items:center;justify-content:center;padding:20px}
+/* ─── EMAIL PREVIEW MOD@L �,�@�@ 
+/em-overlay{display:none;position:fixed;inset:0;background:rgba(10,34,64,.55);z-index:9000;align-items:center;justify-content:center;padding:20px}
 .em-overlay.open{display:flex}
 .em-box{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(10,34,64,.25);max-width:680px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
 .em-header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
@@ -440,6 +444,22 @@ function logout() {
   location.reload();
 }
 
+// ── 90-DAY BUDGET TARGETS ──────────────────────────────────────
+const BUDGET = {
+  '2026-06': {name:'Qershor', short:'Jun', occ:95, rn:3700, days:30},
+  '2026-07': {name:'Korrik',  short:'Jul', occ:99, rn:4900, days:31},
+  '2026-08': {name:'Gusht',   short:'Aug', occ:99, rn:4900, days:31},
+  '2026-09': {name:'Shtator', short:'Sep', occ:95, rn:4320, days:30}
+};
+// Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
+// Këto janë FIKSE — nuk mbishkruhen nga XLS
+const HISTORICAL_RN = {
+  '2026-06-01':99,'2026-06-02':96,'2026-06-03':110,'2026-06-04':121,
+  '2026-06-05':122,'2026-06-06':118,'2026-06-07':89,'2026-06-08':116,
+  '2026-06-09':112,'2026-06-10':127,'2026-06-11':129,'2026-06-12':131,
+  '2026-06-13':140,'2026-06-14':118,'2026-06-15':100,'2026-06-16':106
+};
+
 // Auto-restore last user session
 (function(){
   const u = localStorage.getItem('fhUser');
@@ -485,7 +505,7 @@ function importFile(file) {
         ? ` · ${newOnes.length} u caktuan automatikisht te ${currentUser}` : '';
       const status = document.getElementById('importStatus');
       status.className = 'import-status';
-      status.textContent = `✅ Import i suksesshëm — ${newOnes.length} rezervime të reja u shtuan · ${updated.length} u përditësuan · Totali: ${storedData.length} rekorde${autoAssignMsg}`;
+      status.textContent = `✅ Import i suksessN[�m — ${newOnes.length} rezervime të reja u shtuan · ${updated.length} u përditësuan · Totali: ${storedData.length} rekorde${autoAssignMsg}`;
       setTimeout(() => status.className = 'import-status hidden', 8000);
     } catch(err) { alert('Gabim: ' + err.message); }
   };
@@ -586,21 +606,6 @@ function isExcluded(r) {
   return false;
 }
 
-// ── 90-DAY BUDGET TARGETS ──────────────────────────────────────
-const BUDGET = {
-  '2026-06': {name:'Qershor', short:'Jun', occ:95, rn:3700, days:30},
-  '2026-07': {name:'Korrik',  short:'Jul', occ:99, rn:4900, days:31},
-  '2026-08': {name:'Gusht',   short:'Aug', occ:99, rn:4900, days:31},
-  '2026-09': {name:'Shtator', short:'Sep', occ:95, rn:4320, days:30}
-};
-// Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
-// Këto janë FIKSE — nuk mbishkruhen nga XLS
-const HISTORICAL_RN = {
-  '2026-06-01':99,'2026-06-02':96,'2026-06-03':110,'2026-06-04':121,
-  '2026-06-05':122,'2026-06-06':118,'2026-06-07':89,'2026-06-08':116,
-  '2026-06-09':112,'2026-06-10':127,'2026-06-11':129,'2026-06-12':131,
-  '2026-06-13':140,'2026-06-14':118,'2026-06-15':100,'2026-06-16':106
-};
 
 function getWeekStart() {
   const d=new Date(TODAY); d.setDate(d.getDate()-d.getDay()+1); return d.toISOString().slice(0,10);
@@ -1262,12 +1267,10 @@ async function loadMetaStats() {
   const todayAlb = new Date(now.getTime() + tzOffH * 3600000).toISOString().slice(0, 10);
   const dayStart = new Date(todayAlb + 'T00:00:00.000Z');
   dayStart.setUTCHours(dayStart.getUTCHours() - tzOffH);
-
   var url = SUPABASE_URL + '/rest/v1/meta_conversations'
     + '?select=platform'
     + '&first_message_time=gte.' + encodeURIComponent(dayStart.toISOString())
     + '&first_message_time=lt.'  + encodeURIComponent(now.toISOString());
-
   try {
     const r = await fetch(url, {headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON}});
     const rows = await r.json();
@@ -1333,15 +1336,9 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
   // ── META STATS ─────────────────────────────────────────────────
   var igT=0,meT=0,metaMode='none';
-  if(_metaStats){
-    if(isManager&&_metaStats.sara){
-      igT=(_metaStats.sara.ig||0)+(_metaStats.inva.ig||0)+((_metaStats.none&&_metaStats.none.ig)||0);
-      meT=(_metaStats.sara.me||0)+(_metaStats.inva.me||0)+((_metaStats.none&&_metaStats.none.me)||0);
-      metaMode='manager';
-    } else if(_metaStats.myIg!==undefined){
-      igT=_metaStats.myIg||0; meT=_metaStats.myMe||0;
-      metaMode='staff';
-    }
+  if(_metaStats && _metaStats.ig !== undefined){
+    igT=_metaStats.ig||0; meT=_metaStats.me||0;
+    metaMode='has_data';
   }
   var hasMetaData=metaMode!=='none';
 
@@ -1491,12 +1488,12 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       var clr=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
       var bg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fff5f5';
       var brd=pct>=80?'#86efac':pct>=60?'#fde68a':'#fecaca';
-      var icon=pct>=100?'🏆':pct>=80?'✅':pct>=60?'⚠️':'🚨';
-      var status=pct>=100?'Target tejkaluar!':pct>=80?'Ritëm i mirë — mbeten '+remaining.toLocaleString()+' rn':pct>=60?'Nën target — nevojiten '+remaining.toLocaleString()+' rn':'Deficit — kërkon vëmendje urgente';
+
+      var status=pct>=100?'Target tejkaluar!':pct>=80?'Ritëm i mirë — mbeten '+remaining.toLocaleString()+' rn':pct>=60?'Nën target — nevojiten '+remaining.toLocaleString()+' rn':'Deficit — kërkon vɫmendje urgente';
       pace90Html+='<div style="background:'+bg+';border:1px solid '+brd+';border-left:4px solid '+clr+';border-radius:8px;padding:14px 16px;margin-bottom:10px">'
         +'<div style="display:table;width:100%">'
         +'<div style="display:table-cell;vertical-align:middle">'
-        +'<div style="'+FF+'font-weight:800;font-size:14px;color:#0a2240">'+icon+' '+b.name+'</div>'
+        +'<div style="'+FF+'font-weight:800;font-size:14px;color:#0a2240">'+b.name+'</div>'
         +'<div style="'+FF+'font-size:10px;color:#6b7a8d;margin-top:1px">'+b.occ+'% occ target</div>'
         +'</div>'
         +'<div style="display:table-cell;vertical-align:middle;text-align:right">'
@@ -1533,7 +1530,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var sPace=eMo90.length?sn():null;
   var sCh=sn(),sNat=sn(),sPlan=sn(),sRm=sn();
   var sRez=!isManager?sn():null;
-  var sMeta=hasMetaData?sn():null;
+  var sMeta=sn();
   var sMoX=!isManager&&staffMoRows?sn():null;
   var sSum=sn();
 
@@ -1568,10 +1565,11 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +'}';
 
   // ── BUILD ──────────────────────────────────────────────────────
+  var GF="@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700;800;900&display=swap')";
   return '<!DOCTYPE html><html lang="sq"><head>'
     +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
     +'<meta name="x-apple-disable-message-reformatting">'
-    +'<style>'+css+'</style></head>'
+    +'<style>'+GF+';'+css+'</style></head>'
     +'<body>'
     +'<div class="w">'
 
@@ -1580,8 +1578,8 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     // Header
     +'<div style="background:#0a2240;padding:26px 24px 22px">'
-    +'<div style="'+FF+'font-size:8px;font-weight:700;letter-spacing:3px;color:#c9a84c;margin-bottom:6px">FLOWER HOTEL · DIRECT SALES</div>'
-    +'<h1 class="etitle" style="margin:0 0 10px;'+FF+'font-size:22px;font-weight:900;color:#fff;letter-spacing:-.3px">Raporti Ditor i Performances</h1>'
+    +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:11px;font-weight:600;letter-spacing:4px;color:#c9a84c;margin-bottom:8px">FLOWER HOTEL · DIRECT SALES</div>'
+    +'<h1 class="etitle" style="margin:0 0 10px;font-family:\'Cormorant Garamond\',Georgia,serif;font-size:28px;font-weight:700;color:#fff;letter-spacing:.3px">Raporti Ditor i Performancës</h1>'
     +'<div style="'+FF+'font-size:12px;color:#94b8d4">'+dateVal+'&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:#c9a84c;font-weight:700">'+displayName+'</span></div>'
     +'</div>'
 
@@ -1595,7 +1593,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +'<td class="kc"><div class="kv">'+data.length+'</div><div class="kl">Rezervime Direkte</div></td>'
     +'<td class="kc"><div class="kv">'+totalRev.toFixed(0)+'</div><div class="kl">Të Ardhura EUR</div></td>'
     +'<td class="kc"><div class="kv">'+totalNts+'</div><div class="kl">Netë Qendrimi</div></td>'
-    +'<td class="kc"><div class="kv">'+adr+'</div><div class="kl">ADR ED-?natë</div></td>'
+    +'<td class="kc"><div class="kv">'+adr+'</div><div class="kl">ADR EUR/natë</div></td>'
     +'</tr></tbody></table></td></tr>'
 
     // Manager: staff comparison
@@ -1623,12 +1621,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     // Plans
     +secH(sPlan,'Shitja e Paketave')
     +tbl('<tr><th style="'+th(0)+'">Paketa</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',planRows)
-    +'note(\'Paketa kryesore: <strong>'+topPlan+'</strong>&nbsp;·&nbsp;ADR: <strong>'+topPlanADR+' EUR/natë</strong>\')'
 
     // Rooms
     +secH(sRm,'Tipologjite e Dhomave')
     +tbl('<tr><th style="'+th(0)+'">Tipologjia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',rmRows)
-    +'note(\'Tipologjia kryesore: <strong>'+topRm+'</strong>&nbsp;·&nbsp;ADR: <strong>'+topRmADR+' EUR/natë</strong>\')'
 
     // Top reservations (staff only)
     +(!isManager&&sRez?(
@@ -1636,22 +1632,30 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       +tbl('<tr><th style="'+th(0)+'">Klienti</th><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Vlera</th></tr>',rezRows)
     ):'')
 
-    // Meta
-    +(hasMetaData?(
-      secH(sMeta,'Aktiviteti Social Media — Meta')
-      +'<tr><td colspan="99" style="padding-bottom:14px">'
-      +'<div style="display:table;width:100%">'
-      +'<div style="display:table-cell;padding:16px;background:#fff0f6;border-radius:8px 0 0 8px;text-align:center">'
-      +'<div style="'+FF+'font-size:9px;font-weight:700;color:#e1306c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">📸 Instagram</div>'
-      +'<div style="'+FF+'font-size:30px;font-weight:900;color:#e1306c">'+igT+'</div>'
-      +'</div>'
-      +'<div style="display:table-cell;padding:16px;background:#f0f6ff;border-radius:0 8px 8px 0;text-align:center">'
-      +'<div style="'+FF+'font-size:9px;font-weight:700;color:#1877f2;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💬 Messenger</div>'
-      +'<div style="'+FF+'font-size:30px;font-weight:900;color:#1877f2">'+meT+'</div>'
-      +'</div>'
-      +'</div>'
-      +'</td></tr>'
-    ):'')
+    // Meta — always shown
+    +secH(sMeta,'Aktiviteti Social Media — Meta')
+    +'<tr><td colspan="99" style="padding-bottom:18px">'
+    +(hasMetaData
+      ? ('<table style="width:100%;border-collapse:separate;border-spacing:8px 0"><tbody><tr>'
+        +'<td style="background:#fff0f6;border-radius:10px;padding:20px 12px;text-align:center;vertical-align:top">'
+        +'<div style="'+FF+'font-size:9px;font-weight:700;color:#e1306c;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Instagram</div>'
+        +'<div style="'+FF+'font-size:32px;font-weight:900;color:#e1306c;line-height:1">'+igT+'</div>'
+        +'<div style="'+FF+'font-size:9px;color:#9ca3af;margin-top:4px">biseda</div>'
+        +'</td>'
+        +'<td style="background:#f0f6ff;border-radius:10px;padding:20px 12px;text-align:center;vertical-align:top">'
+        +'<div style="'+FF+'font-size:9px;font-weight:700;color:#1877f2;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Messenger</div>'
+        +'<div style="'+FF+'font-size:32px;font-weight:900;color:#1877f2;line-height:1">'+meT+'</div>'
+        +'<div style="'+FF+'font-size:9px;color:#9ca3af;margin-top:4px">biseda</div>'
+        +'</td>'
+        +'<td style="background:#f0fdf4;border-radius:10px;padding:20px 12px;text-align:center;vertical-align:top">'
+        +'<div style="'+FF+'font-size:9px;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Totali</div>'
+        +'<div style="'+FF+'font-size:32px;font-weight:900;color:#16a34a;line-height:1">'+(igT+meT)+'</div>'
+        +'<div style="'+FF+'font-size:9px;color:#9ca3af;margin-top:4px">biseda sot</div>'
+        +'</td>'
+        +'</tr></tbody></table>')
+      : ('<div style="'+FF+'font-size:12px;color:#9ca3af;font-style:italic;padding:14px 0">Nuk ka të dhëna Meta për periudhën e zgjedhur.</div>')
+    )
+    +'</td></tr>'
 
     // Staff month distribution
     +(!isManager&&staffMoRows?(
@@ -1667,7 +1671,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     // Footer
     +'<div style="background:#0a2240;padding:18px 24px;text-align:center">'
-    +'<div style="'+FF+'font-size:8px;font-weight:700;letter-spacing:2px;color:#94b8d4;text-transform:uppercase">Flower Hotel · Daily Direct Sales Report</div>'
+    +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:11px;font-weight:600;letter-spacing:2.5px;color:#94b8d4;text-transform:uppercase">Flower Hotel · Daily Direct Sales Report</div>'
     +'<div style="'+FF+'font-size:8px;color:#3d5a73;margin-top:4px">'+ts+'</div>'
     +'</div>'
     +'<div style="padding:8px;text-align:center;'+FF+'font-size:9px;color:#9ca3af;background:#f9fafb">Dërguar automatikisht · EmailJS.com</div>'
