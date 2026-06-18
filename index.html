@@ -1257,73 +1257,21 @@ async function recordShift(user) {
 }
 
 async function loadMetaStats() {
-  // ── Shift boundaries (Albania = UTC+2 summer) ──────────────────
-  // Shift 1: 23:00 prev night → 15:00 today  (ora 23-15)
-  // Shift 2: 15:00 today     → 23:00 tonight (ora 15-23)
-  // ──────────────────────────────────────────────────────────────
+  // Day boundary: Albania time (UTC+2 summer) – midnight to now (real-time)
   const now = new Date();
-  // Browser timezone offset in hours (Albania CEST = +120 min → +2h)
-  const tzOffH = -now.getTimezoneOffset() / 60; // e.g. 2 for UTC+2
+  const tzOffH = -now.getTimezoneOffset() / 60; // +2 for Albania CEST
 
-  // Current local hour (0-23)
-  const localHour = (now.getUTCHours() + tzOffH + 24) % 24;
+  // Today's date in Albania local time
+  const todayAlb = new Date(now.getTime() + tzOffH * 3600000).toISOString().slice(0, 10);
 
-  // Helper: build a UTC Date for "today at HH:00 local time"
-  function localHourToUTC(h, dayOffset) {
-    var d = new Date(now);
-    d.setUTCDate(d.getUTCDate() + (dayOffset || 0));
-    d.setUTCHours(h - tzOffH, 0, 0, 0);
-    return d;
-  }
+  // Midnight Albania = todayAlb 00:00 local → UTC = subtract tzOffset hours
+  const dayStart = new Date(todayAlb + 'T00:00:00.000Z');
+  dayStart.setUTCHours(dayStart.getUTCHours() - tzOffH); // -2h → 22:00 UTC prev night
 
-  var shiftStart, shiftEnd, shiftLabel;
-
-  if (currentUser && currentUser !== 'Manager') {
-    try {
-      const todayAlb = new Date(now.getTime() + tzOffH * 3600000).toISOString().slice(0, 10);
-      const sr = await fetch(
-        SUPABASE_URL + '/rest/v1/shifts?select=start_time,end_time&staff_name=eq.'
-        + encodeURIComponent(currentUser) + '&date=eq.' + todayAlb + '&limit=1',
-        {headers: {'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON}}
-      );
-      const shData = await sr.json();
-      if (Array.isArray(shData) && shData.length > 0) {
-        const sH = parseInt(shData[0].start_time.slice(0, 2), 10);
-        const eH = parseInt(shData[0].end_time.slice(0, 2), 10);
-        if (sH > eH) {
-          shiftStart = localHourToUTC(23, -1);
-          shiftEnd   = localHourToUTC(15,  0);
-          shiftLabel = 'Turni 1 (23:00 → 15:00)';
-        } else {
-          shiftStart = localHourToUTC(15, 0);
-          shiftEnd   = localHourToUTC(23, 0);
-          shiftLabel = 'Turni 2 (15:00 → 23:00)';
-        }
-      }
-    } catch(e) {}
-  }
-
-  if (!shiftStart) {
-    if (localHour >= 23) {
-      shiftStart = localHourToUTC(23, 0);
-      shiftEnd   = localHourToUTC(15, 1);
-      shiftLabel = 'Turni 1 (23:00 → 15:00)';
-    } else if (localHour < 15) {
-      shiftStart = localHourToUTC(23, -1);
-      shiftEnd   = localHourToUTC(15, 0);
-      shiftLabel = 'Turni 1 (23:00 → 15:00)';
-    } else {
-      shiftStart = localHourToUTC(15, 0);
-      shiftEnd   = localHourToUTC(23, 0);
-      shiftLabel = 'Turni 2 (15:00 → 23:00)';
-    }
-  }
-
-  // Query by first_message_time range (stored UTC in Supabase)
   var url = SUPABASE_URL + '/rest/v1/meta_conversations'
     + '?select=platform,assigned_staff'
-    + '&first_message_time=gte.' + encodeURIComponent(shiftStart.toISOString())
-    + '&first_message_time=lt.'  + encodeURIComponent(shiftEnd.toISOString());
+    + '&first_message_time=gte.' + encodeURIComponent(dayStart.toISOString())
+    + '&first_message_time=lt.'  + encodeURIComponent(now.toISOString());
 
   try {
     const r = await fetch(url, {headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON}});
@@ -1336,43 +1284,38 @@ async function loadMetaStats() {
       if(row.platform==='instagram') target.ig++; else target.me++;
     });
     if (currentUser === 'Manager') {
-      _metaStats = {sara:{ig:s.ig,me:s.me}, inva:{ig:iv.ig,me:iv.me}, none:{ig:no.ig,me:no.me}, total:rows.length, shiftLabel:shiftLabel};
+      _metaStats = {sara:{ig:s.ig,me:s.me}, inva:{ig:iv.ig,me:iv.me}, none:{ig:no.ig,me:no.me}, total:rows.length};
     } else {
       const mine = rows.filter(function(r){return (r.assigned_staff||'')===currentUser;});
-      _metaStats = {myIg: mine.filter(function(r){return r.platform==='instagram';}).length, myMe: mine.filter(function(r){return r.platform==='messenger';}).length, total:rows.length, shiftLabel:shiftLabel};
+      _metaStats = {myIg: mine.filter(function(r){return r.platform==='instagram';}).length, myMe: mine.filter(function(r){return r.platform==='messenger';}).length, total:rows.length};
     }
     renderMetaSection();
   } catch(e) { console.warn('Meta stats error:', e); }
 }
-
 function renderMetaSection() {
   var el = document.getElementById('metaSection');
   if (!el || !_metaStats) return;
   el.style.display = 'block';
   var isMgr = currentUser === 'Manager';
   var html = '';
-  var shiftBadge = _metaStats.shiftLabel
-    ? '<div style="font-size:11px;color:#6b7a8d;margin-bottom:8px;font-weight:600">⏱ '+_metaStats.shiftLabel+'</div>'
-    : '';
   if (isMgr && _metaStats.sara) {
     var saT = _metaStats.sara.ig + _metaStats.sara.me;
     var inT = _metaStats.inva.ig + _metaStats.inva.me;
-    html = shiftBadge + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px">';
+    html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px">';
     html += mkMetaKpi('Instagram','📸',_metaStats.sara.ig+_metaStats.inva.ig+_metaStats.none.ig,'#e1306c');
     html += mkMetaKpi('Messenger','💬',_metaStats.sara.me+_metaStats.inva.me+_metaStats.none.me,'#1877f2');
-    html += mkMetaKpi('Sara Total','👩',saT,'#ec4899');
-    html += mkMetaKpi('Inva Total','👩',inT,'#7c3aed');
+    html += mkMetaKpi('Sara Sot','👩',saT,'#ec4899');
+    html += mkMetaKpi('Inva Sot','👩',inT,'#7c3aed');
     html += '</div>';
   } else if (_metaStats.myIg !== undefined) {
-    html = shiftBadge + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
+    html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
     html += mkMetaKpi('Instagram','📸',_metaStats.myIg,'#e1306c');
     html += mkMetaKpi('Messenger','💬',_metaStats.myMe,'#1877f2');
-    html += mkMetaKpi('Total Turni Im','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
+    html += mkMetaKpi('Totali Sot','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
     html += '</div>';
   }
   el.innerHTML = html;
 }
-
 function mkMetaKpi(lbl,ico,val,color){
   return '<div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border-left:3px solid '+color+'">'+'<div style="font-size:18px;font-weight:800;color:'+color+'">'+ico+' '+val+'</div>'+'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:3px">'+lbl+'</div>'+'</div>';
 }
@@ -1416,7 +1359,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var topRez=[].concat(data).sort(function(a,b){return getRev(b)-getRev(a);}).slice(0,10);
 
   // ── META STATS ─────────────────────────────────────────────────
-  var igT=0,meT=0,metaMode='none',shiftLbl='';
+  var igT=0,meT=0,metaMode='none';
   if(_metaStats){
     if(isManager&&_metaStats.sara){
       igT=(_metaStats.sara.ig||0)+(_metaStats.inva.ig||0)+((_metaStats.none&&_metaStats.none.ig)||0);
@@ -1424,7 +1367,6 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       metaMode='manager';
     } else if(_metaStats.myIg!==undefined){
       igT=_metaStats.myIg||0; meT=_metaStats.myMe||0;
-      shiftLbl=_metaStats.shiftLabel||'';
       metaMode='staff';
     }
   }
@@ -1735,7 +1677,6 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       +'<div style="'+FF+'font-size:30px;font-weight:900;color:#1877f2">'+meT+'</div>'
       +'</div>'
       +'</div>'
-      +(shiftLbl?'<div style="margin-top:8px;'+FF+'font-size:11px;color:#6b7a8d;text-align:center">'+shiftLbl+'</div>':'')
       +'</td></tr>'
     ):'')
 
