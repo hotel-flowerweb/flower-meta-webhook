@@ -1257,19 +1257,14 @@ async function recordShift(user) {
 }
 
 async function loadMetaStats() {
-  // Day boundary: Albania time (UTC+2 summer) – midnight to now (real-time)
   const now = new Date();
-  const tzOffH = -now.getTimezoneOffset() / 60; // +2 for Albania CEST
-
-  // Today's date in Albania local time
+  const tzOffH = -now.getTimezoneOffset() / 60;
   const todayAlb = new Date(now.getTime() + tzOffH * 3600000).toISOString().slice(0, 10);
-
-  // Midnight Albania = todayAlb 00:00 local → UTC = subtract tzOffset hours
   const dayStart = new Date(todayAlb + 'T00:00:00.000Z');
-  dayStart.setUTCHours(dayStart.getUTCHours() - tzOffH); // -2h → 22:00 UTC prev night
+  dayStart.setUTCHours(dayStart.getUTCHours() - tzOffH);
 
   var url = SUPABASE_URL + '/rest/v1/meta_conversations'
-    + '?select=platform,assigned_staff'
+    + '?select=platform'
     + '&first_message_time=gte.' + encodeURIComponent(dayStart.toISOString())
     + '&first_message_time=lt.'  + encodeURIComponent(now.toISOString());
 
@@ -1277,18 +1272,9 @@ async function loadMetaStats() {
     const r = await fetch(url, {headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON}});
     const rows = await r.json();
     if (!Array.isArray(rows)) return;
-    const s = {ig:0,me:0}, iv = {ig:0,me:0}, no = {ig:0,me:0};
-    rows.forEach(function(row){
-      const staff = (row.assigned_staff||'').toLowerCase();
-      const target = staff==='sara'?s : staff==='inva'?iv : no;
-      if(row.platform==='instagram') target.ig++; else target.me++;
-    });
-    if (currentUser === 'Manager') {
-      _metaStats = {sara:{ig:s.ig,me:s.me}, inva:{ig:iv.ig,me:iv.me}, none:{ig:no.ig,me:no.me}, total:rows.length};
-    } else {
-      const mine = rows.filter(function(r){return (r.assigned_staff||'')===currentUser;});
-      _metaStats = {myIg: mine.filter(function(r){return r.platform==='instagram';}).length, myMe: mine.filter(function(r){return r.platform==='messenger';}).length, total:rows.length};
-    }
+    var ig = 0, me = 0;
+    rows.forEach(function(row){ if(row.platform==='instagram') ig++; else me++; });
+    _metaStats = {ig: ig, me: me, total: rows.length};
     renderMetaSection();
   } catch(e) { console.warn('Meta stats error:', e); }
 }
@@ -1296,24 +1282,11 @@ function renderMetaSection() {
   var el = document.getElementById('metaSection');
   if (!el || !_metaStats) return;
   el.style.display = 'block';
-  var isMgr = currentUser === 'Manager';
-  var html = '';
-  if (isMgr && _metaStats.sara) {
-    var saT = _metaStats.sara.ig + _metaStats.sara.me;
-    var inT = _metaStats.inva.ig + _metaStats.inva.me;
-    html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px">';
-    html += mkMetaKpi('Instagram','📸',_metaStats.sara.ig+_metaStats.inva.ig+_metaStats.none.ig,'#e1306c');
-    html += mkMetaKpi('Messenger','💬',_metaStats.sara.me+_metaStats.inva.me+_metaStats.none.me,'#1877f2');
-    html += mkMetaKpi('Sara Sot','👩',saT,'#ec4899');
-    html += mkMetaKpi('Inva Sot','👩',inT,'#7c3aed');
-    html += '</div>';
-  } else if (_metaStats.myIg !== undefined) {
-    html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
-    html += mkMetaKpi('Instagram','📸',_metaStats.myIg,'#e1306c');
-    html += mkMetaKpi('Messenger','💬',_metaStats.myMe,'#1877f2');
-    html += mkMetaKpi('Totali Sot','💬',_metaStats.myIg+_metaStats.myMe,'#0a2240');
-    html += '</div>';
-  }
+  var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
+  html += mkMetaKpi('Instagram','📸',_metaStats.ig,'#e1306c');
+  html += mkMetaKpi('Messenger','💬',_metaStats.me,'#1877f2');
+  html += mkMetaKpi('Totali Sot','💬',_metaStats.total,'#0a2240');
+  html += '</div>';
   el.innerHTML = html;
 }
 function mkMetaKpi(lbl,ico,val,color){
