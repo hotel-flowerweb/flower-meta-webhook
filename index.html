@@ -1353,7 +1353,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var todayD=new Date(TODAY),end90D=new Date(TODAY);
   end90D.setDate(end90D.getDate()+90);
   var eMo90=[],emCur=new Date(todayD.getFullYear(),todayD.getMonth(),1);
-  while(emCur<=end90D&&eMo90.length<4){
+  while(emCur<=end90D&&eMo90.length<3){
     var emk=emCur.getFullYear()+'-'+('0'+(emCur.getMonth()+1)).slice(-2);
     if(BUDGET[emk]) eMo90.push(emk);
     emCur.setMonth(emCur.getMonth()+1);
