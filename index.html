@@ -541,10 +541,17 @@ function updateBadge() {
 
 // ── DATE HELPERS ───────────────────────────────────────────────
 function getCD(r) {
-  // Use Data Fillimit (check-in date ISO yyyy-mm-ddTHH:MM:SS) directly.
-  // Scanning all fields for dd/mm/yyyy incorrectly matched Exp Date (card expiry)
-  // and Nr Kartes fields instead of the actual check-in date.
-  return (r['Data Fillimit'] || '').slice(0, 10);
+  // Scan all field values for dd/mm/yyyy pattern.
+  // The Exp Date raw value is " - 15/06/2026" but .trim() strips the leading
+  // space → "- 15/06/2026". Checking for ' - ' would miss it, so we just
+  // regex-search for the date digits directly — safe because check-in dates
+  // are stored as ISO (yyyy-mm-dd) and no other field uses dd/mm/yyyy format.
+  for (const val of Object.values(r)) {
+    if (!val) continue;
+    const m = val.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+  }
+  return '';
 }
 function fmtD(iso) { if(!iso||iso.length<10)return'—'; return iso.slice(8,10)+'/'+iso.slice(5,7)+'/'+iso.slice(0,4); }
 function getRev(r) { return parseFloat(r['Ditët qëndrimit'])||0; }
