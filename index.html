@@ -1524,7 +1524,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   function sn(){return ('0'+(_si++)).slice(-2);}
   var s01=sn();
   var sStaff=isManager?sn():null,sMo=isManager?sn():null;
-  var sPace=eMo90.length?sn():null;
+  var sPace=(!isManager&&eMo90.length)?sn():null;
   var sCh=sn(),sNat=sn(),sPlan=sn(),sRm=sn();
   var sRez=!isManager?sn():null;
   var sMeta=sn();
@@ -1602,7 +1602,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     ):'')
 
     // 90-Day Pace
-    +(eMo90.length?(
+    +(!isManager&&eMo90.length?(
       secH(sPace,'90-Day Booking Pace & Budget')
       +'<tr><td colspan="99" style="padding-bottom:8px">'+pace90Html+'</td></tr>'
     ):'')
