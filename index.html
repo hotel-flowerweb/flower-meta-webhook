@@ -592,14 +592,13 @@ function chTag(ch) {
 function isExcluded(r) {
   const room   = (r['Nr Dhomes']||'').trim().toUpperCase().replace(/\s+/g,' ');
   const client = (r['Klienti']||'').trim().toUpperCase().replace(/\s+/g,' ');
-  // Exact room+client pairs (ONLY these specific combinations)
-  if (room==='VILA 1' && client==='OLTI CACI')   return true;
-  if (room==='VILA 2' && client==='ERNEST CACI') return true;
-  if (room==='313'    && client==='AHMET CACI')  return true;
-  // Room always excluded regardless of client
+  // Rooms always excluded regardless of client
+  if (room==='VILA 1' || room==='VILA1') return true;
+  if (room==='VILA 2' || room==='VILA2') return true;
+  if (room==='313') return true;
   if (room==='114 FR' || room==='114FR') return true;
-  // Excluded client names (exact, after collapsing whitespace)
-  if (client==='JASHTE PUNE' || client==='JASHT PUNE' || client==='PA PASTRUAR') return true;
+  // Excluded client names (any variant of jasht/jashte pune)
+  if (client.startsWith('JASHT') || client==='PA PASTRUAR') return true;
   return false;
 }
 
