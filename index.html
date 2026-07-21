@@ -458,6 +458,7 @@ const BUDGET = {
 };
 // Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
 // Këto janë FIKSE — nuk mbishkruhen nga XLS
+const HISTORICAL_REV = {'2026-07':681641};
 const HISTORICAL_RN = {
   '2026-06-01':99,'2026-06-02':96,'2026-06-03':110,'2026-06-04':121,
   '2026-06-05':122,'2026-06-06':117,'2026-06-07':87,'2026-06-08':113,
@@ -1018,7 +1019,7 @@ function render90Day() {
       var b = BUDGET[mk];
       var actual = monthActual[mk];
       var pct = b.rn > 0 ? Math.round(actual/b.rn*100) : 0;
-      var remaining = Math.max(0, b.rn - actual); var mrev=0; for(var _ri=0;_ri<dirData.length;_ri++){ if((dirData[_ri]['Data Fillimit']||'').slice(0,7)===mk) mrev+=getRev(dirData[_ri]); }
+      var remaining = Math.max(0, b.rn - actual); var mrev=0; if(typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined){mrev=HISTORICAL_REV[mk];}else{for(var _ri=0;_ri<dirData.length;_ri++){ if((dirData[_ri]['Data Fillimit']||'').slice(0,7)===mk) mrev+=getRev(dirData[_ri]); }}
       var sc_c = pct>=80 ? '#166534' : pct>=60 ? '#b45309' : '#dc2626';
       var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
       var icon = pct>=80 ? '✅' : pct>=60 ? '⚠️' : '🚨';
@@ -1492,7 +1493,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
 
   // ── 90-DAY PACE (stacked mobile cards) ─────────────────────────
-  var pace90Html=''; var _mRev={},_totRev=0; eMo90.forEach(function(_mk){var _s=0; emailDirData.forEach(function(_r){ if((_r['Data Fillimit']||'').slice(0,7)===_mk) _s+=getRev(_r); }); _mRev[_mk]=_s; _totRev+=_s; });
+  var pace90Html=''; var _mRev={},_totRev=0; eMo90.forEach(function(_mk){var _s=0; emailDirData.forEach(function(_r){ if((_r['Data Fillimit']||'').slice(0,7)===_mk) _s+=getRev(_r); }); _mRev[_mk]=(typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[_mk]!==undefined)?HISTORICAL_REV[_mk]:_s; _totRev+=_mRev[_mk]; });
   if(eMo90.length){
     eMo90.forEach(function(mk){
       var b=BUDGET[mk],actual=emailGetMonthRN(mk); var mrev=_mRev[mk]||0, mpct=_totRev>0?Math.round(mrev/_totRev*100):0;
