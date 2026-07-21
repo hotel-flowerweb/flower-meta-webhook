@@ -408,19 +408,27 @@ let staffMap = {};              // {nr: 'Sara'|'Inva'}
 let filteredData = [];          // currently shown
 let charts = {};
 
-function loadState() {
-  try { storedData = JSON.parse(localStorage.getItem('fhData') || '[]'); } catch(e){ storedData=[]; }
-  try { staffMap  = JSON.parse(localStorage.getItem('fhStaff') || '{}'); } catch(e){ staffMap={}; }
-}
-function saveState() {
-  try { localStorage.setItem('fhData', JSON.stringify(storedData)); } catch(e){ alert('Kujtesa e browserit është plot. Pastro historikun e vjetër.'); }
-  localStorage.setItem('fhStaff', JSON.stringify(staffMap));
-}
+
+/* ==== CLOUD (Supabase) ==== */
+const SUPABASE_URL='https://ftevcplecbihhfffcxfd.supabase.co';
+const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
+const SB_HEADERS={apikey:SUPABASE_ANON,Authorization:'Bearer '+SUPABASE_ANON,'Content-Type':'application/json'};
+let cloudOK=false;
+async function sbSelectAll(path){const out=[];let from=0;const page=1000;while(true){const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{headers:Object.assign({},SB_HEADERS,{'Range-Unit':'items','Range':from+'-'+(from+page-1)})});if(!r.ok)throw new Error('select '+path+' '+r.status);const rows=await r.json();if(!Array.isArray(rows))throw new Error('bad');out.push.apply(out,rows);if(rows.length<page)break;from+=page;}return out;}
+async function sbUpsert(table,rows){if(!rows.length)return;const r=await fetch(SUPABASE_URL+'/rest/v1/'+table,{method:'POST',headers:Object.assign({},SB_HEADERS,{'Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify(rows)});if(!r.ok)throw new Error('upsert '+table+' '+r.status);}
+function loadLocal(){try{storedData=JSON.parse(localStorage.getItem('fhData')||'[]');}catch(e){storedData=[];}try{staffMap=JSON.parse(localStorage.getItem('fhStaff')||'{}');}catch(e){staffMap={};}}
+function saveLocal(){try{localStorage.setItem('fhData',JSON.stringify(storedData));}catch(e){}try{localStorage.setItem('fhStaff',JSON.stringify(staffMap));}catch(e){}}
+async function loadState(){try{const res=await sbSelectAll('fh_reservations?select=nr,data');const stf=await sbSelectAll('fh_staff?select=nr,staff');const cloudData=res.map(function(x){return x.data;});const cloudStaff={};stf.forEach(function(s){if(s.staff)cloudStaff[s.nr]=s.staff;});cloudOK=true;var localData=[],localStaff={};try{localData=JSON.parse(localStorage.getItem('fhData')||'[]');}catch(e){}try{localStaff=JSON.parse(localStorage.getItem('fhStaff')||'{}');}catch(e){}if(cloudData.length===0&&localData.length>0){storedData=localData;staffMap=localStaff;await pushReservations(storedData);await pushStaff(Object.keys(staffMap).filter(function(nr){return staffMap[nr];}));}else{storedData=cloudData;staffMap=cloudStaff;}saveLocal();}catch(e){console.warn('cloud load failed',e);cloudOK=false;loadLocal();}}
+function saveState(){saveLocal();}
+async function pushReservations(list){if(!cloudOK||!list.length)return;try{await sbUpsert('fh_reservations',list.map(function(r){return{nr:String(r['Nr. Prenotimit']||''),data:r};}));}catch(e){console.warn('pushRes',e);}}
+async function pushStaff(nrs){if(!cloudOK||!nrs.length)return;try{await sbUpsert('fh_staff',nrs.map(function(nr){return{nr:String(nr),staff:staffMap[nr]||null};}));}catch(e){console.warn('pushStaff',e);}}
+
+
 
 loadState();
 
 // ── LOGIN ──────────────────────────────────────────────────────
-function doLogin(user) {
+async function doLogin(user) {
   currentUser = user;
   localStorage.setItem('fhUser', user);
   document.getElementById('loginScreen').style.display = 'none';
@@ -429,6 +437,7 @@ function doLogin(user) {
   const chip = document.getElementById('userChip');
   chip.textContent = user === 'Manager' ? '👔 Manager' : (user === 'Sara' ? '👩 Sara' : '👩 Inva');
   chip.className = 'user-chip ' + (user==='Sara'?'sara':user==='Inva'?'inva':'none');
+  document.getElementById('viewTitle').textContent='Duke ngarkuar të dhënat nga cloud…'; await loadState();
   if (storedData.length) { applyFilter(); updateDayHistory(); updateBadge(); }
   else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; render90Day(); }
   if (user !== 'Manager') recordShift(user);
@@ -474,7 +483,7 @@ document.getElementById('fileInput').addEventListener('change', e => {
 function importFile(file) {
   document.getElementById('fileName').textContent = file.name;
   const r = new FileReader();
-  r.onload = e => {
+  r.onload = async e => {
     try {
       const imported = parseXLS(e.target.result);
       const existIds = new Set(storedData.map(r => r['Nr. Prenotimit']));
@@ -507,6 +516,7 @@ function importFile(file) {
       status.className = 'import-status';
       status.textContent = `✅ Import i suksessN[�m — ${newOnes.length} rezervime të reja u shtuan · ${updated.length} u përditësuan · Totali: ${storedData.length} rekorde${autoAssignMsg}`;
       setTimeout(() => status.className = 'import-status hidden', 8000);
+      var changed=[].concat(newOnes,updated); var assignedNrs=newOnes.map(function(r){return r['Nr. Prenotimit'];}).filter(function(nr){return staffMap[nr];}); await pushReservations(changed); await pushStaff(assignedNrs); if(!cloudOK){status.className='import-status'; status.textContent='⚠️ U ruajt vetem ne kete pajisje — cloud deshtoi.';}
     } catch(err) { alert('Gabim: ' + err.message); }
   };
   r.readAsText(file, 'utf-8');
@@ -1205,10 +1215,10 @@ function claimAll() {
   const count = toAssign.filter(r => !staffMap[r['Nr. Prenotimit']]).length;
   if (!count) { alert('Të gjitha rezervimet tashmë janë të caktuara.'); return; }
   if (!confirm(`Cakto ${count} rezervime (pa staf) te ${currentUser}?`)) return;
-  toAssign.forEach(r => {
-    if (!staffMap[r['Nr. Prenotimit']]) staffMap[r['Nr. Prenotimit']] = currentUser;
-  });
+  var assignedNrs=[];
+  toAssign.forEach(r => { var nr=r['Nr. Prenotimit']; if(!staffMap[nr]){staffMap[nr]=currentUser;assignedNrs.push(nr);} });
   saveState();
+  pushStaff(assignedNrs);
   applyFilter();
   updateDayHistory();
 }
@@ -1216,6 +1226,7 @@ function claimAll() {
 function assign(nr,sel) {
   staffMap[nr]=sel.value;
   saveState();
+  pushStaff([nr]);
   sel.className='ss '+(sel.value==='Sara'?'sara':sel.value==='Inva'?'inva':'');
   if(currentUser!=='Manager'){applyFilter();updateDayHistory();}
   else{if(currentUser==='Manager')renderStaffComp(filteredData);renderResTable();}
@@ -1226,9 +1237,6 @@ function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 
 // ── META / SUPABASE ────────────────────────────────────────────
 var _metaStats = null; // { sara:{ig,me}, inva:{ig,me}, none:{ig,me}, total } or { myIg, myMe, total }
-var SUPABASE_URL = 'https://ftevcplecbihhfffcxfd.supabase.co';
-var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0ZXZjcGxlY2JpaGhmZmZjeGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTU1MDIsImV4cCI6MjA5NzE3MTUwMn0.HY1kbnzKD0uQUw72eLas2Ps8GT_D1Tpu8DrLq80Z8KU';
-
 async function recordShift(user) {
   // Record who is on duty when they log in — webhook reads this to assign Meta messages
   try {
