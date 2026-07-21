@@ -1492,10 +1492,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
 
   // ── 90-DAY PACE (stacked mobile cards) ─────────────────────────
-  var pace90Html='';
+  var pace90Html=''; var _mRev={},_totRev=0; eMo90.forEach(function(_mk){var _s=0; emailDirData.forEach(function(_r){ if((_r['Data Fillimit']||'').slice(0,7)===_mk) _s+=getRev(_r); }); _mRev[_mk]=_s; _totRev+=_s; });
   if(eMo90.length){
     eMo90.forEach(function(mk){
-      var b=BUDGET[mk],actual=emailGetMonthRN(mk);
+      var b=BUDGET[mk],actual=emailGetMonthRN(mk); var mrev=_mRev[mk]||0, mpct=_totRev>0?Math.round(mrev/_totRev*100):0;
       var pct=Math.round(actual/b.rn*100),remaining=Math.max(0,b.rn-actual);
       var clr=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
       var bg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fff5f5';
@@ -1529,7 +1529,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'<div style="'+FF+'font-weight:700;font-size:14px;color:'+clr+'">'+remaining.toLocaleString()+' rn</div>'
         +'</div>'
         +'</div>'
-        +'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
+        +'<div style="'+FF+'font-size:11px;font-weight:800;color:#0a2240;margin-top:8px;padding-top:7px;border-top:1px solid rgba(10,34,64,.10)">Të Ardhura: '+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR · '+mpct+'%</div>'+'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
         +'</div>';
     });
   }
