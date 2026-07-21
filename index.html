@@ -1018,7 +1018,7 @@ function render90Day() {
       var b = BUDGET[mk];
       var actual = monthActual[mk];
       var pct = b.rn > 0 ? Math.round(actual/b.rn*100) : 0;
-      var remaining = Math.max(0, b.rn - actual);
+      var remaining = Math.max(0, b.rn - actual); var mrev=0; for(var _ri=0;_ri<dirData.length;_ri++){ if((dirData[_ri]['Data Fillimit']||'').slice(0,7)===mk) mrev+=getRev(dirData[_ri]); }
       var sc_c = pct>=80 ? '#166534' : pct>=60 ? '#b45309' : '#dc2626';
       var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
       var icon = pct>=80 ? '✅' : pct>=60 ? '⚠️' : '🚨';
@@ -1035,7 +1035,7 @@ function render90Day() {
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Aktual RN</div><div style="font-weight:800;color:#0a2240;font-size:18px">'+actual.toLocaleString()+'</div></div>'
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Arritja</div><div style="font-weight:800;color:'+sc_c+';font-size:18px">'+pct+'%</div></div>'
         + '</div>'
-        + '<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
+        + '<div style="font-size:12px;margin-bottom:10px"><span style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Të Ardhura</span> <span style="font-weight:800;color:#0a2240;font-size:15px">'+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</span></div><div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
         + '<div style="width:'+barW+'%;height:100%;background:'+sc_c+';border-radius:4px"></div></div>'
         + '<div style="font-size:11px;color:'+sc_c+';font-weight:600">'+insight+'</div>'
         + '</div>';
