@@ -1700,7 +1700,7 @@ function sendSummaryEmail() {
   var TO = isManager ? TO_MANAGER : TO_STAFF;
   var data = filteredData;
   var dateVal = document.getElementById('dateFilter').value || TODAY;
-  var viewLabels = {today:'Sot · '+fmtD(dateVal).replace(/\//g,'.'), week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
+  var viewLabels = {today:'Sot', week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
   var viewLbl = viewLabels[currentView] || currentView;
   var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'.');
   var subject = isManager
@@ -1748,7 +1748,7 @@ function exportPDF() {
   var isManager = currentUser === 'Manager';
   var data = filteredData;
   var dateVal = document.getElementById('dateFilter').value || TODAY;
-  var viewLabels = {today:'Sot · '+fmtD(dateVal).replace(/\//g,'.'), week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
+  var viewLabels = {today:'Sot', week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
   var viewLbl = viewLabels[currentView] || currentView;
   var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'});
   var htmlContent = buildEmailHTML(isManager, data, currentUser, today2+' · '+viewLbl, viewLbl);
