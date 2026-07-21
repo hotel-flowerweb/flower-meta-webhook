@@ -405,9 +405,21 @@ async function loadState(){
       sbSelectAll('fh_reservations?select=nr,data'),
       sbSelectAll('fh_staff?select=nr,staff')
     ]);
-    storedData = res.map(row => row.data);
-    staffMap = {}; stf.forEach(s => { if (s.staff) staffMap[s.nr] = s.staff; });
+    const cloudData = res.map(row => row.data);
+    const cloudStaff = {}; stf.forEach(s => { if (s.staff) cloudStaff[s.nr] = s.staff; });
     cloudOK = true;
+    // One-time migration: if the cloud is still empty but this browser has
+    // existing history in localStorage, upload it instead of overwriting it.
+    let localData = [], localStaff = {};
+    try { localData = JSON.parse(localStorage.getItem('fhData') || '[]'); } catch(e){}
+    try { localStaff = JSON.parse(localStorage.getItem('fhStaff') || '{}'); } catch(e){}
+    if (cloudData.length === 0 && localData.length > 0) {
+      storedData = localData; staffMap = localStaff;
+      await pushReservations(storedData);
+      await pushStaff(Object.keys(staffMap).filter(nr => staffMap[nr]));
+    } else {
+      storedData = cloudData; staffMap = cloudStaff;
+    }
     saveLocal(); // refresh offline cache
   } catch(e){
     console.warn('Cloud load failed — using local cache:', e);
