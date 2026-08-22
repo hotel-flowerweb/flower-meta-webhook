@@ -1000,14 +1000,14 @@ function render90Day() {
     // Room nights for a date — HISTORICAL_RN has priority over XLS data
     function p90DayOcc(iso) {
       if (HISTORICAL_RN[iso] !== undefined) return HISTORICAL_RN[iso];
-      var n = 0;
+      var rooms = new Set();
       for (var i=0; i<dirData.length; i++) {
         var r = dirData[i];
         var ci = (r['Data Fillimit']||'').slice(0,10);
         var co = (r['Data Mbarimit']||'').slice(0,10);
-        if (ci && co && ci <= iso && co > iso) n++;
+        if (ci && co && ci <= iso && co > iso) rooms.add((r['Nr Dhomes']||'').trim().toUpperCase());
       }
-      return n;
+      return rooms.size;
     }
 
     // Monthly total via day-by-day sum so HISTORICAL is automatically included
@@ -1407,12 +1407,12 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
   function emailDayOcc(iso){
     if(HISTORICAL_RN[iso]!==undefined) return HISTORICAL_RN[iso];
-    var n=0;
+    var rooms=new Set();
     for(var i=0;i<emailDirData.length;i++){
       var r=emailDirData[i],ci=(r['Data Fillimit']||'').slice(0,10),co=(r['Data Mbarimit']||'').slice(0,10);
-      if(ci&&co&&ci<=iso&&co>iso) n++;
+      if(ci&&co&&ci<=iso&&co>iso) rooms.add((r['Nr Dhomes']||'').trim().toUpperCase());
     }
-    return n;
+    return rooms.size;
   }
   function emailGetMonthRN(mk){
     var pts=mk.split('-'),y=+pts[0],mo=+pts[1],dInM=new Date(y,mo,0).getDate(),tot=0;
