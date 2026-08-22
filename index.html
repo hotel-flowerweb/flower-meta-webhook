@@ -460,8 +460,6 @@ const BUDGET = {
 // Këto janë FIKSE — nuk mbishkruhen nga XLS
 const HISTORICAL_REV = {'2026-07':681641,'2026-08':370317,'2026-09':170350};
 function paceRevMonth(list, mk){
-  if(typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined)
-    return {rev:HISTORICAL_REV[mk], any:true};
   var y=+mk.slice(0,4), m=+mk.slice(5,7);
   var msT=new Date(mk+'-01T00:00:00').getTime();
   var meT=new Date((m===12?(y+1)+'-01':y+'-'+('0'+(m+1)).slice(-2))+'-01T00:00:00').getTime();
