@@ -460,16 +460,21 @@ const BUDGET = {
 // Këto janë FIKSE — nuk mbishkruhen nga XLS
 const HISTORICAL_REV = {'2026-07':681641,'2026-08':370317,'2026-09':170350};
 function paceRevMonth(list, mk){
+  if(typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined)
+    return {rev:HISTORICAL_REV[mk], any:true};
   var y=+mk.slice(0,4), m=+mk.slice(5,7);
   var msT=new Date(mk+'-01T00:00:00').getTime();
   var meT=new Date((m===12?(y+1)+'-01':y+'-'+('0'+(m+1)).slice(-2))+'-01T00:00:00').getTime();
-  var tot=0, any=false;
+  var tot=0, any=false, seen=new Set();
   for(var i=0;i<list.length;i++){
     var r=list[i], p=parseFloat(r._cmimi);
     if(!isFinite(p)) continue;
-    any=true;
     var ci=(r['Data Fillimit']||'').slice(0,10), co=(r['Data Mbarimit']||'').slice(0,10);
     if(!ci||!co) continue;
+    var key=(r['Nr Dhomes']||'').trim().toUpperCase()+'|'+ci+'|'+co;
+    if(seen.has(key)) continue;
+    seen.add(key);
+    any=true;
     var a=Math.max(new Date(ci+'T00:00:00').getTime(), msT), b=Math.min(new Date(co+'T00:00:00').getTime(), meT);
     if(b>a) tot += p * Math.round((b-a)/86400000);
   }
