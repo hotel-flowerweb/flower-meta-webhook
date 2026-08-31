@@ -1059,7 +1059,7 @@ function render90Day() {
       var mk = months90[mi];
       var b = BUDGET[mk];
       var _st = paceMonthStats(dirData, mk); var actual = _st.fresh ? _st.nights : monthActual[mk];
-      var pct = b.rn > 0 ? Math.round(actual/b.rn*100) : 0;
+      var pct = b.rn > 0 ? Math.round(actual/b.rn*100) : 0; var occPct = b.days > 0 ? Math.round(actual/(b.days*160)*100) : 0;
       var remaining = Math.max(0, b.rn - actual); var mrev = _st.fresh ? _st.rev : ((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined)?HISTORICAL_REV[mk]:0);
       var sc_c = pct>=80 ? '#166534' : pct>=60 ? '#b45309' : '#dc2626';
       var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
@@ -1075,7 +1075,7 @@ function render90Day() {
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Budget RN</div><div style="font-weight:800;color:#2563eb;font-size:15px">'+b.rn.toLocaleString()+'</div></div>'
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Budget Occ</div><div style="font-weight:800;color:#2563eb;font-size:15px">'+b.occ+'%</div></div>'
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Aktual RN</div><div style="font-weight:800;color:#0a2240;font-size:18px">'+actual.toLocaleString()+'</div></div>'
-        + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Arritja</div><div style="font-weight:800;color:'+sc_c+';font-size:18px">'+pct+'%</div></div>'
+        + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Arritja</div><div style="font-weight:800;color:'+sc_c+';font-size:18px">'+occPct+'%</div></div>'
         + '</div>'
         + '<div style="font-size:12px;margin-bottom:10px"><span style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Të Ardhura</span> <span style="font-weight:800;color:#0a2240;font-size:15px">'+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</span></div><div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
         + '<div style="width:'+barW+'%;height:100%;background:'+sc_c+';border-radius:4px"></div></div>'
