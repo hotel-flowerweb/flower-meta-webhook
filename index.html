@@ -516,7 +516,7 @@ function importFile(file) {
   const r = new FileReader();
   r.onload = async e => {
     try {
-      const imported = parseXLS(e.target.result); var _impTS=Date.now(); imported.forEach(function(r){ r._impTS=_impTS; });
+      const imported = parseXLS(e.target.result); var _impTS=Date.now(); imported.forEach(function(r){ r._impTS=String(_impTS); });
       const existIds = new Set(storedData.map(r => r['Nr. Prenotimit']));
       const newOnes  = imported.filter(r => !existIds.has(r['Nr. Prenotimit']));
       const updated  = imported.filter(r =>  existIds.has(r['Nr. Prenotimit']));
@@ -606,7 +606,7 @@ function getCD(r) {
   // regex-search for the date digits directly — safe because check-in dates
   // are stored as ISO (yyyy-mm-dd) and no other field uses dd/mm/yyyy format.
   for (const val of Object.values(r)) {
-    if (!val) continue;
+    if (!val || typeof val !== 'string') continue;
     const m = val.match(/(\d{2})\/(\d{2})\/(\d{4})/);
     if (m) return `${m[3]}-${m[2]}-${m[1]}`;
   }
