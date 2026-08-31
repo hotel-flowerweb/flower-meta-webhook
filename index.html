@@ -453,9 +453,9 @@ function logout() {
 const BUDGET = {
   '2026-06': {name:'Qershor', short:'Jun', occ:95, rn:3700, days:30},
   '2026-07': {name:'Korrik',  short:'Jul', occ:99, rn:4900, days:31},
-  '2026-08': {name:'Gusht',   short:'Aug', occ:99, rn:4900, days:31},
-  '2026-09': {name:'Shtator', short:'Sep', occ:95, rn:4320, days:30},
-  '2026-10': {name:'Tetor', short:'Tet', occ:38, rn:1900, days:31}
+  '2026-08': {name:'Gusht',   short:'Aug', occ:99, rn:4900, days:31, rev:996505},
+  '2026-09': {name:'Shtator', short:'Sep', occ:95, rn:4320, days:30, rev:666500},
+  '2026-10': {name:'Tetor', short:'Tet', occ:38, rn:1900, days:31, rev:240000}
 };
 // Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
 // Këto janë FIKSE — nuk mbishkruhen nga XLS
@@ -1077,7 +1077,7 @@ function render90Day() {
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Aktual RN</div><div style="font-weight:800;color:#0a2240;font-size:18px">'+actual.toLocaleString()+'</div></div>'
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Arritja</div><div style="font-weight:800;color:'+sc_c+';font-size:18px">'+occPct+'%</div></div>'
         + '</div>'
-        + '<div style="font-size:12px;margin-bottom:10px"><span style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Të Ardhura</span> <span style="font-weight:800;color:#0a2240;font-size:15px">'+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</span></div><div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
+        + '<div style="font-size:12px;margin-bottom:10px"><span style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Të Ardhura</span> <span style="font-weight:800;color:#0a2240;font-size:15px">'+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</span>'+(b.rev?' <span style="color:#6b7a8d;font-size:11px;font-weight:600">/ '+b.rev.toLocaleString('sq-AL')+' EUR ('+(b.rev>0?Math.round(mrev/b.rev*100):0)+'%)</span>':'')+'</div><div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
         + '<div style="width:'+barW+'%;height:100%;background:'+sc_c+';border-radius:4px"></div></div>'
         + '<div style="font-size:11px;color:'+sc_c+';font-weight:600">'+insight+'</div>'
         + '</div>';
@@ -1571,7 +1571,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'<div style="'+FF+'font-weight:700;font-size:14px;color:'+clr+'">'+remaining.toLocaleString()+' rn</div>'
         +'</div>'
         +'</div>'
-        +'<div style="'+FF+'font-size:11px;font-weight:800;color:#0a2240;margin-top:8px;padding-top:7px;border-top:1px solid rgba(10,34,64,.10)">Të Ardhura: '+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</div>'+'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
+        +'<div style="'+FF+'font-size:11px;font-weight:800;color:#0a2240;margin-top:8px;padding-top:7px;border-top:1px solid rgba(10,34,64,.10)">Të Ardhura: '+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR'+(b.rev?' / '+b.rev.toLocaleString('sq-AL')+' EUR ('+(b.rev>0?Math.round(mrev/b.rev*100):0)+'%)':'')+'</div>'+'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
         +'</div>';
     });
   }
