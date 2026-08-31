@@ -586,7 +586,7 @@ function parseXLS(content) {
       }
       const _pi = header.indexOf('Çmimi');
       if (_pi >= 0) obj._cmimi = _cv[_pi];
-      var _ki = header.indexOf('Kompania'); if (_ki >= 0) obj._plan = _cv[_ki];
+      var _ki = header.indexOf('Kompania'); var _pl = (_ki>=0?(_cv[_ki]||''):'').trim(); if(!_pl){ var _bb=parseFloat(_cv[header.indexOf('BB')])||0,_hb=parseFloat(_cv[header.indexOf('HB')])||0,_fb=parseFloat(_cv[header.indexOf('FB')])||0,_ai=parseFloat(_cv[header.indexOf('AI')])||0; if(_ai>0)_pl='ALL INCLUSIVE'; else if(_fb>0)_pl='Full Board'; else if(_hb>0)_pl='Half Board'; else if(_bb>0)_pl='Bed & Breakfast'; } obj._plan=_pl;
     } catch(e){}
     data.push(obj);
   }
