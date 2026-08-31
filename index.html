@@ -459,25 +459,31 @@ const BUDGET = {
 // Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
 // Këto janë FIKSE — nuk mbishkruhen nga XLS
 const HISTORICAL_REV = {'2026-07':681641,'2026-08':370317,'2026-09':170350};
-function paceRevMonth(list, mk){
+function paceMonthStats(list, mk){
+  var maxTS=0, i;
+  for(i=0;i<list.length;i++){ var t=+list[i]._impTS||0; if(t>maxTS) maxTS=t; }
+  var fresh = maxTS>0;
+  var res={nights:0, rev:0, any:false, fresh:fresh};
+  if(!fresh) return res;
   var y=+mk.slice(0,4), m=+mk.slice(5,7);
   var msT=new Date(mk+'-01T00:00:00').getTime();
   var meT=new Date((m===12?(y+1)+'-01':y+'-'+('0'+(m+1)).slice(-2))+'-01T00:00:00').getTime();
-  var tot=0, any=false, seen=new Set();
-  for(var i=0;i<list.length;i++){
-    var r=list[i], p=parseFloat(r._cmimi);
-    if(!isFinite(p)) continue;
+  for(i=0;i<list.length;i++){
+    var r=list[i];
+    if((+r._impTS||0)!==maxTS) continue;
     var ci=(r['Data Fillimit']||'').slice(0,10), co=(r['Data Mbarimit']||'').slice(0,10);
     if(!ci||!co) continue;
-    var key=(r['Nr Dhomes']||'').trim().toUpperCase()+'|'+ci+'|'+co;
-    if(seen.has(key)) continue;
-    seen.add(key);
-    any=true;
     var a=Math.max(new Date(ci+'T00:00:00').getTime(), msT), b=Math.min(new Date(co+'T00:00:00').getTime(), meT);
-    if(b>a) tot += p * Math.round((b-a)/86400000);
+    if(b<=a) continue;
+    var n=Math.round((b-a)/86400000);
+    res.nights += n;
+    var p=parseFloat(r._cmimi);
+    if(isFinite(p)){ res.any=true; res.rev += p*n; }
   }
-  return {rev:Math.round(tot), any:any};
+  res.rev=Math.round(res.rev);
+  return res;
 }
+function paceRevMonth(list, mk){ var s=paceMonthStats(list,mk); return {rev:s.rev, any:(s.fresh&&s.any)}; }
 const HISTORICAL_RN = {
   '2026-06-01':99,'2026-06-02':96,'2026-06-03':110,'2026-06-04':121,
   '2026-06-05':122,'2026-06-06':117,'2026-06-07':87,'2026-06-08':113,
@@ -510,7 +516,7 @@ function importFile(file) {
   const r = new FileReader();
   r.onload = async e => {
     try {
-      const imported = parseXLS(e.target.result);
+      const imported = parseXLS(e.target.result); var _impTS=Date.now(); imported.forEach(function(r){ r._impTS=_impTS; });
       const existIds = new Set(storedData.map(r => r['Nr. Prenotimit']));
       const newOnes  = imported.filter(r => !existIds.has(r['Nr. Prenotimit']));
       const updated  = imported.filter(r =>  existIds.has(r['Nr. Prenotimit']));
@@ -1050,9 +1056,9 @@ function render90Day() {
     for (var mi=0; mi<months90.length; mi++) {
       var mk = months90[mi];
       var b = BUDGET[mk];
-      var actual = monthActual[mk];
+      var _st = paceMonthStats(dirData, mk); var actual = _st.fresh ? _st.nights : monthActual[mk];
       var pct = b.rn > 0 ? Math.round(actual/b.rn*100) : 0;
-      var remaining = Math.max(0, b.rn - actual); var _pr=paceRevMonth(dirData,mk); var mrev=_pr.any?_pr.rev:((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined)?HISTORICAL_REV[mk]:0);
+      var remaining = Math.max(0, b.rn - actual); var mrev = _st.fresh ? _st.rev : ((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined)?HISTORICAL_REV[mk]:0);
       var sc_c = pct>=80 ? '#166534' : pct>=60 ? '#b45309' : '#dc2626';
       var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
       var icon = pct>=80 ? '✅' : pct>=60 ? '⚠️' : '🚨';
@@ -1526,10 +1532,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
 
   // ── 90-DAY PACE (stacked mobile cards) ─────────────────────────
-  var pace90Html=''; var _mRev={},_totRev=0; eMo90.forEach(function(_mk){ var _pr=paceRevMonth(emailDirData,_mk); _mRev[_mk]=_pr.any?_pr.rev:((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[_mk]!==undefined)?HISTORICAL_REV[_mk]:0); _totRev+=_mRev[_mk]; });
+  var pace90Html=''; var _mRev={},_mNights={},_totRev=0; eMo90.forEach(function(_mk){ var _st=paceMonthStats(emailDirData,_mk); _mRev[_mk]=_st.fresh?_st.rev:((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[_mk]!==undefined)?HISTORICAL_REV[_mk]:0); _mNights[_mk]=_st.fresh?_st.nights:emailGetMonthRN(_mk); _totRev+=_mRev[_mk]; });
   if(eMo90.length){
     eMo90.forEach(function(mk){
-      var b=BUDGET[mk],actual=emailGetMonthRN(mk); var mrev=_mRev[mk]||0, mpct=_totRev>0?Math.round(mrev/_totRev*100):0;
+      var b=BUDGET[mk],actual=(_mNights[mk]!==undefined?_mNights[mk]:emailGetMonthRN(mk)); var mrev=_mRev[mk]||0, mpct=_totRev>0?Math.round(mrev/_totRev*100):0;
       var pct=Math.round(actual/b.rn*100),remaining=Math.max(0,b.rn-actual);
       var clr=pct>=80?'#166534':pct>=60?'#b45309':'#dc2626';
       var bg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fff5f5';
