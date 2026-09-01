@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flower Hotel â Sales Monitor</title>
+<title>Flower Hotel — Sales Monitor</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
@@ -19,7 +19,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;min-height:100vh}
 
-/* âââ HEADER âââ */
+/* ─── HEADER ─── */
 header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(10,34,64,.25);position:sticky;top:0;z-index:100}
 header h1{font-size:20px;font-weight:700;letter-spacing:.3px}
 header h1 span{color:var(--gold)}
@@ -30,7 +30,7 @@ header h1 span{color:var(--gold)}
 .user-chip.none{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff}
 .date-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#aac4e0;padding:5px 12px;border-radius:20px;font-size:12px}
 
-/* âââ LOGIN SCREEN âââ */
+/* ─── LOGIN SCREEN ─── */
 #loginScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);gap:0;padding:40px 20px}
 .login-box{background:var(--card);border-radius:20px;padding:52px 60px;box-shadow:0 8px 40px rgba(10,34,64,.15);text-align:center;max-width:460px;width:100%}
 .login-logo{font-size:52px;margin-bottom:8px}
@@ -47,7 +47,7 @@ header h1 span{color:var(--gold)}
 .login-manager:hover{color:var(--navy)}
 .login-note{margin-top:28px;background:#f8fafc;border-radius:10px;padding:14px 18px;font-size:12px;color:var(--muted);line-height:1.7;text-align:left}
 
-/* âââ CONTROLS âââ */
+/* ─── CONTROLS ─── */
 .controls{background:var(--navy);padding:10px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .ctl-lbl{color:#aac4e0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
 .controls input[type=date]{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 10px;border-radius:6px;font-size:13px;cursor:pointer}
@@ -61,10 +61,10 @@ header h1 span{color:var(--gold)}
 #fileInput{display:none}
 .data-badge{background:rgba(14,124,110,.25);border:1px solid #0e7c6e;color:#6ee7b7;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700}
 
-/* âââ MAIN âââ */
+/* ─── MAIN ─── */
 main{padding:22px 28px;max-width:1600px;margin:0 auto}
 
-/* âââ VIEW HEADER âââ */
+/* ─── VIEW HEADER ─── */
 .view-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
 .view-title{font-size:22px;font-weight:800;color:var(--navy)}
 .view-title .accent.sara{color:var(--sara)}.view-title .accent.inva{color:var(--inva)}.view-title .accent.all{color:var(--gold)}
@@ -74,7 +74,7 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .vtab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 .vtab:hover:not(.active){border-color:var(--navy);color:var(--navy)}
 
-/* âââ KPI CARDS âââ */
+/* ─── KPI CARDS ─── */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;margin-bottom:22px}
 .kpi{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);border-left:4px solid var(--gold);transition:transform .15s}
 .kpi:hover{transform:translateY(-1px)}
@@ -86,7 +86,7 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .kpi .kdelta{font-size:11px;margin-top:3px;font-weight:700}
 .kdelta.up{color:var(--teal)}.kdelta.dn{color:var(--red)}.kdelta.eq{color:var(--muted)}
 
-/* âââ STAFF COMPARISON âââ */
+/* ─── STAFF COMPARISON ─── */
 .staff-comp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
 @media(max-width:600px){.staff-comp{grid-template-columns:1fr}}
 .sc-card{background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);border-top:4px solid}
@@ -104,20 +104,20 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .sc-card.sara .sc-bar-fill{background:var(--sara)}.sc-card.inva .sc-bar-fill{background:var(--inva)}
 .sc-pct{font-size:11px;color:var(--muted);margin-top:5px;font-weight:600}
 
-/* âââ GRIDS âââ */
+/* ─── GRIDS ─── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:22px}
 @media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
 
-/* âââ CARDS âââ */
+/* ─── CARDS ─── */
 .card{background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}
 .ct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;justify-content:space-between}
 .ct-left{display:flex;align-items:center;gap:8px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
 .cw{position:relative;height:210px}
 
-/* âââ CHANNEL TABLE âââ */
+/* ─── CHANNEL TABLE ─── */
 .cht{width:100%;border-collapse:collapse}
 .cht th{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);padding:7px 4px;text-align:left;border-bottom:2px solid var(--border)}
 .cht td{padding:8px 4px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
@@ -126,7 +126,7 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .tag{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700}
 .t-ota{background:#dbeafe;color:#1d4ed8}.t-tour{background:#f3e8ff;color:#7c3aed}.t-dir{background:#dcfce7;color:#15803d}.t-oth{background:#fef9c3;color:#92400e}
 
-/* âââ DAILY HISTORY âââ */
+/* ─── DAILY HISTORY ─── */
 .day-history{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px}
 .day-pill{background:var(--card);border-radius:10px;padding:10px 14px;box-shadow:var(--sh);cursor:pointer;border:2px solid transparent;white-space:nowrap;transition:all .15s;min-width:100px;text-align:center}
 .day-pill:hover{border-color:var(--gold)}
@@ -138,7 +138,7 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .day-pill .dp-rev{font-size:11px;color:var(--muted);margin-top:2px}
 .day-pill.active .dp-rev{color:#aac4e0}
 
-/* âââ RES TABLE âââ */
+/* ─── RES TABLE ─── */
 .rw{overflow-x:auto}
 .rt{width:100%;border-collapse:collapse;font-size:13px}
 .rt th{background:var(--navy);color:#fff;padding:9px 11px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
@@ -152,21 +152,21 @@ main{padding:22px 28px;max-width:1600px;margin:0 auto}
 .new-badge{background:#f0fdf4;border:1px solid #86efac;color:#166534;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px}
 .es{text-align:center;color:var(--muted);padding:36px;font-size:13px}
 
-/* âââ NAT âââ */
+/* ─── NAT ─── */
 .hi{display:flex;align-items:center;justify-content:space-between;;padding:7px 0;border-bottom:1px solid var(--border)}
 .ni:last-child{border-bottom:none}
 
-/* âââ SEARCH âââ */
+/* ─── SEARCH ─── */
 .srch{padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;width:200px;outline:none}
 .srch:focus{border-color:var(--navy)}
 
-/* âââ IMPORT STATUS âââ */
+/* ─── IMPORT STATUS ─── */
 .import-status{background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 16px;font-size:12px;color:#15803d;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .import-status.hidden{display:none}
 
 f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-top:4px}
 
-/* âââ EMAIL PREVIEW MOD@L ï¿½,ï¿½@ï¿½@ 
+/* ─── EMAIL PREVIEW MOD@L �,�@�@ 
 /em-overlay{display:none;position:fixed;inset:0;background:rgba(10,34,64,.55);z-index:9000;align-items:center;justify-content:center;padding:20px}
 .em-overlay.open{display:flex}
 .em-box{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(10,34,64,.25);max-width:680px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
@@ -181,7 +181,7 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
 .em-body pre{font-family:'Segoe UI',system-ui,sans-serif;font-size:12.5px;line-height:1.7;white-space:pre-wrap;color:var(--text);margin:0}
 .em-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;background:#f8fafc}
 
-/* âââ PRINT / PDF âââ */
+/* ─── PRINT / PDF ─── */
 @media print{
   header,.controls,#loginScreen,.day-history,.view-tabs,footer,
   .btn,.upload-lbl,#importStatus,.em-overlay,#metaRefreshBtn,
@@ -200,50 +200,50 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
 <body>
 
 <header>
-  <h1>ð¸ Flower Hotel &nbsp;â&nbsp; <span>Sales Monitor</span></h1>
+  <h1>🌸 Flower Hotel &nbsp;—&nbsp; <span>Sales Monitor</span></h1>
   <div class="hdr-right">
     <span class="date-chip" id="todayChip"></span>
-    <div class="user-chip none" id="userChip" onclick="logout()" title="Klik pÃ«r tÃ« ndÃ«rruar">ð¤ â</div>
+    <div class="user-chip none" id="userChip" onclick="logout()" title="Klik për të ndërruar">👤 —</div>
   </div>
 </header>
 
-<!-- âââââââââââ LOGIN SCREEN âââââââââââ -->
+<!-- ═══════════ LOGIN SCREEN ═══════════ -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">ð¸</div>
+    <div class="login-logo">🌸</div>
     <div class="login-title">Sales Monitor</div>
-    <div class="login-sub">MirÃ« se erdhe! Kush po monitoron shitjet sot?</div>
+    <div class="login-sub">Mirë se erdhe! Kush po monitoron shitjet sot?</div>
     <div class="login-btns">
       <button class="login-btn sara" onclick="doLogin('Sara')">
-        <span class="emoji">ð©</span>Sara
+        <span class="emoji">👩</span>Sara
       </button>
       <button class="login-btn inva" onclick="doLogin('Inva')">
-        <span class="emoji">ð©</span>Inva
+        <span class="emoji">👩</span>Inva
       </button>
     </div>
-    <div class="login-manager" onclick="doLogin('Manager')">Hyr si Manager (shiko tÃ« gjitha)</div>
+    <div class="login-manager" onclick="doLogin('Manager')">Hyr si Manager (shiko të gjitha)</div>
     <div class="login-note">
-      ð¾ <strong>TÃ« dhÃ«nat ruhen dita-ditÃ«s</strong> â Ã§do import shtohet mbi historikun ekzistues. Nuk humbet asgjÃ«.<br><br>
-      ð Ãdo punonjÃ«se cakton rezervimet e saj â dashboardi mat performancÃ«n individuale.
+      💾 <strong>Të dhënat ruhen dita-ditës</strong> — çdo import shtohet mbi historikun ekzistues. Nuk humbet asgjë.<br><br>
+      📊 Çdo punonjëse cakton rezervimet e saj → dashboardi mat performancën individuale.
     </div>
   </div>
 </div>
 
-<!-- âââââââââââ CONTROLS âââââââââââ -->
+<!-- ═══════════ CONTROLS ═══════════ -->
 <div class="controls" id="controlsBar" style="display:none">
-  <span class="ctl-lbl">ð Import:</span>
-  <label class="upload-lbl" for="fileInput">ð <span id="fileName">Ngarko XLS Trinis...</span></label>
+  <span class="ctl-lbl">📂 Import:</span>
+  <label class="upload-lbl" for="fileInput">📊 <span id="fileName">Ngarko XLS Trinis...</span></label>
   <input type="file" id="fileInput" accept=".xls,.xlsx,.xml">
   <span id="dataBadge" class="data-badge" style="display:none"></span>
-  <button class="btn btn-ghost btn-sm" onclick="clearAndReimport()" title="Pastro cache dhe importo skedarin sÃ«rish">ð Riset</button>
-  <span class="ctl-lbl" style="margin-left:8px">ð</span>
+  <button class="btn btn-ghost btn-sm" onclick="clearAndReimport()" title="Pastro cache dhe importo skedarin sërish">🗑 Riset</button>
+  <span class="ctl-lbl" style="margin-left:8px">📅</span>
   <input type="date" id="dateFilter">
-  <button class="btn btn-gold btn-sm" onclick="applyFilter()">â¶ Filtro</button>
-  <button class="btn btn-ghost btn-sm" onclick="showAll()">TÃ« gjitha</button>
-  <input type="text" class="srch" id="srch" placeholder="ð Klient / dhomÃ«â¦" oninput="renderResTable()" style="margin-left:auto">
+  <button class="btn btn-gold btn-sm" onclick="applyFilter()">▶ Filtro</button>
+  <button class="btn btn-ghost btn-sm" onclick="showAll()">Të gjitha</button>
+  <input type="text" class="srch" id="srch" placeholder="🔍 Klient / dhomë…" oninput="renderResTable()" style="margin-left:auto">
 </div>
 
-<!-- âââââââââââ MAIN âââââââââââ -->
+<!-- ═══════════ MAIN ═══════════ -->
 <main id="mainArea" style="display:none">
 
   <div class="import-status hidden" id="importStatus"></div>
@@ -251,18 +251,18 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
   <!-- VIEW HEADER -->
   <div class="view-header">
     <div>
-      <div class="view-title" id="viewTitle">â</div>
+      <div class="view-title" id="viewTitle">—</div>
       <div class="view-sub" id="viewSub"></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div class="view-tabs" id="viewTabs">
-        <div class="vtab active" onclick="setView('today',this)">ð Sot</div>
-        <div class="vtab" onclick="setView('week',this)">ð Kjo JavÃ«</div>
-        <div class="vtab" onclick="setView('month',this)">ð Ky Muaj</div>
-        <div class="vtab" onclick="setView('all',this)">ð GjithÃ« Historia</div>
+        <div class="vtab active" onclick="setView('today',this)">📅 Sot</div>
+        <div class="vtab" onclick="setView('week',this)">📆 Kjo Javë</div>
+        <div class="vtab" onclick="setView('month',this)">📈 Ky Muaj</div>
+        <div class="vtab" onclick="setView('all',this)">📋 Gjithë Historia</div>
       </div>
-      <button class="btn btn-gold btn-sm" onclick="sendSummaryEmail()" title="DÃ«rgo pÃ«rmbledhjen me email">âï¸ Email</button>
-      <button class="btn btn-sm" onclick="exportPDF()" title="Shkarko PDF" style="background:linear-gradient(135deg,#3730a3,#5b21b6);color:#fff;font-weight:800;border:none;box-shadow:0 2px 8px rgba(55,48,163,.35)">ð PDF</button>
+      <button class="btn btn-gold btn-sm" onclick="sendSummaryEmail()" title="Dërgo përmbledhjen me email">✉️ Email</button>
+      <button class="btn btn-sm" onclick="exportPDF()" title="Shkarko PDF" style="background:linear-gradient(135deg,#3730a3,#5b21b6);color:#fff;font-weight:800;border:none;box-shadow:0 2px 8px rgba(55,48,163,.35)">📄 PDF</button>
     </div>
   </div>
 
@@ -271,12 +271,12 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
 
   <!-- KPIs -->
   <div class="kpi-grid" id="kpiGrid">
-    <div class="kpi blue"><label>Rezervime</label><div class="kval" id="kCnt">â</div><div class="ksub" id="kCntS"></div></div>
-    <div class="kpi"><label>TÃ« Ardhura</label><div class="kval sm" id="kRev">â</div><div class="ksub">EUR</div></div>
-    <div class="kpi green"><label>NetÃ« Dhomash</label><div class="kval" id="kNts">â</div><div class="ksub">room nights</div></div>
-    <div class="kpi purple"><label>ADR</label><div class="kval sm" id="kADR">â</div><div class="ksub">EUR / natÃ«</div></div>
-    <div class="kpi"><label>Dhoma</label><div class="kval" id="kRms">â</div><div class="ksub">unikale</div></div>
-    <div class="kpi green"><label>Arrivals Sot</label><div class="kval" id="kArr">â</div><div class="ksub">check-in sot</div></div>
+    <div class="kpi blue"><label>Rezervime</label><div class="kval" id="kCnt">—</div><div class="ksub" id="kCntS"></div></div>
+    <div class="kpi"><label>Të Ardhura</label><div class="kval sm" id="kRev">—</div><div class="ksub">EUR</div></div>
+    <div class="kpi green"><label>Netë Dhomash</label><div class="kval" id="kNts">—</div><div class="ksub">room nights</div></div>
+    <div class="kpi purple"><label>ADR</label><div class="kval sm" id="kADR">—</div><div class="ksub">EUR / natë</div></div>
+    <div class="kpi"><label>Dhoma</label><div class="kval" id="kRms">—</div><div class="ksub">unikale</div></div>
+    <div class="kpi green"><label>Arrivals Sot</label><div class="kval" id="kArr">—</div><div class="ksub">check-in sot</div></div>
   </div>
 
   <!-- STAFF COMPARISON (Manager only) -->
@@ -287,8 +287,8 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       <div class="sc-kpis">
         <div class="sck"><div class="sv" id="sCnt">0</div><div class="sl">Rez.</div></div>
         <div class="sck"><div class="sv" id="sRev">0</div><div class="sl">EUR</div></div>
-        <div class="sck"><div class="sv" id="sNts">0</div><div class="sl">NetÃ«</div></div>
-        <div class="sck"><div class="sv" id="sADR">â</div><div class="sl">ADR</div></div>
+        <div class="sck"><div class="sv" id="sNts">0</div><div class="sl">Netë</div></div>
+        <div class="sck"><div class="sv" id="sADR">—</div><div class="sl">ADR</div></div>
       </div>
       <div class="sc-bar"><div class="sc-bar-fill" id="sBar" style="width:0%"></div></div>
       <div class="sc-pct" id="sPct"></div>
@@ -299,8 +299,8 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       <div class="sc-kpis">
         <div class="sck"><div class="sv" id="iCnt">0</div><div class="sl">Rez.</div></div>
         <div class="sck"><div class="sv" id="iRev">0</div><div class="sl">EUR</div></div>
-        <div class="sck"><div class="sv" id="iNts">0</div><div class="sl">NetÃ«</div></div>
-        <div class="sck"><div class="sv" id="iADR">â</div><div class="sl">ADR</div></div>
+        <div class="sck"><div class="sv" id="iNts">0</div><div class="sl">Netë</div></div>
+        <div class="sck"><div class="sv" id="iADR">—</div><div class="sl">ADR</div></div>
       </div>
       <div class="sc-bar"><div class="sc-bar-fill" id="iBar" style="width:0%"></div></div>
       <div class="sc-pct" id="iPct"></div>
@@ -322,7 +322,7 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       <tbody id="chTbl"></tbody></table>
     </div>
     <div class="card">
-      <div class="ct"><div class="ct-left"><span class="dot" style="background:var(--teal)"></span>KombÃ«sitÃ« â Top 10</div></div>
+      <div class="ct"><div class="ct-left"><span class="dot" style="background:var(--teal)"></span>Kombësitë — Top 10</div></div>
       <div id="natList"></div>
     </div>
   </div>
@@ -332,8 +332,8 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     <div class="ct">
       <div class="ct-left">
         <span class="dot" style="background:#c9a84c"></span>
-        ð 90-Day Booking Pace &amp; Budget
-        <span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:8px">Rolling view Â· TÃ« gjitha kanalet Â· Dhoma tÃ« pÃ«rjashtuara nuk llogariten</span>
+        📊 90-Day Booking Pace &amp; Budget
+        <span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:8px">Rolling view · Të gjitha kanalet · Dhoma të përjashtuara nuk llogariten</span>
       </div>
     </div>
     <div id="pace90Summary"></div>
@@ -342,8 +342,8 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;font-size:10px;color:var(--muted);padding:0 2px">
       <span><span style="display:inline-block;width:10px;height:10px;background:#c9a84c;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Para monitorimit</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:3px;vertical-align:middle"></span>TÃ« monitoruara</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Rezervime tÃ« ardhshme</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Të monitoruara</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Rezervime të ardhshme</span>
       <span><span style="display:inline-block;width:10px;height:10px;border:2px dashed #dc2626;box-sizing:border-box;border-radius:2px;margin-right:3px;vertical-align:middle"></span>Target ditor (buxhet)</span>
     </div>
     <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
@@ -354,11 +354,11 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
   <!-- CHECKIN MONTH DISTRIBUTION -->
   <div class="card" style="margin-bottom:24px" id="monthSection">
     <div class="ct">
-      <div class="ct-left"><span class="dot" style="background:var(--navy)"></span>ShpÃ«rndarja sipas Muajit <span id="monthSectionSub" style="font-weight:400;color:var(--muted);font-size:12px;margin-left:6px">â muajt e check-in tÃ« rezervimeve tÃ« filtrit</span></div>
+      <div class="ct-left"><span class="dot" style="background:var(--navy)"></span>Shpërndarja sipas Muajit <span id="monthSectionSub" style="font-weight:400;color:var(--muted);font-size:12px;margin-left:6px">— muajt e check-in të rezervimeve të filtrit</span></div>
     </div>
-    <div style="position:relative;height:180px;margin-bottom:16px"><canvas id="monthChart" role="img" aria-label="ShpÃ«rndarje e rezervimeve sipas muajit tÃ« check-in">TÃ« dhÃ«nat do shfaqen pas importit.</canvas></div>
+    <div style="position:relative;height:180px;margin-bottom:16px"><canvas id="monthChart" role="img" aria-label="Shpërndarje e rezervimeve sipas muajit të check-in">Të dhënat do shfaqen pas importit.</canvas></div>
     <table class="cht">
-      <thead><tr><th>Muaj check-in</th><th>Rezervime</th><th>TÃ« ardhura</th><th>% e totalit</th></tr></thead>
+      <thead><tr><th>Muaj check-in</th><th>Rezervime</th><th>Të ardhura</th><th>% e totalit</th></tr></thead>
       <tbody id="monthTblBody"></tbody>
     </table>
   </div>
@@ -366,11 +366,11 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
 
   <!-- META SOCIAL MEDIA -->
   <div class="card" style="margin-bottom:22px">
-    <div class="ct"><div class="ct-left"><span class="dot" style="background:#e1306c"></span>Social Media Meta â Sot</div>
-    <span id="metaRefreshBtn" onclick="loadMetaStats()" style="cursor:pointer;font-size:11px;color:var(--muted);font-weight:400;text-transform:none">ð Rifresko</span>
+    <div class="ct"><div class="ct-left"><span class="dot" style="background:#e1306c"></span>Social Media Meta — Sot</div>
+    <span id="metaRefreshBtn" onclick="loadMetaStats()" style="cursor:pointer;font-size:11px;color:var(--muted);font-weight:400;text-transform:none">🔄 Rifresko</span>
     </div>
     <div id="metaSection" style="display:none"></div>
-    <div id="metaLoading" style="font-size:12px;color:var(--muted);padding:8px 0">Duke ngarkuar tÃ« dhÃ«nat Meta...</div>
+    <div id="metaLoading" style="font-size:12px;color:var(--muted);padding:8px 0">Duke ngarkuar të dhënat Meta...</div>
   </div>
 
   <!-- RESERVATIONS -->
@@ -378,13 +378,13 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     <div class="ct">
       <div class="ct-left"><span class="dot" style="background:#7c3aed"></span>Lista Rezervimeve <span id="resCnt" style="font-weight:400;color:var(--muted);margin-left:4px"></span></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn btn-sm" id="claimAllBtn" onclick="claimAll()" style="background:var(--gold);color:var(--navy);font-size:11px;display:none">â Cakto tÃ« gjitha si tÃ« miat</button>
-        <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none">â Cakto stafit Ã§do rezervim</span>
+        <button class="btn btn-sm" id="claimAllBtn" onclick="claimAll()" style="background:var(--gold);color:var(--navy);font-size:11px;display:none">★ Cakto të gjitha si të miat</button>
+        <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none">← Cakto stafit çdo rezervim</span>
       </div>
     </div>
     <div class="rw">
       <table class="rt">
-        <thead><tr><th>#</th><th>Klienti</th><th>Dhoma</th><th>Lloji</th><th>Krijuar</th><th>Check-in</th><th>Check-out</th><th>NetÃ«</th><th>Plan</th><th>Kanali</th><th>KombÃ«sia</th><th>EUR</th><th>Stafi</th></tr></thead>
+        <thead><tr><th>#</th><th>Klienti</th><th>Dhoma</th><th>Lloji</th><th>Krijuar</th><th>Check-in</th><th>Check-out</th><th>Netë</th><th>Plan</th><th>Kanali</th><th>Kombësia</th><th>EUR</th><th>Stafi</th></tr></thead>
         <tbody id="resTbl"></tbody>
       </table>
     </div>
@@ -392,7 +392,7 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
 
 </main>
 
-<footer>ð¸ Flower Hotel Â· Sales Monitor Â· TÃ« dhÃ«nat ruhen lokalisht nÃ« browser</footer>
+<footer>🌸 Flower Hotel · Sales Monitor · Të dhënat ruhen lokalisht në browser</footer>
 
 <script>
 'use strict';
@@ -400,7 +400,7 @@ const TODAY = new Date().toISOString().slice(0,10);
 document.getElementById('todayChip').textContent = fmtD(TODAY);
 document.getElementById('dateFilter').value = TODAY;
 
-// ââ STATE ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── STATE ──────────────────────────────────────────────────────
 let currentUser = '';           // 'Sara' | 'Inva' | 'Manager'
 let currentView = 'today';      // today | week | month | all
 let storedData = [];            // all reservations ever imported
@@ -427,7 +427,7 @@ async function pushStaff(nrs){if(!cloudOK||!nrs.length)return;try{await sbUpsert
 
 loadState();
 
-// ââ LOGIN ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── LOGIN ──────────────────────────────────────────────────────
 async function doLogin(user) {
   currentUser = user;
   localStorage.setItem('fhUser', user);
@@ -435,21 +435,21 @@ async function doLogin(user) {
   document.getElementById('controlsBar').style.display = 'flex';
   document.getElementById('mainArea').style.display = 'block';
   const chip = document.getElementById('userChip');
-  chip.textContent = user === 'Manager' ? 'ð Manager' : (user === 'Sara' ? 'ð© Sara' : 'ð© Inva');
+  chip.textContent = user === 'Manager' ? '👔 Manager' : (user === 'Sara' ? '👩 Sara' : '👩 Inva');
   chip.className = 'user-chip ' + (user==='Sara'?'sara':user==='Inva'?'inva':'none');
-  document.getElementById('viewTitle').textContent='Duke ngarkuar tÃ« dhÃ«nat nga cloudâ¦'; await loadState();
+  document.getElementById('viewTitle').textContent='Duke ngarkuar të dhënat nga cloud…'; await loadState();
   if (storedData.length) { applyFilter(); updateDayHistory(); updateBadge(); }
-  else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" nÃ« shiritin e sipÃ«rm'; render90Day(); }
+  else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; render90Day(); }
   if (user !== 'Manager') recordShift(user);
   loadMetaStats();
 }
 function logout() {
-  if (!confirm('DÃ«shiron tÃ« ndÃ«rrosh pÃ«rdoruesin?')) return;
+  if (!confirm('Dëshiron të ndërrosh përdoruesin?')) return;
   localStorage.removeItem('fhUser');
   location.reload();
 }
 
-// ââ 90-DAY BUDGET TARGETS ââââââââââââââââââââââââââââââââââââââ
+// ── 90-DAY BUDGET TARGETS ──────────────────────────────────────
 const BUDGET = {
   '2026-06': {name:'Qershor', short:'Jun', occ:95, rn:3700, days:30},
   '2026-07': {name:'Korrik',  short:'Jul', occ:99, rn:4900, days:31},
@@ -457,8 +457,8 @@ const BUDGET = {
   '2026-09': {name:'Shtator', short:'Sep', occ:95, rn:4320, days:30, rev:666500},
   '2026-10': {name:'Tetor', short:'Tet', occ:38, rn:1900, days:31, rev:240000}
 };
-// TÃ« dhÃ«na historike para fillimit tÃ« monitorimit (1â16 Qershor 2026)
-// KÃ«to janÃ« FIKSE â nuk mbishkruhen nga XLS
+// Të dhëna historike para fillimit të monitorimit (1–16 Qershor 2026)
+// Këto janë FIKSE — nuk mbishkruhen nga XLS
 const HISTORICAL_REV = {'2026-07':681641,'2026-08':370317,'2026-09':170350};
 function paceMonthStats(list, mk){
   var maxTS=0, i;
@@ -507,7 +507,7 @@ const HISTORICAL_RN = {
   if (u) { loadState(); if(storedData.length || true) doLogin(u); }
 })();
 
-// ââ FILE IMPORT ââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── FILE IMPORT ────────────────────────────────────────────────
 document.getElementById('fileInput').addEventListener('change', e => {
   if (e.target.files[0]) importFile(e.target.files[0]);
 });
@@ -543,12 +543,12 @@ function importFile(file) {
       applyFilter();
 
       const autoAssignMsg = (currentUser && currentUser !== 'Manager' && newOnes.length > 0)
-        ? ` Â· ${newOnes.length} u caktuan automatikisht te ${currentUser}` : '';
+        ? ` · ${newOnes.length} u caktuan automatikisht te ${currentUser}` : '';
       const status = document.getElementById('importStatus');
       status.className = 'import-status';
-      status.textContent = `â Import i suksessN[ï¿½m â ${newOnes.length} rezervime tÃ« reja u shtuan Â· ${updated.length} u pÃ«rditÃ«suan Â· Totali: ${storedData.length} rekorde${autoAssignMsg}`;
+      status.textContent = `✅ Import i suksessN[�m — ${newOnes.length} rezervime të reja u shtuan · ${updated.length} u përditësuan · Totali: ${storedData.length} rekorde${autoAssignMsg}`;
       setTimeout(() => status.className = 'import-status hidden', 8000);
-      var changed=[].concat(newOnes,updated); var assignedNrs=newOnes.map(function(r){return r['Nr. Prenotimit'];}).filter(function(nr){return staffMap[nr];}); await pushReservations(changed); await pushStaff(assignedNrs); if(!cloudOK){status.className='import-status'; status.textContent='â ï¸ U ruajt vetem ne kete pajisje â cloud deshtoi.';}
+      var changed=[].concat(newOnes,updated); var assignedNrs=newOnes.map(function(r){return r['Nr. Prenotimit'];}).filter(function(nr){return staffMap[nr];}); await pushReservations(changed); await pushStaff(assignedNrs); if(!cloudOK){status.className='import-status'; status.textContent='⚠️ U ruajt vetem ne kete pajisje — cloud deshtoi.';}
     } catch(err) { alert('Gabim: ' + err.message); }
   };
   r.readAsText(file, 'utf-8');
@@ -559,14 +559,14 @@ function parseXLS(content) {
   const xml = new DOMParser().parseFromString(content, 'application/xml');
   const ns = 'urn:schemas-microsoft-com:office:spreadsheet';
   const rows = xml.getElementsByTagNameNS(ns, 'Row');
-  if (!rows.length) throw new Error('Skedari Ã«shtÃ« bosh ose i formatit tÃ« gabuar');
+  if (!rows.length) throw new Error('Skedari është bosh ose i formatit të gabuar');
 
   // Header: all Data elements in first row
   const header = Array.from(rows[0].getElementsByTagNameNS(ns,'Data')).map(c=>c.textContent.trim());
 
   const data = [];
   for (let i = 1; i < rows.length; i++) {
-    // Use Data elements only â same as Python lxml findall('.//Data').
+    // Use Data elements only — same as Python lxml findall('.//Data').
     // Empty <Cell /> has no Data child, so it is skipped automatically.
     // This gives correct sequential mapping identical to the Python analysis.
     const dataEls = rows[i].getElementsByTagNameNS(ns, 'Data');
@@ -585,7 +585,7 @@ function parseXLS(content) {
         if (_col >= 0 && _col < header.length) _cv[_col] = _dd ? _dd.textContent.trim() : '';
         _col++;
       }
-      const _pi = header.indexOf('Ãmimi');
+      const _pi = header.indexOf('Çmimi');
       if (_pi >= 0) obj._cmimi = _cv[_pi];
       var _ki = header.indexOf('Kompania'); var _pl = (_ki>=0?(_cv[_ki]||''):'').trim(); if(!_pl){ var _bb=parseFloat(_cv[header.indexOf('BB')])||0,_hb=parseFloat(_cv[header.indexOf('HB')])||0,_fb=parseFloat(_cv[header.indexOf('FB')])||0,_ai=parseFloat(_cv[header.indexOf('AI')])||0; if(_ai>0)_pl='ALL INCLUSIVE'; else if(_fb>0)_pl='Full Board'; else if(_hb>0)_pl='Half Board'; else if(_bb>0)_pl='Bed & Breakfast'; } obj._plan=_pl;
     } catch(e){}
@@ -597,15 +597,15 @@ function parseXLS(content) {
 function updateBadge() {
   const b = document.getElementById('dataBadge');
   b.style.display = 'inline-block';
-  b.textContent = `ð¾ ${storedData.length} rez. ruajtur`;
+  b.textContent = `💾 ${storedData.length} rez. ruajtur`;
 }
 
-// ââ DATE HELPERS âââââââââââââââââââââââââââââââââââââââââââââââ
+// ── DATE HELPERS ───────────────────────────────────────────────
 function getCD(r) {
   // Scan all field values for dd/mm/yyyy pattern.
   // The Exp Date raw value is " - 15/06/2026" but .trim() strips the leading
-  // space â "- 15/06/2026". Checking for ' - ' would miss it, so we just
-  // regex-search for the date digits directly â safe because check-in dates
+  // space → "- 15/06/2026". Checking for ' - ' would miss it, so we just
+  // regex-search for the date digits directly — safe because check-in dates
   // are stored as ISO (yyyy-mm-dd) and no other field uses dd/mm/yyyy format.
   for (const val of Object.values(r)) {
     if (!val || typeof val !== 'string') continue;
@@ -614,9 +614,9 @@ function getCD(r) {
   }
   return '';
 }
-function fmtD(iso) { if(!iso||iso.length<10)return'â'; return iso.slice(8,10)+'/'+iso.slice(5,7)+'/'+iso.slice(0,4); }
-function getRev(r) { return parseFloat(r['DitÃ«t qÃ«ndrimit'])||0; }
-function getNts(r) { return parseInt(r['Ãmimi'])||0; }
+function fmtD(iso) { if(!iso||iso.length<10)return'—'; return iso.slice(8,10)+'/'+iso.slice(5,7)+'/'+iso.slice(0,4); }
+function getRev(r) { return parseFloat(r['Ditët qëndrimit'])||0; }
+function getNts(r) { return parseInt(r['Çmimi'])||0; }
 function getPlan(r) {
   const k = (r._plan !== undefined ? r._plan : r['Kompania']) || '';
   if (k.includes('ALL INCLUSIVE')) return 'All Inclusive';
@@ -624,7 +624,7 @@ function getPlan(r) {
   if (k.includes('Half') || k.includes('HB')) return 'Half Board';
   if (k.includes('Full') || k.includes('FB')) return 'Full Board';
   if (k.includes('ITAKA')) return 'Tour Op.';
-  return k.slice(0,12) || 'â';
+  return k.slice(0,12) || '—';
 }
 function getPlanCls(plan) {
   if (plan==='All Inclusive') return 'pAI';
@@ -641,14 +641,14 @@ function chType(ch) {
 }
 function chTag(ch) {
   const t=chType(ch);
-  const map={ota:'ð OTA',tour:'âï¸ Tour Op.',dir:'ð± Direkt',oth:'ð¹ TjetÃ«r'};
+  const map={ota:'🌐 OTA',tour:'✈️ Tour Op.',dir:'📱 Direkt',oth:'🔹 Tjetër'};
   const cls={ota:'t-ota',tour:'t-tour',dir:'t-dir',oth:'t-oth'};
   return`<span class="tag ${cls[t]}">${map[t]}</span>`;
 }
 
-// ââ ROOM / CLIENT EXCLUSIONS âââââââââââââââââââââââââââââââââââ
+// ── ROOM / CLIENT EXCLUSIONS ───────────────────────────────────
 // EXACT match: only the specific room+client pair is excluded.
-// Dhoma 212 me emrin "Olti Caci" NUK pÃ«rjashtohet â vetÃ«m VILA1+OLTICACI.
+// Dhoma 212 me emrin "Olti Caci" NUK përjashtohet — vetëm VILA1+OLTICACI.
 function isExcluded(r) {
   const room   = (r['Nr Dhomes']||'').trim().toUpperCase().replace(/\s+/g,' ');
   const client = (r['Klienti']||'').trim().toUpperCase().replace(/\s+/g,' ');
@@ -668,7 +668,7 @@ function getWeekStart() {
 }
 function getMonthStart() { return TODAY.slice(0,8)+'01'; }
 
-// ââ VIEW / FILTER ââââââââââââââââââââââââââââââââââââââââââââââ
+// ── VIEW / FILTER ──────────────────────────────────────────────
 function setView(v, el) {
   currentView = v;
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
@@ -678,7 +678,7 @@ function setView(v, el) {
 
 function applyFilter() {
   const dateVal = document.getElementById('dateFilter').value;
-  // VetÃ«m kanale direkte, pa dhoma/klientÃ« tÃ« pÃ«rjashtuar
+  // Vetëm kanale direkte, pa dhoma/klientë të përjashtuar
   let data = [...storedData].filter(r => !isExcluded(r) && chType(r['AI'] || '') === 'dir');
 
   if (currentView === 'today')       data = data.filter(r => getCD(r) === TODAY);
@@ -706,7 +706,7 @@ function showAll() {
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
 }
 
-// ââ DAILY HISTORY PILLS ââââââââââââââââââââââââââââââââââââââââ
+// ── DAILY HISTORY PILLS ────────────────────────────────────────
 function updateDayHistory() {
   // Get last 14 days that have data
   const byDay = {};
@@ -740,7 +740,7 @@ function selectDay(d) {
   updateDayHistory();
 }
 
-// ââ RENDER âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── RENDER ─────────────────────────────────────────────────────
 function render() {
   const data = filteredData;
   updateMonthHistory();
@@ -751,12 +751,12 @@ function render() {
   // Title
   let titleDate = '';
   if (currentView==='today') titleDate = dateVal ? fmtD(dateVal) : fmtD(TODAY);
-  const viewLabel = currentView==='today'?`Sot Â· ${titleDate}`:currentView==='week'?'Kjo JavÃ«':currentView==='month'?'Ky Muaj':'GjithÃ« Historia';
+  const viewLabel = currentView==='today'?`Sot · ${titleDate}`:currentView==='week'?'Kjo Javë':currentView==='month'?'Ky Muaj':'Gjithë Historia';
   const userName = currentUser==='Manager'?'Manager':currentUser;
-  document.getElementById('viewTitle').innerHTML = `<span class="accent ${userColor}">${userName}</span> â ${viewLabel}`;
+  document.getElementById('viewTitle').innerHTML = `<span class="accent ${userColor}">${userName}</span> — ${viewLabel}`;
   document.getElementById('viewSub').textContent = isManager
-    ? `${storedData.length} rezervime totale Â· ${data.length} nÃ« kÃ«tÃ« periudhÃ«`
-    : `${data.length} rezervime tÃ« tua Â· ${storedData.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')==='').length} ende pa caktuar staf`;
+    ? `${storedData.length} rezervime totale · ${data.length} në këtë periudhë`
+    : `${data.length} rezervime të tua · ${storedData.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')==='').length} ende pa caktuar staf`;
 
   // KPIs
   const totalRev = data.reduce((s,r)=>s+getRev(r),0);
@@ -769,7 +769,7 @@ function render() {
   set('kCntS', isManager ? '' : `nga ${storedData.length} total`);
   set('kRev', totalRev.toLocaleString('sq-AL',{maximumFractionDigits:0}));
   set('kNts', totalNts);
-  set('kADR', adr>0?adr.toFixed(0)+'â¬':'â');
+  set('kADR', adr>0?adr.toFixed(0)+'€':'—');
   set('kRms', rooms);
   set('kArr', arrToday);
 
@@ -779,7 +779,7 @@ function render() {
 
   // Charts
   mkDoughnut('chChart', cntBy(data,r=>r['AI']||'Pa kanal'),8,['#0a2240','#c9a84c','#0e7c6e','#2563eb','#7c3aed','#e05252','#f59e0b','#10b981']);
-  mkBar('rmChart', cntBy(data,r=>(r['LLoji Dhomes']||'').trim().replace('GARDEN ','G ').replace('FLOWER ','F ').replace(' FLOWER ','F ')||'TjetÃ«r'),
+  mkBar('rmChart', cntBy(data,r=>(r['LLoji Dhomes']||'').trim().replace('GARDEN ','G ').replace('FLOWER ','F ').replace(' FLOWER ','F ')||'Tjetër'),
     ['#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#1d4ed8','#1e40af']);
   mkDoughnut('plChart', cntBy(data,r=>getPlan(r)),99,['#f59e0b','#0e7c6e','#2563eb','#7c3aed','#e05252','#10b981']);
 
@@ -798,9 +798,9 @@ function renderStaffComp(data) {
     const pct = totalRev>0?((rev/totalRev)*100):0;
     const p = name[0].toLowerCase();
     set(p+'Cnt',mine.length); set(p+'Rev',rev.toLocaleString('sq-AL',{maximumFractionDigits:0}));
-    set(p+'Nts',nts); set(p+'ADR',nts>0?(rev/nts).toFixed(0)+'â¬':'â');
+    set(p+'Nts',nts); set(p+'ADR',nts>0?(rev/nts).toFixed(0)+'€':'—');
     document.getElementById(p+'Bar').style.width = pct+'%';
-    set(p+'Pct',`${pct.toFixed(0)}% e tÃ« ardhurave totale`);
+    set(p+'Pct',`${pct.toFixed(0)}% e të ardhurave totale`);
   });
 }
 
@@ -845,7 +845,7 @@ function renderNat(data) {
   data.forEach(r=>{const n=r['Burimi Info.']||'?';if(!bn[n])bn[n]={cnt:0,rev:0};bn[n].cnt++;bn[n].rev+=getRev(r);});
   const sorted=Object.entries(bn).sort((a,b)=>b[1].rev-a[1].rev).slice(0,10);
   document.getElementById('natList').innerHTML=sorted.map(([n,v])=>
-    `<div class="ni"><span>ð <strong>${n}</strong></span><div style="display:flex;gap:12px;align-items:center"><span style="color:var(--muted);font-size:12px">${v.cnt} rez</span><strong>${v.rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} EUR</strong></div></div>`
+    `<div class="ni"><span>🌍 <strong>${n}</strong></span><div style="display:flex;gap:12px;align-items:center"><span style="color:var(--muted);font-size:12px">${v.cnt} rez</span><strong>${v.rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} EUR</strong></div></div>`
   ).join('');
 }
 
@@ -866,7 +866,7 @@ function renderResTable() {
   const cb = document.getElementById('claimAllBtn');
   if(cb) cb.style.display = (currentUser && currentUser!=='Manager') ? 'inline-block' : 'none';
 
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="13" class="es">Nuk ka rezervime pÃ«r kÃ«tÃ« periudhÃ«</td></tr>';return;}
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="13" class="es">Nuk ka rezervime për këtë periudhë</td></tr>';return;}
 
   const cdToday = getCD; // reuse
   tbody.innerHTML=rows.map(r=>{
@@ -889,19 +889,19 @@ function renderResTable() {
       <td>${fmtD((r['Data Mbarimit']||'').slice(0,10))}</td>
       <td style="text-align:center"><strong>${getNts(r)}</strong></td>
       <td><span class="pb ${planCls}">${plan}</span></td>
-      <td style="font-size:11px">${r['AI']||'â'}</td>
-      <td style="font-size:11px">${r['Burimi Info.']||'â'}</td>
-      <td><strong>${rev>0?rev.toLocaleString('sq-AL',{maximumFractionDigits:0}):'<span style="color:var(--muted)">â</span>'}</strong></td>
+      <td style="font-size:11px">${r['AI']||'—'}</td>
+      <td style="font-size:11px">${r['Burimi Info.']||'—'}</td>
+      <td><strong>${rev>0?rev.toLocaleString('sq-AL',{maximumFractionDigits:0}):'<span style="color:var(--muted)">—</span>'}</strong></td>
       <td><select class="ss ${sCls}" onchange="assign('${nr}',this)">
-        <option value="">â Cakto â</option>
-        <option value="Sara"${as==='Sara'?' selected':''}>ð© Sara</option>
-        <option value="Inva"${as==='Inva'?' selected':''}>ð© Inva</option>
+        <option value="">— Cakto —</option>
+        <option value="Sara"${as==='Sara'?' selected':''}>👩 Sara</option>
+        <option value="Inva"${as==='Inva'?' selected':''}>👩 Inva</option>
       </select></td>
     </tr>`;
   }).join('');
 }
 
-// ââ CHECKIN MONTH DISTRIBUTION ââââââââââââââââââââââââââââââââââ
+// ── CHECKIN MONTH DISTRIBUTION ──────────────────────────────────
 var monthChartInst = null;
 function updateMonthHistory() {
   // Group the CURRENTLY FILTERED reservations by their check-in month
@@ -922,8 +922,8 @@ function updateMonthHistory() {
     return;
   }
 
-  const mNames = ['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','NÃ«ntor','Dhjetor'];
-  const mShort = ['Jan','Shk','Mar','Pri','Maj','Qer','Kor','Gus','Sht','Tet','NÃ«n','Dhj'];
+  const mNames = ['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
+  const mShort = ['Jan','Shk','Mar','Pri','Maj','Qer','Kor','Gus','Sht','Tet','Nën','Dhj'];
   const labels = months.map(m => { const [y,mo]=m.split('-'); return mShort[+mo-1]+' '+y.slice(2); });
   const counts = months.map(m => byMonth[m].cnt);
   const total = data.length;
@@ -953,7 +953,7 @@ function updateMonthHistory() {
         responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: { callbacks: { label: ctx => ` ${ctx.raw} rezervime Â· ${byMonth[months[ctx.dataIndex]].rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} â¬` } }
+          tooltip: { callbacks: { label: ctx => ` ${ctx.raw} rezervime · ${byMonth[months[ctx.dataIndex]].rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} €` } }
         },
         scales: {
           x: { grid:{display:false}, ticks:{font:{size:12}, color:'#6b7a8d', autoSkip:false, maxRotation:0} },
@@ -971,7 +971,7 @@ function updateMonthHistory() {
     return `<tr>
       <td><strong>${mNames[+mo-1]} ${y}</strong></td>
       <td><strong>${v.cnt}</strong></td>
-      <td><strong>${v.rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} â¬</strong></td>
+      <td><strong>${v.rev.toLocaleString('sq-AL',{maximumFractionDigits:0})} €</strong></td>
       <td style="min-width:120px">
         <div style="display:flex;align-items:center;gap:8px">
           <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden">
@@ -984,7 +984,7 @@ function updateMonthHistory() {
   }).join('');
 }
 
-// ââ 90-DAY BOOKING PACE ââââââââââââââââââââââââââââââââââââââââ
+// ── 90-DAY BOOKING PACE ────────────────────────────────────────
 function render90Day() {
   var el90s = document.getElementById('pace90Summary');
   var el90t = document.getElementById('pace90Table');
@@ -1004,11 +1004,11 @@ function render90Day() {
     }
 
     if (!months90.length) {
-      el90s.innerHTML = '<p style="color:#6b7a8d;padding:8px">Nuk ka target buxheti pÃ«r 90 ditÃ«t e ardhshme.</p>';
+      el90s.innerHTML = '<p style="color:#6b7a8d;padding:8px">Nuk ka target buxheti për 90 ditët e ardhshme.</p>';
       el90t.innerHTML = ''; return;
     }
 
-    // Room nights for a date â HISTORICAL_RN has priority over XLS data
+    // Room nights for a date — HISTORICAL_RN has priority over XLS data
     function p90DayOcc(iso) {
       if (HISTORICAL_RN[iso] !== undefined) return HISTORICAL_RN[iso];
       var rooms = new Set();
@@ -1053,7 +1053,7 @@ function render90Day() {
       monthActual[months90[mi]] = p90MonthRN(months90[mi]);
     }
 
-    // ââ Summary cards ââââââââââââââââââââââââââââââââââââââââââ
+    // ── Summary cards ──────────────────────────────────────────
     var sc = '<div style="display:grid;grid-template-columns:repeat('+months90.length+',1fr);gap:12px;margin-bottom:16px">';
     for (var mi=0; mi<months90.length; mi++) {
       var mk = months90[mi];
@@ -1063,12 +1063,12 @@ function render90Day() {
       var remaining = Math.max(0, b.rn - actual); var mrev = _st.fresh ? _st.rev : ((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[mk]!==undefined)?HISTORICAL_REV[mk]:0);
       var sc_c = pct>=80 ? '#166534' : pct>=60 ? '#b45309' : '#dc2626';
       var sc_bg = pct>=80 ? '#f0fdf4' : pct>=60 ? '#fffbeb' : '#fef2f2';
-      var icon = pct>=80 ? 'â' : pct>=60 ? 'â ï¸' : 'ð¨';
+      var icon = pct>=80 ? '✅' : pct>=60 ? '⚠️' : '🚨';
       var barW = Math.min(100, pct);
-      var insight = pct>=100 ? 'ð Tejkaluar buxhetin!'
-                  : pct>=80  ? 'RitÃ«m i mirÃ« â mbeten ' + remaining.toLocaleString() + ' rn'
-                  : pct>=50  ? 'NÃ«n target â duhen ' + remaining.toLocaleString() + ' rn shtesÃ«'
-                  :            'Deficit â kÃ«rkon vÃ«mendje urgente';
+      var insight = pct>=100 ? '🏆 Tejkaluar buxhetin!'
+                  : pct>=80  ? 'Ritëm i mirë — mbeten ' + remaining.toLocaleString() + ' rn'
+                  : pct>=50  ? 'Nën target — duhen ' + remaining.toLocaleString() + ' rn shtesë'
+                  :            'Deficit — kërkon vëmendje urgente';
       sc += '<div style="background:'+sc_bg+';border-radius:10px;padding:14px 16px;border-left:4px solid '+sc_c+'">'
         + '<div style="font-weight:800;color:#0a2240;font-size:13px;margin-bottom:10px">'+icon+' '+b.name+' '+todayD.getFullYear()+'</div>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">'
@@ -1077,7 +1077,7 @@ function render90Day() {
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Aktual RN</div><div style="font-weight:800;color:#0a2240;font-size:18px">'+actual.toLocaleString()+'</div></div>'
         + '<div><div style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Arritja</div><div style="font-weight:800;color:'+sc_c+';font-size:18px">'+occPct+'%</div></div>'
         + '</div>'
-        + '<div style="font-size:12px;margin-bottom:10px"><span style="color:#6b7a8d;font-size:10px;text-transform:uppercase">TÃ« Ardhura</span> <span style="font-weight:800;color:#0a2240;font-size:15px">'+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</span>'+(b.rev?' <span style="color:#6b7a8d;font-size:11px;font-weight:600">/ '+b.rev.toLocaleString('sq-AL')+' EUR ('+(b.rev>0?Math.round(mrev/b.rev*100):0)+'%)</span>':'')+'</div><div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
+        + '<div style="font-size:12px;margin-bottom:10px"><span style="color:#6b7a8d;font-size:10px;text-transform:uppercase">Të Ardhura</span> <span style="font-weight:800;color:#0a2240;font-size:15px">'+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR</span>'+(b.rev?' <span style="color:#6b7a8d;font-size:11px;font-weight:600">/ '+b.rev.toLocaleString('sq-AL')+' EUR ('+(b.rev>0?Math.round(mrev/b.rev*100):0)+'%)</span>':'')+'</div><div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:8px">'
         + '<div style="width:'+barW+'%;height:100%;background:'+sc_c+';border-radius:4px"></div></div>'
         + '<div style="font-size:11px;color:'+sc_c+';font-weight:600">'+insight+'</div>'
         + '</div>';
@@ -1085,7 +1085,7 @@ function render90Day() {
     sc += '</div>';
     el90s.innerHTML = sc;
 
-    // ââ Chart.js daily bar + budget line âââââââââââââââââââââââ
+    // ── Chart.js daily bar + budget line ───────────────────────
     try {
       var chartLabels = [], chartRN = [], chartBgCol = [], chartBudget = [];
       for (var ci2=0; ci2<months90.length; ci2++) {
@@ -1172,12 +1172,12 @@ function render90Day() {
       }
     } catch(ce) { console.warn('pace90Chart error:', ce.message); }
 
-    // ââ Heatmap table ââââââââââââââââââââââââââââââââââââââââââ
+    // ── Heatmap table ──────────────────────────────────────────
     var th = '<table style="width:100%;border-collapse:collapse;font-size:11px">';
     th += '<thead><tr><th style="width:30px;padding:5px 3px;background:#0a2240;color:#aac4e0;font-size:10px;text-align:center">Day</th>';
     for (var mi=0; mi<months90.length; mi++) {
       var b = BUDGET[months90[mi]];
-      th += '<th style="padding:6px 4px;background:#0a2240;color:#fff;text-align:center">'+b.name+'<div style="font-size:10px;color:#7dd3fc;font-weight:400">'+b.occ+'% Â· '+b.rn.toLocaleString()+' rn</div></th>';
+      th += '<th style="padding:6px 4px;background:#0a2240;color:#fff;text-align:center">'+b.name+'<div style="font-size:10px;color:#7dd3fc;font-weight:400">'+b.occ+'% · '+b.rn.toLocaleString()+' rn</div></th>';
     }
     th += '</tr></thead><tbody>';
 
@@ -1239,7 +1239,7 @@ function render90Day() {
 }
 
 function clearAndReimport() {
-  if (!confirm('Fshij tÃ« gjitha tÃ« dhÃ«nat e ruajtura dhe caktimet e stafit? Pas kÃ«saj duhet tÃ« importosh skedarin sÃ«rish.')) return;
+  if (!confirm('Fshij të gjitha të dhënat e ruajtura dhe caktimet e stafit? Pas kësaj duhet të importosh skedarin sërish.')) return;
   localStorage.removeItem('fhData');
   localStorage.removeItem('fhStaff');
   storedData = [];
@@ -1249,8 +1249,8 @@ function clearAndReimport() {
   document.getElementById('monthTblBody').innerHTML = '';
   if (monthChartInst) { monthChartInst.destroy(); monthChartInst = null; }
   document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis';
-  document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" nÃ« shiritin e sipÃ«rm';
-  alert('â U pastrua. Tani ngarko skedarin XLS nga Trinis â rezervimet e reja do caktohen automatikisht te ' + currentUser + '.');
+  document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm';
+  alert('✅ U pastrua. Tani ngarko skedarin XLS nga Trinis — rezervimet e reja do caktohen automatikisht te ' + currentUser + '.');
 }
 
 function claimAll() {
@@ -1260,7 +1260,7 @@ function claimAll() {
   let toAssign = storedData.filter(r => getCD(r) === dateVal);
   if (!toAssign.length) toAssign = filteredData;
   const count = toAssign.filter(r => !staffMap[r['Nr. Prenotimit']]).length;
-  if (!count) { alert('TÃ« gjitha rezervimet tashmÃ« janÃ« tÃ« caktuara.'); return; }
+  if (!count) { alert('Të gjitha rezervimet tashmë janë të caktuara.'); return; }
   if (!confirm(`Cakto ${count} rezervime (pa staf) te ${currentUser}?`)) return;
   var assignedNrs=[];
   toAssign.forEach(r => { var nr=r['Nr. Prenotimit']; if(!staffMap[nr]){staffMap[nr]=currentUser;assignedNrs.push(nr);} });
@@ -1282,10 +1282,10 @@ function assign(nr,sel) {
 function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
 function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 
-// ââ META / SUPABASE ââââââââââââââââââââââââââââââââââââââââââââ
+// ── META / SUPABASE ────────────────────────────────────────────
 var _metaStats = null; // { sara:{ig,me}, inva:{ig,me}, none:{ig,me}, total } or { myIg, myMe, total }
 async function recordShift(user) {
-  // Record who is on duty when they log in â webhook reads this to assign Meta messages
+  // Record who is on duty when they log in — webhook reads this to assign Meta messages
   try {
     const now = new Date();
     const ALB = 2; // UTC+2
@@ -1340,9 +1340,9 @@ function renderMetaSection() {
   if (!el || !_metaStats) return;
   el.style.display = 'block';
   var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">';
-  html += mkMetaKpi('Instagram','ð¸',_metaStats.ig,'#e1306c');
-  html += mkMetaKpi('Messenger','ð¬',_metaStats.me,'#1877f2');
-  html += mkMetaKpi('Totali Sot','ð¬',_metaStats.total,'#0a2240');
+  html += mkMetaKpi('Instagram','📸',_metaStats.ig,'#e1306c');
+  html += mkMetaKpi('Messenger','💬',_metaStats.me,'#1877f2');
+  html += mkMetaKpi('Totali Sot','💬',_metaStats.total,'#0a2240');
   html += '</div>';
   el.innerHTML = html;
 }
@@ -1350,27 +1350,27 @@ function mkMetaKpi(lbl,ico,val,color){
   return '<div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border-left:3px solid '+color+'">'+'<div style="font-size:18px;font-weight:800;color:'+color+'">'+ico+' '+val+'</div>'+'<div style="font-size:10px;color:#6b7a8d;font-weight:700;text-transform:uppercase;margin-top:3px">'+lbl+'</div>'+'</div>';
 }
 
-// ââ EMAILJS CONFIG ââââââââââââââââââââââââââââââââââââââââââââââ
+// ── EMAILJS CONFIG ──────────────────────────────────────────────
 var EJS_SERVICE  = 'service_uwyagn9';
 var EJS_TEMPLATE = 'template_3tsyh2t';
 var EJS_PUBLIC   = 'mce87cm88ruWn-jwp';
 
-// ââ BUILD HTML EMAIL ââââââââââââââââââââââââââââââââââââââââââââ
+// ── BUILD HTML EMAIL ────────────────────────────────────────────
 function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   // Fix: use dots to avoid &#x2F; encoding in email clients
   var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'.');
   var ts = new Date().toLocaleString('sq-AL');
 
-  // ââ DATA ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── DATA ──────────────────────────────────────────────────────
   var totalRev=data.reduce(function(s,r){return s+getRev(r);},0);
   var totalNts=data.reduce(function(s,r){return s+getNts(r);},0);
-  var adr=totalNts>0?(totalRev/totalNts).toFixed(0):'â';
-  var avgLos=data.length>0?(totalNts/data.length).toFixed(1):'â';
+  var adr=totalNts>0?(totalRev/totalNts).toFixed(0):'—';
+  var avgLos=data.length>0?(totalNts/data.length).toFixed(1):'—';
 
   var chMap={},chRev={},chNts={};
-  data.forEach(function(r){var ch=r['AI']||'TjetÃ«r';chMap[ch]=(chMap[ch]||0)+1;chRev[ch]=(chRev[ch]||0)+getRev(r);chNts[ch]=(chNts[ch]||0)+getNts(r);});
+  data.forEach(function(r){var ch=r['AI']||'Tjetër';chMap[ch]=(chMap[ch]||0)+1;chRev[ch]=(chRev[ch]||0)+getRev(r);chNts[ch]=(chNts[ch]||0)+getNts(r);});
   var chSorted=Object.keys(chMap).sort(function(a,b){return chRev[b]-chRev[a];});
-  var topCh=chSorted[0]||'â',topChRev=chRev[topCh]||0,topChPct=totalRev>0?Math.round(topChRev/totalRev*100):0;
+  var topCh=chSorted[0]||'—',topChRev=chRev[topCh]||0,topChPct=totalRev>0?Math.round(topChRev/totalRev*100):0;
 
   var natMap={},natRev={},natNts={};
   data.forEach(function(r){var n=r['Burimi Info.']||'?';natMap[n]=(natMap[n]||0)+1;natRev[n]=(natRev[n]||0)+getRev(r);natNts[n]=(natNts[n]||0)+getNts(r);});
@@ -1379,16 +1379,16 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   var planMap={},planRev={},planNts={};
   data.forEach(function(r){var p=getPlan(r);planMap[p]=(planMap[p]||0)+1;planRev[p]=(planRev[p]||0)+getRev(r);planNts[p]=(planNts[p]||0)+getNts(r);});
   var planSorted=Object.keys(planMap).sort(function(a,b){return planRev[b]-planRev[a];});
-  var topPlan=planSorted[0]||'â',topPlanADR=planNts[topPlan]>0?(planRev[topPlan]/planNts[topPlan]).toFixed(0):'â';
+  var topPlan=planSorted[0]||'—',topPlanADR=planNts[topPlan]>0?(planRev[topPlan]/planNts[topPlan]).toFixed(0):'—';
 
   var rmMap={},rmRev={},rmNts={};
   data.forEach(function(r){var rm=(r['LLoji Dhomes']||'').trim()||'?';rmMap[rm]=(rmMap[rm]||0)+1;rmRev[rm]=(rmRev[rm]||0)+getRev(r);rmNts[rm]=(rmNts[rm]||0)+getNts(r);});
   var rmSorted=Object.keys(rmMap).sort(function(a,b){return rmRev[b]-rmRev[a];});
-  var topRm=rmSorted[0]||'â',topRmADR=rmNts[topRm]>0?(rmRev[topRm]/rmNts[topRm]).toFixed(0):'â';
+  var topRm=rmSorted[0]||'—',topRmADR=rmNts[topRm]>0?(rmRev[topRm]/rmNts[topRm]).toFixed(0):'—';
 
   var topRez=[].concat(data).sort(function(a,b){return getRev(b)-getRev(a);}).slice(0,5);
 
-  // ââ META STATS âââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── META STATS ─────────────────────────────────────────────────
   var igT=0,meT=0,metaMode='none';
   if(_metaStats && _metaStats.ig !== undefined){
     igT=_metaStats.ig||0; meT=_metaStats.me||0;
@@ -1396,17 +1396,17 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   }
   var hasMetaData=metaMode!=='none';
 
-  // ââ SUMMARY TEXT âââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── SUMMARY TEXT ───────────────────────────────────────────────
   var moMap={};
   data.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7);if(m)moMap[m]=(moMap[m]||0)+1;});
   var moKeys=Object.keys(moMap).sort();
   var topMo=moKeys.length?moKeys.reduce(function(a,b){return moMap[b]>moMap[a]?b:a;}):'';;
-  var mNm=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','NÃ«ntor','Dhjetor'];
-  var topMoName=topMo?(mNm[+topMo.split('-')[1]-1]+' '+topMo.split('-')[0]):'â';
+  var mNm=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
+  var topMoName=topMo?(mNm[+topMo.split('-')[1]-1]+' '+topMo.split('-')[0]):'—';
   var metaNote2=hasMetaData?' Gjate turnit u regjistruan '+(igT+meT)+' biseda te reja nga Meta ('+igT+' Instagram, '+meT+' Messenger).':'';
   var summaryText='Departamenti i shitjeve direkte regjistroi '+data.length+' rezervime per periudhen e raportuar, me te ardhura totale prej '+totalRev.toFixed(0)+' EUR dhe '+totalNts+' nete qendrimi. ADR mesatare: '+adr+' EUR/nate. Kanali me kontributin me te larte ishte '+topCh+', me '+topChRev.toFixed(0)+' EUR ('+topChPct+'% e totalit). Rezervimet targetojne kryesisht muajin '+topMoName+'. Mesatarja e LOS eshte '+avgLos+' nete.'+metaNote2;
 
-  // ââ 90-DAY BUDGET ââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── 90-DAY BUDGET ──────────────────────────────────────────────
   var emailDirData=storedData.filter(function(r){return !isExcluded(r);});
   var todayD=new Date(TODAY),end90D=new Date(TODAY);
   end90D.setDate(end90D.getDate()+90);
@@ -1431,7 +1431,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     return tot;
   }
 
-  // ââ STYLE HELPERS ââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── STYLE HELPERS ──────────────────────────────────────────────
   var FF="font-family:Montserrat,'Segoe UI',Arial,sans-serif;";
   function th(r){return FF+'font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#6b7a8d;padding:9px 10px;border-bottom:2px solid #e2e8f0;background:#f8fafc;text-align:'+(r?'right':'left')+';white-space:nowrap';}
   function td(r,bold,color){return FF+'padding:9px 10px;border-bottom:1px solid #f0f4f8;font-size:12px;color:'+(color||'#1a2533')+';text-align:'+(r?'right':'left')+(bold?';font-weight:'+bold:'');}
@@ -1447,10 +1447,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   function tbl(hdr,rows){return '<tr><td colspan="99" style="padding-bottom:4px"><table style="width:100%;border-collapse:collapse">'+hdr+rows+'</table></td></tr>';}
   function note(txt){return '<tr><td colspan="99" style="padding:0 0 14px"><div style="border-left:3px solid #c9a84c;padding:8px 12px;font-size:11px;color:#6b7a8d;background:#fffbf0;border-radius:0 4px 4px 0">'+txt+'</div></td></tr>';}
 
-  // ââ TABLE ROWS âââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── TABLE ROWS ─────────────────────────────────────────────────
   var chRows=chSorted.map(function(ch){
     var pct=totalRev>0?Math.round(chRev[ch]/totalRev*100):0;
-    var cAdr=chNts[ch]>0?(chRev[ch]/chNts[ch]).toFixed(0):'â';
+    var cAdr=chNts[ch]>0?(chRev[ch]/chNts[ch]).toFixed(0):'—';
     return '<tr><td style="'+td(0)+'">'+ch+'</td><td style="'+td(1,700)+'">'+chMap[ch]+'</td><td style="'+td(1,800,'#2563eb')+'">'+chRev[ch].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+chNts[ch]+'</td><td style="'+td(1)+'">'+cAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
@@ -1461,27 +1461,27 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
   var planRows=planSorted.map(function(p){
     var pct=totalRev>0?Math.round(planRev[p]/totalRev*100):0;
-    var pAdr=planNts[p]>0?(planRev[p]/planNts[p]).toFixed(0):'â';
+    var pAdr=planNts[p]>0?(planRev[p]/planNts[p]).toFixed(0):'—';
     return '<tr><td style="'+td(0,700)+'">'+p+'</td><td style="'+td(1,700)+'">'+planMap[p]+'</td><td style="'+td(1)+'">'+planNts[p]+'</td><td style="'+td(1,800,'#2563eb')+'">'+planRev[p].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+pAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
   var rmRows=rmSorted.map(function(rm){
     var pct=totalRev>0?Math.round(rmRev[rm]/totalRev*100):0;
-    var rAdr=rmNts[rm]>0?(rmRev[rm]/rmNts[rm]).toFixed(0):'â';
+    var rAdr=rmNts[rm]>0?(rmRev[rm]/rmNts[rm]).toFixed(0):'—';
     return '<tr><td style="'+td(0)+'">'+rm+'</td><td style="'+td(1,700)+'">'+rmMap[rm]+'</td><td style="'+td(1)+'">'+rmNts[rm]+'</td><td style="'+td(1,800,'#2563eb')+'">'+rmRev[rm].toFixed(0)+' EUR</td><td style="'+td(1)+'">'+rAdr+'</td><td style="'+td(1,0,'#6b7a8d')+'">'+pct+'%</td></tr>';
   }).join('');
 
   var rezRows=topRez.map(function(r){
     var rev=getRev(r);
-    return '<tr><td style="'+td(0,700)+'">'+((r['Klienti']||'').trim())+'</td><td style="'+td(0)+'">'+( r['AI']||'â')+'</td><td style="'+td(1,700)+'">'+getNts(r)+'</td><td style="'+td(1,800,'#2563eb')+'">'+(rev>0?rev.toFixed(0)+' EUR':'â')+'</td></tr>';
+    return '<tr><td style="'+td(0,700)+'">'+((r['Klienti']||'').trim())+'</td><td style="'+td(0)+'">'+( r['AI']||'—')+'</td><td style="'+td(1,700)+'">'+getNts(r)+'</td><td style="'+td(1,800,'#2563eb')+'">'+(rev>0?rev.toFixed(0)+' EUR':'—')+'</td></tr>';
   }).join('');
 
-  // ââ MANAGER: Staff comparison ââââââââââââââââââââââââââââââââââ
+  // ── MANAGER: Staff comparison ──────────────────────────────────
   var mgrStaffHtml='';
   if(isManager){
     var saraD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Sara';});
     var invaD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Inva';});
-    function calcSt(sd){var rv=sd.reduce(function(s,r){return s+getRev(r);},0),nt=sd.reduce(function(s,r){return s+getNts(r);},0);return{cnt:sd.length,rev:rv,nts:nt,adr:nt>0?(rv/nt).toFixed(0):'â'};}
+    function calcSt(sd){var rv=sd.reduce(function(s,r){return s+getRev(r);},0),nt=sd.reduce(function(s,r){return s+getNts(r);},0);return{cnt:sd.length,rev:rv,nts:nt,adr:nt>0?(rv/nt).toFixed(0):'—'};}
     var ss=calcSt(saraD),si=calcSt(invaD);
     var sPct=totalRev>0?Math.round(ss.rev/totalRev*100):0,iPct=totalRev>0?Math.round(si.rev/totalRev*100):0;
     function staffCard(name,st,pct,bg,bar,tc){
@@ -1489,7 +1489,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'<div style="'+FF+'font-size:10px;font-weight:700;color:'+tc+';letter-spacing:.5px;margin-bottom:6px">'+name+'</div>'
         +'<div style="'+FF+'font-size:22px;font-weight:900;color:#0a2240;line-height:1">'+st.rev.toFixed(0)+'</div>'
         +'<div style="'+FF+'font-size:9px;color:#6b7a8d;margin-bottom:10px">EUR</div>'
-        +'<div style="'+FF+'font-size:11px;color:#374151;margin-bottom:10px">'+st.cnt+' rez &nbsp;Â·&nbsp; '+st.nts+' netÃ« &nbsp;Â·&nbsp; ADR '+st.adr+'</div>'
+        +'<div style="'+FF+'font-size:11px;color:#374151;margin-bottom:10px">'+st.cnt+' rez &nbsp;·&nbsp; '+st.nts+' netë &nbsp;·&nbsp; ADR '+st.adr+'</div>'
         +'<div style="height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px"></div></div>'
         +'<div style="'+FF+'font-size:11px;font-weight:800;color:'+tc+'">'+pct+'%</div>'
         +'</td>';
@@ -1501,7 +1501,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       +'</tr>';
 
     // Manager month distribution
-    var moNm2=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','NÃ©ntor','Dhjetor'];
+    var moNm2=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Néntor','Dhjetor'];
     var moS={},moI={},moTt={};
     saraD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7),n=getNts(r);if(m){moS[m]=(moS[m]||0)+n;moTt[m]=(moTt[m]||0)+n;}});
     invaD.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7),n=getNts(r);if(m){moI[m]=(moI[m]||0)+n;moTt[m]=(moTt[m]||0)+n;}});
@@ -1519,10 +1519,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     mgrStaffHtml+='__MGR_MO_ROWS__'+moRows2+'__MGR_MO_END__';
   }
 
-  // ââ STAFF MONTH DISTRIBUTION âââââââââââââââââââââââââââââââââââ
+  // ── STAFF MONTH DISTRIBUTION ───────────────────────────────────
   var staffMoRows='';
   if(!isManager){
-    var moNmX=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','NÃ«ntor','Dhjetor'];
+    var moNmX=['Janar','Shkurt','Mars','Prill','Maj','Qershor','Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'];
     var moDataX={};
     data.forEach(function(r){var m=(r['Data Fillimit']||'').slice(0,7),n=getNts(r);if(m)moDataX[m]=(moDataX[m]||0)+n;});
     var allMoX=Object.keys(moDataX).sort(),mxMoX=allMoX.reduce(function(mx,m){return Math.max(mx,moDataX[m]||0);},1);
@@ -1533,7 +1533,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     }).join('');
   }
 
-  // ââ 90-DAY PACE (stacked mobile cards) âââââââââââââââââââââââââ
+  // ── 90-DAY PACE (stacked mobile cards) ─────────────────────────
   var pace90Html=''; var _mRev={},_mNights={},_totRev=0; eMo90.forEach(function(_mk){ var _st=paceMonthStats(emailDirData,_mk); _mRev[_mk]=_st.fresh?_st.rev:((typeof HISTORICAL_REV!=='undefined'&&HISTORICAL_REV[_mk]!==undefined)?HISTORICAL_REV[_mk]:0); _mNights[_mk]=_st.fresh?_st.nights:emailGetMonthRN(_mk); _totRev+=_mRev[_mk]; });
   if(eMo90.length){
     eMo90.forEach(function(mk){
@@ -1543,7 +1543,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
       var bg=pct>=80?'#f0fdf4':pct>=60?'#fffbeb':'#fff5f5';
       var brd=pct>=80?'#86efac':pct>=60?'#fde68a':'#fecaca';
 
-      var status=pct>=100?'Target tejkaluar!':pct>=80?'RitÃ«m i mirÃ« â mbeten '+remaining.toLocaleString()+' rn':pct>=60?'NÃ«n target â nevojiten '+remaining.toLocaleString()+' rn':'Deficit â kÃ«rkon vÉ«mendje urgente';
+      var status=pct>=100?'Target tejkaluar!':pct>=80?'Ritëm i mirë — mbeten '+remaining.toLocaleString()+' rn':pct>=60?'Nën target — nevojiten '+remaining.toLocaleString()+' rn':'Deficit — kërkon vɫmendje urgente';
       pace90Html+='<div style="background:'+bg+';border:1px solid '+brd+';border-left:4px solid '+clr+';border-radius:8px;padding:14px 16px;margin-bottom:10px">'
         +'<div style="display:table;width:100%">'
         +'<div style="display:table-cell;vertical-align:middle">'
@@ -1571,12 +1571,12 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'<div style="'+FF+'font-weight:700;font-size:14px;color:'+clr+'">'+remaining.toLocaleString()+' rn</div>'
         +'</div>'
         +'</div>'
-        +'<div style="'+FF+'font-size:11px;font-weight:800;color:#0a2240;margin-top:8px;padding-top:7px;border-top:1px solid rgba(10,34,64,.10)">TÃ« Ardhura: '+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR'+(b.rev?' / '+b.rev.toLocaleString('sq-AL')+' EUR ('+(b.rev>0?Math.round(mrev/b.rev*100):0)+'%)':'')+'</div>'+'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
+        +'<div style="'+FF+'font-size:11px;font-weight:800;color:#0a2240;margin-top:8px;padding-top:7px;border-top:1px solid rgba(10,34,64,.10)">Të Ardhura: '+mrev.toLocaleString('sq-AL',{maximumFractionDigits:0})+' EUR'+(b.rev?' / '+b.rev.toLocaleString('sq-AL')+' EUR ('+(b.rev>0?Math.round(mrev/b.rev*100):0)+'%)':'')+'</div>'+'<div style="'+FF+'font-size:10px;font-weight:600;color:'+clr+';margin-top:8px">'+status+'</div>'
         +'</div>';
     });
   }
 
-  // ââ SECTION NUMBERS ââââââââââââââââââââââââââââââââââââââââââââ
+  // ── SECTION NUMBERS ────────────────────────────────────────────
   var _si=1;
   function sn(){return ('0'+(_si++)).slice(-2);}
   var s01=sn();
@@ -1599,7 +1599,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     mgrMoRows=moEnd[0];
   }
 
-  // ââ CSS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── CSS ────────────────────────────────────────────────────────
   var css='*{box-sizing:border-box}'
     +'body{margin:0;padding:0;background:#eef2f7;-webkit-text-size-adjust:100%}'
     +'.w{max-width:600px;margin:0 auto;background:#fff}'
@@ -1618,7 +1618,7 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +'.dtbl th:nth-child(n+4),.dtbl td:nth-child(n+4){display:none!important}'
     +'}';
 
-  // ââ BUILD ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── BUILD ──────────────────────────────────────────────────────
   var GF="@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700;800;900&display=swap')";
   return '<!DOCTYPE html><html lang="sq"><head>'
     +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -1632,9 +1632,9 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     // Header
     +'<div style="background:#0a2240;padding:26px 24px 22px">'
-    +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:11px;font-weight:600;letter-spacing:4px;color:#c9a84c;margin-bottom:8px">FLOWER HOTEL Â· DIRECT SALES</div>'
-    +'<h1 class="etitle" style="margin:0 0 10px;font-family:\'Cormorant Garamond\',Georgia,serif;font-size:28px;font-weight:700;color:#fff;letter-spacing:.3px">Raporti Ditor i PerformancÃ«s</h1>'
-    +'<div style="'+FF+'font-size:12px;color:#94b8d4">'+dateVal+'&nbsp;&nbsp;Â·&nbsp;&nbsp;<span style="color:#c9a84c;font-weight:700">'+displayName+'</span></div>'
+    +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:11px;font-weight:600;letter-spacing:4px;color:#c9a84c;margin-bottom:8px">FLOWER HOTEL · DIRECT SALES</div>'
+    +'<h1 class="etitle" style="margin:0 0 10px;font-family:\'Cormorant Garamond\',Georgia,serif;font-size:28px;font-weight:700;color:#fff;letter-spacing:.3px">Raporti Ditor i Performancës</h1>'
+    +'<div style="'+FF+'font-size:12px;color:#94b8d4">'+dateVal+'&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:#c9a84c;font-weight:700">'+displayName+'</span></div>'
     +'</div>'
 
     // Body
@@ -1645,17 +1645,17 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
     +'<tr><td colspan="99" style="padding:0 0 6px">'
     +'<table class="kg"><tbody><tr>'
     +'<td class="kc"><div class="kv">'+data.length+'</div><div class="kl">Rezervime Direkte</div></td>'
-    +'<td class="kc"><div class="kv">'+totalRev.toFixed(0)+'</div><div class="kl">TÃ« Ardhura EUR</div></td>'
-    +'<td class="kc"><div class="kv">'+totalNts+'</div><div class="kl">NetÃ« Qendrimi</div></td>'
-    +'<td class="kc"><div class="kv">'+adr+'</div><div class="kl">ADR EUR/natÃ«</div></td>'
+    +'<td class="kc"><div class="kv">'+totalRev.toFixed(0)+'</div><div class="kl">Të Ardhura EUR</div></td>'
+    +'<td class="kc"><div class="kv">'+totalNts+'</div><div class="kl">Netë Qendrimi</div></td>'
+    +'<td class="kc"><div class="kv">'+adr+'</div><div class="kl">ADR EUR/natë</div></td>'
     +'</tr></tbody></table></td></tr>'
 
     // Manager: staff comparison
     +(isManager&&mgrCards?(
-      secH(sStaff,'Sara vs Inva â Performanca')
+      secH(sStaff,'Sara vs Inva — Performanca')
       +'<tr><td colspan="99" style="padding-bottom:12px"><table style="width:100%;border-collapse:separate;border-spacing:0">'+mgrCards+'</table></td></tr>'
-      +secH(sMo,'ShpÃ«rndarje Mujore â Sara / Inva')
-      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+';color:#9d174d">Sara</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+';color:#5b21b6">Inva</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+'">Total NetÃ«</th></tr>',mgrMoRows)
+      +secH(sMo,'Shpërndarje Mujore — Sara / Inva')
+      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+';color:#9d174d">Sara</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+';color:#5b21b6">Inva</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+'">Total Netë</th></tr>',mgrMoRows)
     ):'')
 
     // 90-Day Pace
@@ -1666,28 +1666,28 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     // Channels
     +secH(sCh,'Performanca Sipas Kanaleve Direkte')
-    +tbl('<tr><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">TÃ« Ardhura</th><th style="'+th(1)+'">NetÃª</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',chRows)
+    +tbl('<tr><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">Netê</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',chRows)
 
     // Nationalities
     +secH(sNat,'Kombesia e Klienteve')
-    +tbl('<tr><th style="'+th(0)+'">Kombesia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">NetÃ«</th><th style="'+th(1)+'">TÃ« Ardhura</th><th style="'+th(1)+'">%</th></tr>',natRows)
+    +tbl('<tr><th style="'+th(0)+'">Kombesia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">%</th></tr>',natRows)
 
     // Plans
     +secH(sPlan,'Shitja e Paketave')
-    +tbl('<tr><th style="'+th(0)+'">Paketa</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">NetÃ«</th><th style="'+th(1)+'">TÃ« Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',planRows)
+    +tbl('<tr><th style="'+th(0)+'">Paketa</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',planRows)
 
     // Rooms
     +secH(sRm,'Tipologjite e Dhomave')
-    +tbl('<tr><th style="'+th(0)+'">Tipologjia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">NetÃ«</th><th style="'+th(1)+'">TÃ« Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',rmRows)
+    +tbl('<tr><th style="'+th(0)+'">Tipologjia</th><th style="'+th(1)+'">Rez.</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Të Ardhura</th><th style="'+th(1)+'">ADR</th><th style="'+th(1)+'">%</th></tr>',rmRows)
 
     // Top reservations (staff only)
     +(!isManager&&sRez?(
       secH(sRez,'Rezervimet Kryesore te Dites')
-      +tbl('<tr><th style="'+th(0)+'">Klienti</th><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">NetÃ«</th><th style="'+th(1)+'">Vlera</th></tr>',rezRows)
+      +tbl('<tr><th style="'+th(0)+'">Klienti</th><th style="'+th(0)+'">Kanali</th><th style="'+th(1)+'">Netë</th><th style="'+th(1)+'">Vlera</th></tr>',rezRows)
     ):'')
 
-    // Meta â always shown
-    +secH(sMeta,'Aktiviteti Social Media â Meta')
+    // Meta — always shown
+    +secH(sMeta,'Aktiviteti Social Media — Meta')
     +'<tr><td colspan="99" style="padding-bottom:18px">'
     +(hasMetaData
       ? ('<table style="width:100%;border-collapse:separate;border-spacing:8px 0"><tbody><tr>'
@@ -1707,14 +1707,14 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'<div style="'+FF+'font-size:9px;color:#9ca3af;margin-top:4px">biseda sot</div>'
         +'</td>'
         +'</tr></tbody></table>')
-      : ('<div style="'+FF+'font-size:12px;color:#9ca3af;font-style:italic;padding:14px 0">Nuk ka tÃ« dhÃ«na Meta pÃ«r periudhÃ«n e zgjedhur.</div>')
+      : ('<div style="'+FF+'font-size:12px;color:#9ca3af;font-style:italic;padding:14px 0">Nuk ka të dhëna Meta për periudhën e zgjedhur.</div>')
     )
     +'</td></tr>'
 
     // Staff month distribution
     +(!isManager&&staffMoRows?(
-      secH(sMoX,'ShpÃ«rndarje Mujore â NetÃ« Qendrimi')
-      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+'">NetÃ«</th><th style="'+th(0)+';width:130px">Grafiku</th></tr>',staffMoRows)
+      secH(sMoX,'Shpërndarje Mujore — Netë Qendrimi')
+      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+'">Netë</th><th style="'+th(0)+';width:130px">Grafiku</th></tr>',staffMoRows)
     ):'')
 
     // Summary
@@ -1725,13 +1725,13 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     // Footer
     +'<div style="background:#0a2240;padding:18px 24px;text-align:center">'
-    +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:11px;font-weight:600;letter-spacing:2.5px;color:#94b8d4;text-transform:uppercase">Flower Hotel Â· Daily Direct Sales Report</div>'
+    +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:11px;font-weight:600;letter-spacing:2.5px;color:#94b8d4;text-transform:uppercase">Flower Hotel · Daily Direct Sales Report</div>'
     +'<div style="'+FF+'font-size:8px;color:#3d5a73;margin-top:4px">'+ts+'</div>'
     +'</div>'
-    +'<div style="padding:8px;text-align:center;'+FF+'font-size:9px;color:#9ca3af;background:#f9fafb">DÃ«rguar automatikisht Â· EmailJS.com</div>'
+    +'<div style="padding:8px;text-align:center;'+FF+'font-size:9px;color:#9ca3af;background:#f9fafb">Dërguar automatikisht · EmailJS.com</div>'
     +'</div></body></html>';
 }
-// ââ EMAIL SUMMARY âââââââââââââââââââââââââââââââââââââââââââââââ
+// ── EMAIL SUMMARY ───────────────────────────────────────────────
 var _emailDraft = null;
 
 function sendSummaryEmail() {
@@ -1741,18 +1741,18 @@ function sendSummaryEmail() {
   var TO = isManager ? TO_MANAGER : TO_STAFF;
   var data = filteredData;
   var dateVal = document.getElementById('dateFilter').value || TODAY;
-  var viewLabels = {today:'Sot', week:'Kjo JavÃ«', month:'Ky Muaj', all:'GjithÃ« Historia'};
+  var viewLabels = {today:'Sot', week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
   var viewLbl = viewLabels[currentView] || currentView;
   var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'.');
   var subject = isManager
-    ? 'Flower Hotel â Raport Manager Â· '+viewLbl+' Â· '+today2
-    : 'Flower Hotel â Permbledhje Shitjeve '+currentUser+' Â· '+today2;
+    ? 'Flower Hotel — Raport Manager · '+viewLbl+' · '+today2
+    : 'Flower Hotel — Permbledhje Shitjeve '+currentUser+' · '+today2;
 
-  var htmlContent = buildEmailHTML(isManager, data, currentUser, today2+' Â· '+viewLbl, viewLbl);
+  var htmlContent = buildEmailHTML(isManager, data, currentUser, today2+' · '+viewLbl, viewLbl);
 
   _emailDraft = {TO: TO, subject: subject, htmlContent: htmlContent};
 
-  document.getElementById('emTo').textContent = 'DÃ«rguar: ' + TO;
+  document.getElementById('emTo').textContent = 'Dërguar: ' + TO;
   document.getElementById('emSubj').textContent = subject;
   var iframe = document.getElementById('emIframe');
   iframe.srcdoc = htmlContent;
@@ -1768,7 +1768,7 @@ function confirmSendEmail() {
   if (!_emailDraft) return;
   var btn = document.querySelector('#emailModal .btn-gold');
   btn.disabled = true;
-  btn.textContent = 'â³ Duke dÃ«rguar...';
+  btn.textContent = '⏳ Duke dërguar...';
 
   emailjs.init(EJS_PUBLIC);
   emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
@@ -1776,12 +1776,12 @@ function confirmSendEmail() {
     html_content: _emailDraft.htmlContent,
     to_email: _emailDraft.TO
   }).then(function() {
-    btn.textContent = 'â U dÃ«rgua!';
+    btn.textContent = '✅ U dërgua!';
     setTimeout(function(){ closeEmailModal(); }, 1500);
   }, function(err) {
     btn.disabled = false;
-    btn.textContent = 'âï¸ DÃ«rgo Email';
-    alert('Gabim gjatÃ« dÃ«rgimit: ' + JSON.stringify(err));
+    btn.textContent = '✉️ Dërgo Email';
+    alert('Gabim gjatë dërgimit: ' + JSON.stringify(err));
   });
 }
 
@@ -1789,10 +1789,10 @@ function exportPDF() {
   var isManager = currentUser === 'Manager';
   var data = filteredData;
   var dateVal = document.getElementById('dateFilter').value || TODAY;
-  var viewLabels = {today:'Sot', week:'Kjo JavÃ«', month:'Ky Muaj', all:'GjithÃ« Historia'};
+  var viewLabels = {today:'Sot', week:'Kjo Javë', month:'Ky Muaj', all:'Gjithë Historia'};
   var viewLbl = viewLabels[currentView] || currentView;
   var today2 = new Date().toLocaleDateString('sq-AL',{day:'2-digit',month:'2-digit',year:'numeric'});
-  var htmlContent = buildEmailHTML(isManager, data, currentUser, today2+' Â· '+viewLbl, viewLbl);
+  var htmlContent = buildEmailHTML(isManager, data, currentUser, today2+' · '+viewLbl, viewLbl);
   var w = window.open('','_blank');
   w.document.write(htmlContent);
   w.document.close();
@@ -1800,12 +1800,12 @@ function exportPDF() {
 }
 </script>
 
-<!-- âââââââââââ EMAIL PREVIEW MODAL âââââââââââ -->
+<!-- ═══════════ EMAIL PREVIEW MODAL ═══════════ -->
 <div class="em-overlay" id="emailModal" onclick="if(event.target===this)closeEmailModal()">
   <div class="em-box">
     <div class="em-header">
-      <h3>âï¸ Preview Email â Raport Shitjeve</h3>
-      <button class="em-close" onclick="closeEmailModal()">â</button>
+      <h3>✉️ Preview Email — Raport Shitjeve</h3>
+      <button class="em-close" onclick="closeEmailModal()">✕</button>
     </div>
     <div class="em-meta">
       <div class="em-to" id="emTo"></div>
@@ -1816,7 +1816,7 @@ function exportPDF() {
     </div>
     <div class="em-footer">
       <button class="btn btn-ghost" onclick="closeEmailModal()" style="background:#f1f5f9;color:var(--navy);border:1px solid var(--border)">Anulo</button>
-      <button class="btn btn-gold" onclick="confirmSendEmail()" style="padding:8px 24px;font-size:14px">âï¸ DÃ«rgo Email</button>
+      <button class="btn btn-gold" onclick="confirmSendEmail()" style="padding:8px 24px;font-size:14px">✉️ Dërgo Email</button>
     </div>
   </div>
 </div>
