@@ -478,8 +478,8 @@ function paceMonthStats(list, mk){
     if(b<=a) continue;
     var n=Math.round((b-a)/86400000);
     res.nights += n;
-    var p=parseFloat(r._cmimi);
-    if(isFinite(p)){ res.any=true; res.rev += p*n; }
+    var p=parseFloat(r._cmimi); if(!(isFinite(p)&&p>0)){ var _pp=parseFloat(r['Personeli']); if(isFinite(_pp)&&_pp>0) p=_pp; }
+    if(isFinite(p)&&p>0){ res.any=true; res.rev += p*n; }
   }
   res.rev=Math.round(res.rev);
   return res;
