@@ -214,11 +214,11 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
     <div class="login-title">Sales Monitor</div>
     <div class="login-sub">Mirë se erdhe! Kush po monitoron shitjet sot?</div>
     <div class="login-btns">
-      <button class="login-btn sara" onclick="doLogin('Sara')">
-        <span class="emoji">👩</span>Sara
+      <button class="login-btn sara" onclick="doLogin('Turni 1')">
+        <span class="emoji">👩</span>Turni 1
       </button>
-      <button class="login-btn inva" onclick="doLogin('Inva')">
-        <span class="emoji">👩</span>Inva
+      <button class="login-btn inva" onclick="doLogin('Turni 2')">
+        <span class="emoji">👩</span>Turni 2
       </button>
     </div>
     <div class="login-manager" onclick="doLogin('Manager')">Hyr si Manager (shiko të gjitha)</div>
@@ -282,7 +282,7 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
   <!-- STAFF COMPARISON (Manager only) -->
   <div class="staff-comp" id="staffComp" style="display:none">
     <div class="sc-card sara">
-      <div class="sc-name">Sara</div>
+      <div class="sc-name">Turni 1</div>
       <div class="sc-role">Sales Agent</div>
       <div class="sc-kpis">
         <div class="sck"><div class="sv" id="sCnt">0</div><div class="sl">Rez.</div></div>
@@ -294,7 +294,7 @@ f?oter{text-align:center;color:var(--muted);font-size:11px;padding:20px;margin-t
       <div class="sc-pct" id="sPct"></div>
     </div>
     <div class="sc-card inva">
-      <div class="sc-name">Inva</div>
+      <div class="sc-name">Turni 2</div>
       <div class="sc-role">Sales Agent</div>
       <div class="sc-kpis">
         <div class="sck"><div class="sv" id="iCnt">0</div><div class="sl">Rez.</div></div>
@@ -401,10 +401,10 @@ document.getElementById('todayChip').textContent = fmtD(TODAY);
 document.getElementById('dateFilter').value = TODAY;
 
 // ── STATE ──────────────────────────────────────────────────────
-let currentUser = '';           // 'Sara' | 'Inva' | 'Manager'
+let currentUser = '';           // 'Turni 1' | 'Turni 2' | 'Manager'
 let currentView = 'today';      // today | week | month | all
 let storedData = [];            // all reservations ever imported
-let staffMap = {};              // {nr: 'Sara'|'Inva'}
+let staffMap = {};              // {nr: 'Turni 1'|'Turni 2'}
 let filteredData = [];          // currently shown
 let charts = {};
 
@@ -435,8 +435,8 @@ async function doLogin(user) {
   document.getElementById('controlsBar').style.display = 'flex';
   document.getElementById('mainArea').style.display = 'block';
   const chip = document.getElementById('userChip');
-  chip.textContent = user === 'Manager' ? '👔 Manager' : (user === 'Sara' ? '👩 Sara' : '👩 Inva');
-  chip.className = 'user-chip ' + (user==='Sara'?'sara':user==='Inva'?'inva':'none');
+  chip.textContent = user === 'Manager' ? '👔 Manager' : (user === 'Turni 1' ? '👩 Turni 1' : '👩 Turni 2');
+  chip.className = 'user-chip ' + (user==='Turni 1'?'sara':user==='Turni 2'?'inva':'none');
   document.getElementById('viewTitle').textContent='Duke ngarkuar të dhënat nga cloud…'; await loadState();
   if (storedData.length) { applyFilter(); updateDayHistory(); updateBadge(); }
   else { document.getElementById('viewTitle').textContent = 'Ngarko skedarin XLS nga Trinis'; document.getElementById('viewSub').textContent = 'Kliko "Ngarko XLS Trinis" në shiritin e sipërm'; render90Day(); }
@@ -746,7 +746,7 @@ function render() {
   updateMonthHistory();
   const dateVal = document.getElementById('dateFilter').value;
   const isManager = currentUser === 'Manager';
-  const userColor = currentUser==='Sara'?'sara':currentUser==='Inva'?'inva':'all';
+  const userColor = currentUser==='Turni 1'?'sara':currentUser==='Turni 2'?'inva':'all';
 
   // Title
   let titleDate = '';
@@ -791,7 +791,7 @@ function render() {
 
 function renderStaffComp(data) {
   const totalRev = data.reduce((s,r)=>s+getRev(r),0);
-  ['Sara','Inva'].forEach(name => {
+  ['Turni 1','Turni 2'].forEach(name => {
     const mine = data.filter(r=>(staffMap[r['Nr. Prenotimit']]||'')===name);
     const rev = mine.reduce((s,r)=>s+getRev(r),0);
     const nts = mine.reduce((s,r)=>s+getNts(r),0);
@@ -878,7 +878,7 @@ function renderResTable() {
     const plan=getPlan(r);
     const planCls=getPlanCls(plan);
     const rev=getRev(r);
-    const sCls=as==='Sara'?'sara':as==='Inva'?'inva':'';
+    const sCls=as==='Turni 1'?'sara':as==='Turni 2'?'inva':'';
     return`<tr${isArrToday?' style="background:#f0fdf4"':''}>
       <td><strong style="color:var(--navy)">#${nr}</strong></td>
       <td><strong>${r['Klienti'].trim()}</strong></td>
@@ -894,8 +894,8 @@ function renderResTable() {
       <td><strong>${rev>0?rev.toLocaleString('sq-AL',{maximumFractionDigits:0}):'<span style="color:var(--muted)">—</span>'}</strong></td>
       <td><select class="ss ${sCls}" onchange="assign('${nr}',this)">
         <option value="">— Cakto —</option>
-        <option value="Sara"${as==='Sara'?' selected':''}>👩 Sara</option>
-        <option value="Inva"${as==='Inva'?' selected':''}>👩 Inva</option>
+        <option value="Turni 1"${as==='Turni 1'?' selected':''}>👩 Turni 1</option>
+        <option value="Turni 2"${as==='Turni 2'?' selected':''}>👩 Turni 2</option>
       </select></td>
     </tr>`;
   }).join('');
@@ -1274,7 +1274,7 @@ function assign(nr,sel) {
   staffMap[nr]=sel.value;
   saveState();
   pushStaff([nr]);
-  sel.className='ss '+(sel.value==='Sara'?'sara':sel.value==='Inva'?'inva':'');
+  sel.className='ss '+(sel.value==='Turni 1'?'sara':sel.value==='Turni 2'?'inva':'');
   if(currentUser!=='Manager'){applyFilter();updateDayHistory();}
   else{if(currentUser==='Manager')renderStaffComp(filteredData);renderResTable();}
 }
@@ -1479,8 +1479,8 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
   // ── MANAGER: Staff comparison ──────────────────────────────────
   var mgrStaffHtml='';
   if(isManager){
-    var saraD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Sara';});
-    var invaD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Inva';});
+    var saraD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Turni 1';});
+    var invaD=data.filter(function(r){return (staffMap[r['Nr. Prenotimit']]||'')==='Turni 2';});
     function calcSt(sd){var rv=sd.reduce(function(s,r){return s+getRev(r);},0),nt=sd.reduce(function(s,r){return s+getNts(r);},0);return{cnt:sd.length,rev:rv,nts:nt,adr:nt>0?(rv/nt).toFixed(0):'—'};}
     var ss=calcSt(saraD),si=calcSt(invaD);
     var sPct=totalRev>0?Math.round(ss.rev/totalRev*100):0,iPct=totalRev>0?Math.round(si.rev/totalRev*100):0;
@@ -1495,9 +1495,9 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
         +'</td>';
     }
     mgrStaffHtml='<tr>'
-      +staffCard('Sara',ss,sPct,'#fdf2f8','#ec4899','#9d174d')
+      +staffCard('Turni 1',ss,sPct,'#fdf2f8','#ec4899','#9d174d')
       +'<td style="width:10px"></td>'
-      +staffCard('Inva',si,iPct,'#f5f3ff','#7c3aed','#5b21b6')
+      +staffCard('Turni 2',si,iPct,'#f5f3ff','#7c3aed','#5b21b6')
       +'</tr>';
 
     // Manager month distribution
@@ -1652,10 +1652,10 @@ function buildEmailHTML(isManager, data, staffName, dateVal, viewLbl) {
 
     // Manager: staff comparison
     +(isManager&&mgrCards?(
-      secH(sStaff,'Sara vs Inva — Performanca')
+      secH(sStaff,'Turni 1 vs Turni 2 — Performanca')
       +'<tr><td colspan="99" style="padding-bottom:12px"><table style="width:100%;border-collapse:separate;border-spacing:0">'+mgrCards+'</table></td></tr>'
-      +secH(sMo,'Shpërndarje Mujore — Sara / Inva')
-      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+';color:#9d174d">Sara</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+';color:#5b21b6">Inva</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+'">Total Netë</th></tr>',mgrMoRows)
+      +secH(sMo,'Shpërndarje Mujore — Turni 1 / Turni 2')
+      +tbl('<tr><th style="'+th(0)+'">Muaj</th><th style="'+th(1)+';color:#9d174d">Turni 1</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+';color:#5b21b6">Turni 2</th><th style="width:90px;'+th(0)+'"></th><th style="'+th(1)+'">Total Netë</th></tr>',mgrMoRows)
     ):'')
 
     // 90-Day Pace
